@@ -1414,7 +1414,7 @@ OSXScreen::mapScrollWheelToSynergy(SInt32 x) const
 }
 
 SInt32
-OSXScreen::mapScrollWheelFromSynergy(SInt32 x) const
+OSXScreen::mapScrollWheelFromSynergy(float x) const
 {
 	// use server's acceleration with a little boost since other platforms
 	// take one wheel step as a larger step than the mac does.
@@ -1931,10 +1931,15 @@ OSXScreen::handleCGInputEvent(CGEventTapProxy proxy,
 			return event;
 			break;
 		case kCGEventScrollWheel:
+			// http://tinyurl.com/gt98gz7
 			screen->onMouseWheel(screen->mapScrollWheelToSynergy(
-								 CGEventGetIntegerValueField(event, kCGScrollWheelEventDeltaAxis2)),
-								 screen->mapScrollWheelToSynergy(
-								 CGEventGetIntegerValueField(event, kCGScrollWheelEventDeltaAxis1)));
+											CGEventGetIntegerValueField(
+												event,
+												kCGScrollWheelEventFixedPtDeltaAxis2) >> 16),
+											screen->mapScrollWheelToSynergy(
+												CGEventGetIntegerValueField(
+													event,
+													kCGScrollWheelEventFixedPtDeltaAxis1) >> 16));
 			break;
 		case kCGEventKeyDown:
 		case kCGEventKeyUp:

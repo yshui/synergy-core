@@ -147,7 +147,7 @@ private:
 	SInt32				mapScrollWheelToSynergy(SInt32) const;
 
 	// map synergy scroll wheel value to a mac scroll wheel value
-	SInt32				mapScrollWheelFromSynergy(SInt32) const;
+	SInt32				mapScrollWheelFromSynergy(float) const;
 
 	// get the current scroll wheel speed
 	double				getScrollSpeed() const;
