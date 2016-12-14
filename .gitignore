@@ -3,6 +3,7 @@ config.h
 *.pyc
 *.o
 *~
+*.qm
 \.*.swp
 *build-gui-Desktop_Qt*
 /bin
