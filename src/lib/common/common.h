@@ -2,11 +2,11 @@
  * synergy -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
- * 
+ *
  * This package is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * found in the file LICENSE that should have accompanied this file.
- * 
+ *
  * This package is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -21,7 +21,9 @@
 // this file should be included, directly or indirectly by every other.
 
 #if HAVE_CONFIG_H
-#	include "config.h"
+// afaik config.h hasn't been in the common folder
+//#	include "config.h"
+#	include "../../../synergy/config.h"
 
 	// don't use poll() on mac
 #	if defined(__APPLE__)

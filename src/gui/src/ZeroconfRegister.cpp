@@ -87,6 +87,9 @@ void ZeroconfRegister::registerService(DNSServiceRef, DNSServiceFlags,
 		DNSServiceErrorType errorCode, const char* name, const char* regtype,
 		const char* domain, void* data)
 {
+    (void)name;
+    (void)domain;
+    (void)regtype;
 	ZeroconfRegister* serviceRegister = static_cast<ZeroconfRegister*>(data);
 	if (errorCode != kDNSServiceErr_NoError) {
 		emit serviceRegister->error(errorCode);

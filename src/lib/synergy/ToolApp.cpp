@@ -29,8 +29,6 @@
 #include "platform/MSWindowsSession.h"
 #endif
 
-#define JSON_URL "https://symless.com/account/json/"
-
 enum {
 	kErrorOk,
 	kErrorArgs,

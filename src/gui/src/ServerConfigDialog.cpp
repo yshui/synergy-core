@@ -71,6 +71,7 @@ ServerConfigDialog::ServerConfigDialog(QWidget* parent, ServerConfig& config, co
 
 void ServerConfigDialog::showEvent(QShowEvent* event)
 {
+    (void)event;
 	QDialog::show();
 
 	if (!m_Message.isEmpty())

@@ -409,8 +409,7 @@ void MainWindow::updateFromLogLine(const QString &line)
 {
 	// TODO: this code makes Andrew cry
 	checkConnected(line);
-	checkFingerprint(line);
-	checkLicense(line);
+    checkFingerprint(line);
 }
 
 void MainWindow::checkConnected(const QString& line)
@@ -432,14 +431,6 @@ void MainWindow::checkConnected(const QString& line)
 			appConfig().setStartedBefore(true);
 			appConfig().saveSettings();
 		}
-	}
-}
-
-void MainWindow::checkLicense(const QString &line)
-{
-	if (line.contains("trial has expired")) {
-		licenseManager().refresh();
-		raiseActivationDialog();
 	}
 }
 

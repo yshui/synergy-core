@@ -86,7 +86,7 @@ int main(int argc, char* argv[])
 
 	app.switchTranslator(appConfig.language());
 
-	MainWindow mainWindow(settings, appConfig, licenseManager);
+    MainWindow mainWindow(settings, appConfig);
 	SetupWizard setupWizard(mainWindow, true);
 
 	if (appConfig.wizardShouldRun())
