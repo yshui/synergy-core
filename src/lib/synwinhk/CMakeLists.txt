@@ -1,10 +1,10 @@
 # synergy -- mouse and keyboard sharing utility
 # Copyright (C) 2013-2016 Symless Ltd.
-# 
+#
 # This package is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # found in the file LICENSE that should have accompanied this file.
-# 
+#
 # This package is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -30,15 +30,15 @@ if (NOT MSVC_VERSION VERSION_LESS 1900)
 	target_link_libraries(synwinhk libucrt)
 endif()
 
-# copy the dlls (and supporting files) from the lib dir to 
+# copy the dlls (and supporting files) from the lib dir to
 # the bin dir, so that synergyc and synergys can easily find them.
 # we should leave the other libraries compiling to the lib dir,
 # so that the bin dir remains tidy. the path is relative to the
 # build dir (in this case, that's: build\src\lib\platform).
-add_custom_command(
-	TARGET synwinhk 
-	POST_BUILD
-	COMMAND xcopy /Y /Q
-		..\\..\\..\\..\\..\\synergy\\lib\\${CMAKE_CFG_INTDIR}\\synwinhk.*
-		..\\..\\..\\..\\..\\bin\\${CMAKE_CFG_INTDIR}\\
-)
+#add_custom_command(
+#	TARGET synwinhk
+#	POST_BUILD
+#	COMMAND xcopy /Y /Q
+#		..\\..\\..\\..\\lib\\${CMAKE_CFG_INTDIR}\\synwinhk.*
+#		..\\..\\..\\..\\bin\\${CMAKE_CFG_INTDIR}\\
+#)
