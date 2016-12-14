@@ -1178,11 +1178,7 @@ This allows Synergy to interact with elevated processes and the UAC dialog, but 
         <source>Please select an option.</source>
         <translation type="finished">Пожалуйста, выберите опцию.</translation>
     </message>
-    <message>
-        <location filename="src/SetupWizard.cpp" line="80"/>
-        <source>Please enter your email address and password.</source>
-        <translation type="finished">Пожалуйста введите ваш адрес электронной почты и пароль</translation>
-    </message>
+
 </context>
 <context>
     <name>SetupWizardBase</name>
@@ -1205,36 +1201,6 @@ This allows Synergy to interact with elevated processes and the UAC dialog, but 
         <location filename="res/SetupWizardBase.ui" line="114"/>
         <source>Synergy lets you easily share your mouse and keyboard between multiple computers on your desk, and it's Free and Open Source. Just move your mouse off the edge of one computer's screen on to another. You can even share all of your clipboards. All you need is a network connection. Synergy is cross-platform (works on Windows, Mac OS X and Linux).</source>
         <translation type="finished">Synergy позволяет вам просто и легко работать с одним набором клавиатуры и мышки между несколькими компьютерами. Это бесплатное приложение с открытым исходным кодом. Просто подведите курсор за край экрана. Вы также можете объединять буферы обмена. Все что вам нужно это сетевое подключение. Synergy это кросс-платформенное приложение, которое работает на Windows, Mac OS X и Linux.</translation>
-    </message>
-    <message>
-        <location filename="res/SetupWizardBase.ui" line="125"/>
-        <source>Activate</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="res/SetupWizardBase.ui" line="131"/>
-        <source>&amp;Activate now...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="res/SetupWizardBase.ui" line="152"/>
-        <source>Email:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="res/SetupWizardBase.ui" line="178"/>
-        <source>Password:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="res/SetupWizardBase.ui" line="204"/>
-        <source>&lt;a href=&quot;https://symless.com/account/reset/&quot;&gt;Forgot password&lt;/a&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="res/SetupWizardBase.ui" line="232"/>
-        <source>&amp;Skip activation</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="res/SetupWizardBase.ui" line="277"/>
@@ -1299,116 +1265,6 @@ p, li { white-space: pre-wrap; }
         <location filename="src/VersionChecker.cpp" line="102"/>
         <source>Unknown</source>
         <translation type="finished">Неизвестно</translation>
-    </message>
-</context>
-<context>
-    <name>WebClient</name>
-    <message>
-        <location filename="src/WebClient.cpp" line="44"/>
-        <source>An error occurred while trying to sign in. Please contact the helpdesk, and provide the following details.
-
-%1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="src/WebClient.cpp" line="65"/>
-        <source>Login failed, invalid email or password.</source>
-        <translation type="finished">Неудачная попытка, email или пароль введены с ошибкой</translation>
-    </message>
-    <message>
-        <location filename="src/WebClient.cpp" line="78"/>
-        <source>Login failed, an error occurred.
-
-%1</source>
-        <translation type="finished">Войти не удалось, произошла ошибка. 
-
-%1</translation>
-    </message>
-    <message>
-        <location filename="src/WebClient.cpp" line="86"/>
-        <source>Login failed, an error occurred.
-
-Server response:
-
-%1</source>
-        <translation type="finished">Войти не удалось, произошла ошибка. 
-
-Ответ сервера:
-
-%1</translation>
-    </message>
-    <message>
-        <location filename="src/WebClient.cpp" line="101"/>
-        <source>An error occurred while trying to query the plugin list. Please contact the help desk, and provide the following details.
-
-%1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="src/WebClient.cpp" line="120"/>
-        <source>Get plugin list failed, invalid user email or password.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="src/WebClient.cpp" line="131"/>
-        <source>Get plugin list failed, an error occurred.
-
-%1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="src/WebClient.cpp" line="137"/>
-        <source>Get plugin list failed, an error occurred.
-
-Server response:
-
-%1</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ZeroconfService</name>
-    <message>
-        <location filename="src/ZeroconfService.cpp" line="82"/>
-        <source>zeroconf server detected: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="src/ZeroconfService.cpp" line="91"/>
-        <source>zeroconf client detected: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="src/ZeroconfService.cpp" line="99"/>
-        <location filename="src/ZeroconfService.cpp" line="130"/>
-        <source>Zero configuration service</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="src/ZeroconfService.cpp" line="100"/>
-        <source>Error code: %1.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="src/ZeroconfService.cpp" line="131"/>
-        <source>Unable to start the zeroconf: %1.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="src/ZeroconfService.cpp" line="140"/>
-        <source>Synergy</source>
-        <translation type="finished">Synergy</translation>
-    </message>
-    <message>
-        <location filename="src/ZeroconfService.cpp" line="141"/>
-        <source>Failed to get local IP address. Please manually type in server address on your clients</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="src/ZeroconfService.cpp" line="147"/>
-        <location filename="src/ZeroconfService.cpp" line="154"/>
-        <source>%1</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

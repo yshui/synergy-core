@@ -900,8 +900,8 @@ To automatically trust this fingerprint for future connections, click Yes. To re
         <source>Drag new screens to the grid or move existing ones around.
 Drag a screen to the trashcan to delete it.
 Double click on a screen to edit its settings.</source>
-        <translation type="finished">Izgaraya yeni ekranları sürükleyin veya çevresinde mevcut olanları taşıyın. 
-Silmek için çöp tenekesine ekranı sürükleyin. 
+        <translation type="finished">Izgaraya yeni ekranları sürükleyin veya çevresinde mevcut olanları taşıyın.
+Silmek için çöp tenekesine ekranı sürükleyin.
 Kendi ayarlarınızı düzenlemek için bir ekran üzerine çift tıklayın.</translation>
     </message>
     <message>
@@ -1177,11 +1177,7 @@ This allows Synergy to interact with elevated processes and the UAC dialog, but 
         <source>Please select an option.</source>
         <translation type="finished">Lütfen seçiminizi yapınız.</translation>
     </message>
-    <message>
-        <location filename="src/SetupWizard.cpp" line="80"/>
-        <source>Please enter your email address and password.</source>
-        <translation type="finished">Lütfen e-posta adresinizi ve şifrenizi girin.</translation>
-    </message>
+
 </context>
 <context>
     <name>SetupWizardBase</name>
@@ -1204,36 +1200,6 @@ This allows Synergy to interact with elevated processes and the UAC dialog, but 
         <location filename="res/SetupWizardBase.ui" line="114"/>
         <source>Synergy lets you easily share your mouse and keyboard between multiple computers on your desk, and it's Free and Open Source. Just move your mouse off the edge of one computer's screen on to another. You can even share all of your clipboards. All you need is a network connection. Synergy is cross-platform (works on Windows, Mac OS X and Linux).</source>
         <translation type="finished">Synergy, aynı mouse ve klavye ile birden çok bilgisayarı kontrol etmenizi sağlayan Özgür ve Açık Kaynak Kodlu bir uygulamadır. Yapmanız gereken mouse imlecinizi bilgisayar ekranından diğerine sürüklemek. Synergy aynı zamanda ortak bir panoya da izin vermektedir yani bilgisayarlar arası kopyala/yapıştır yapmanıza da olanak tanır. Tek gereken bilgisayarlarınız arasında kuruluş olan network bağlantısı.  Synergy, çoklu platform desteği de vemektedir (Windows, Linux ve Mac OS X  işletimde sistemlerinde çalışır). </translation>
-    </message>
-    <message>
-        <location filename="res/SetupWizardBase.ui" line="125"/>
-        <source>Activate</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="res/SetupWizardBase.ui" line="131"/>
-        <source>&amp;Activate now...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="res/SetupWizardBase.ui" line="152"/>
-        <source>Email:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="res/SetupWizardBase.ui" line="178"/>
-        <source>Password:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="res/SetupWizardBase.ui" line="204"/>
-        <source>&lt;a href=&quot;https://symless.com/account/reset/&quot;&gt;Forgot password&lt;/a&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="res/SetupWizardBase.ui" line="232"/>
-        <source>&amp;Skip activation</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="res/SetupWizardBase.ui" line="277"/>
@@ -1298,113 +1264,6 @@ p, li { white-space: pre-wrap; }
         <location filename="src/VersionChecker.cpp" line="102"/>
         <source>Unknown</source>
         <translation type="finished">Bilinmeyen</translation>
-    </message>
-</context>
-<context>
-    <name>WebClient</name>
-    <message>
-        <location filename="src/WebClient.cpp" line="44"/>
-        <source>An error occurred while trying to sign in. Please contact the helpdesk, and provide the following details.
-
-%1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="src/WebClient.cpp" line="65"/>
-        <source>Login failed, invalid email or password.</source>
-        <translation type="finished">Giriş başarısız, e-posta yada şifre yanlış.</translation>
-    </message>
-    <message>
-        <location filename="src/WebClient.cpp" line="78"/>
-        <source>Login failed, an error occurred.
-
-%1</source>
-        <translation type="finished">Giriş başarısız, bir hata meydana geldi.
-%1</translation>
-    </message>
-    <message>
-        <location filename="src/WebClient.cpp" line="86"/>
-        <source>Login failed, an error occurred.
-
-Server response:
-
-%1</source>
-        <translation type="finished">Giriş başarısız, bir hata meydana geldi.
-Sunucu yanıtı:
-%1</translation>
-    </message>
-    <message>
-        <location filename="src/WebClient.cpp" line="101"/>
-        <source>An error occurred while trying to query the plugin list. Please contact the help desk, and provide the following details.
-
-%1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="src/WebClient.cpp" line="120"/>
-        <source>Get plugin list failed, invalid user email or password.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="src/WebClient.cpp" line="131"/>
-        <source>Get plugin list failed, an error occurred.
-
-%1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="src/WebClient.cpp" line="137"/>
-        <source>Get plugin list failed, an error occurred.
-
-Server response:
-
-%1</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ZeroconfService</name>
-    <message>
-        <location filename="src/ZeroconfService.cpp" line="82"/>
-        <source>zeroconf server detected: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="src/ZeroconfService.cpp" line="91"/>
-        <source>zeroconf client detected: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="src/ZeroconfService.cpp" line="99"/>
-        <location filename="src/ZeroconfService.cpp" line="130"/>
-        <source>Zero configuration service</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="src/ZeroconfService.cpp" line="100"/>
-        <source>Error code: %1.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="src/ZeroconfService.cpp" line="131"/>
-        <source>Unable to start the zeroconf: %1.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="src/ZeroconfService.cpp" line="140"/>
-        <source>Synergy</source>
-        <translation type="finished">Synergy</translation>
-    </message>
-    <message>
-        <location filename="src/ZeroconfService.cpp" line="141"/>
-        <source>Failed to get local IP address. Please manually type in server address on your clients</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="src/ZeroconfService.cpp" line="147"/>
-        <location filename="src/ZeroconfService.cpp" line="154"/>
-        <source>%1</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

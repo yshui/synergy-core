@@ -33,7 +33,6 @@
 #include "VersionChecker.h"
 #include "IpcClient.h"
 #include "Ipc.h"
-#include "ActivationDialog.h"
 
 #include <QMutex>
 
@@ -66,7 +65,6 @@ class MainWindow : public QMainWindow, public Ui::MainWindowBase
 
 	friend class QSynergyApplication;
 	friend class SetupWizard;
-	friend class ActivationDialog;
 	friend class SettingsDialog;
 
 	public:
@@ -95,13 +93,14 @@ class MainWindow : public QMainWindow, public Ui::MainWindowBase
 		};
 
 	public:
-		MainWindow(QSettings& settings, AppConfig& appConfig,
-				   LicenseManager& licenseManager);
+		MainWindow(QSettings& settings, AppConfig& appConfig);
 		~MainWindow();
 
 	public:
 		void setVisible(bool visible);
-		int synergyType() const { return m_pGroupClient->isChecked() ? synergyClient : synergyServer; }
+		int synergyType() const {
+			return m_pGroupClient->isChecked() ? synergyClient : synergyServer;
+		}
 		int synergyState() const { return m_SynergyState; }
 		QString hostname() const { return m_pLineEditHostname->text(); }
 		QString configFilename();
@@ -118,14 +117,8 @@ class MainWindow : public QMainWindow, public Ui::MainWindowBase
 		void updateZeroconfService();
 		void serverDetected(const QString name);
 		void updateLocalFingerprint();
-		LicenseManager& licenseManager() const;
-
-		int raiseActivationDialog();
 
 public slots:
-		void setEdition(Edition edition);
-		void beginTrial(bool isExpiring);
-		void endTrial(bool isExpired);
 		void appendLogRaw(const QString& text);
 		void appendLogInfo(const QString& text);
 		void appendLogDebug(const QString& text);
@@ -141,7 +134,6 @@ public slots:
 		bool on_m_pActionSave_triggered();
 		void on_m_pActionAbout_triggered();
 		void on_m_pActionSettings_triggered();
-		void on_m_pActivate_triggered();
 		void synergyFinished(int exitCode, QProcess::ExitStatus);
 		void trayActivated(QSystemTrayIcon::ActivationReason reason);
 		void stopSynergy();
@@ -197,7 +189,6 @@ public slots:
 	private:
 		QSettings& m_Settings;
 		AppConfig* m_AppConfig;
-		LicenseManager* m_LicenseManager;
 		QProcess* m_pSynergy;
 		int m_SynergyState;
 		ServerConfig m_ServerConfig;

@@ -18,8 +18,6 @@ FORMS += res/MainWindowBase.ui \
     res/SettingsDialogBase.ui \
     res/SetupWizardBase.ui \
     res/AddClientDialogBase.ui \
-    res/ActivationDialog.ui \
-    res/CancelActivationDialog.ui \
     res/FailedLoginDialog.ui
 SOURCES += src/main.cpp \
     src/MainWindow.cpp \
@@ -59,14 +57,7 @@ SOURCES += src/main.cpp \
     src/CommandProcess.cpp \
     src/CoreInterface.cpp \
     src/Fingerprint.cpp \
-    src/SslCertificate.cpp \
-    src/WebClient.cpp \
-    src/ActivationNotifier.cpp \
-    src/ActivationDialog.cpp \
-    src/CancelActivationDialog.cpp \
-    src/FailedLoginDialog.cpp \
-    ../lib/shared/SerialKey.cpp \
-    src/LicenseManager.cpp
+    src/SslCertificate.cpp
 HEADERS += src/MainWindow.h \
     src/AboutDialog.h \
     src/ServerConfig.h \
@@ -107,18 +98,10 @@ HEADERS += src/MainWindow.h \
     src/CoreInterface.h \
     src/Fingerprint.h \
     src/SslCertificate.h \
-    src/WebClient.h \
-    src/ActivationNotifier.h \
-    src/ElevateMode.h \
-    src/ActivationDialog.h \
-    src/CancelActivationDialog.h \
-    src/FailedLoginDialog.h \
-    ../lib/shared/EditionType.h \
-    ../lib/shared/SerialKey.h \
-    src/LicenseManager.h
+    src/ElevateMode.h
 RESOURCES += res/Synergy.qrc
 RC_FILE = res/win/Synergy.rc
-macx { 
+macx {
     QMAKE_INFO_PLIST = res/mac/Info.plist
     TARGET = Synergy
     QSYNERGY_ICON.files = res/mac/Synergy.icns
@@ -127,12 +110,12 @@ macx {
     LIBS += $$MACX_LIBS
 }
 unix:!macx:LIBS += -ldns_sd
-debug { 
+debug {
     OBJECTS_DIR = tmp/debug
     MOC_DIR = tmp/debug
     RCC_DIR = tmp/debug
 }
-release { 
+release {
     OBJECTS_DIR = tmp/release
     MOC_DIR = tmp/release
     RCC_DIR = tmp/release
@@ -152,7 +135,7 @@ win32-msvc* {
         LIBS += -L"$$(BONJOUR_SDK_HOME)/Lib/x64" -ldnssd
     }
 }
-win32 { 
+win32 {
     Debug:DESTDIR = ../../bin/Debug
     Release:DESTDIR = ../../bin/Release
     INCLUDEPATH += "$$(BONJOUR_SDK_HOME)/Include"

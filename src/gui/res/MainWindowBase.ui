@@ -532,14 +532,6 @@
     <string notr="true"/>
    </property>
   </action>
-  <action name="m_pActivate">
-   <property name="text">
-    <string>Activate</string>
-   </property>
-   <property name="toolTip">
-    <string>Activate</string>
-   </property>
-  </action>
  </widget>
  <resources>
   <include location="Synergy.qrc"/>

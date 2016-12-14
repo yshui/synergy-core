@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define DOWNLOAD_URL "http://symless.com/?source=gui"
+#define DOWNLOAD_URL "http://www.example.com/"
 
 #include <iostream>
 
@@ -26,12 +26,9 @@
 #include "AboutDialog.h"
 #include "ServerConfigDialog.h"
 #include "SettingsDialog.h"
-#include "ActivationDialog.h"
 #include "ZeroconfService.h"
 #include "DataDownloader.h"
 #include "CommandProcess.h"
-#include "LicenseManager.h"
-#include "EditionType.h"
 #include "QUtility.h"
 #include "ProcessorArch.h"
 #include "SslCertificate.h"
@@ -76,11 +73,9 @@ static const char* synergyIconFiles[] =
 	":/res/icons/16x16/synergy-transfering.png"
 };
 
-MainWindow::MainWindow(QSettings& settings, AppConfig& appConfig,
-					   LicenseManager& licenseManager) :
+MainWindow::MainWindow(QSettings& settings, AppConfig& appConfig) :
 	m_Settings(settings),
 	m_AppConfig(&appConfig),
-	m_LicenseManager(&licenseManager),
 	m_pSynergy(NULL),
 	m_SynergyState(synergyDisconnected),
 	m_ServerConfig(&m_Settings, 5, 3, m_AppConfig->screenName(), this),
@@ -101,8 +96,7 @@ MainWindow::MainWindow(QSettings& settings, AppConfig& appConfig,
 	m_BonjourInstall(NULL),
 	m_SuppressEmptyServerWarning(false),
 	m_ExpectedRunningState(kStopped),
-	m_pSslCertificate(NULL),
-	m_ActivationDialogRunning(false)
+	m_pSslCertificate(NULL)
 {
 	setupUi(this);
 
@@ -143,27 +137,14 @@ MainWindow::MainWindow(QSettings& settings, AppConfig& appConfig,
 	connect (this, SIGNAL(windowShown()),
 			 this, SLOT(on_windowShown()), Qt::QueuedConnection);
 
-	connect (m_LicenseManager, SIGNAL(editionChanged(Edition)),
-			 this, SLOT(setEdition(Edition)), Qt::QueuedConnection);
-
-	connect (m_LicenseManager, SIGNAL(beginTrial(bool)),
-			 this, SLOT(beginTrial(bool)), Qt::QueuedConnection);
-
-	connect (m_LicenseManager, SIGNAL(endTrial(bool)),
-			 this, SLOT(endTrial(bool)), Qt::QueuedConnection);
-
 	connect (m_AppConfig, SIGNAL(sslToggled(bool)),
 			 this, SLOT(sslToggled(bool)), Qt::QueuedConnection);
-
-	setWindowTitle (m_LicenseManager->activeEditionName());
-	m_LicenseManager->refresh();
 
 	QString lastVersion = m_AppConfig->lastVersion();
 	QString currentVersion = m_VersionChecker.getVersion();
 	if (lastVersion != currentVersion) {
 		m_AppConfig->setLastVersion (currentVersion);
 		m_AppConfig->saveSettings();
-		m_LicenseManager->notifyUpdate (lastVersion, currentVersion);
 	}
 }
 
@@ -197,7 +178,7 @@ void MainWindow::open()
 		showNormal();
 	}
 
-	m_VersionChecker.checkLatest();
+	//m_VersionChecker.checkLatest();
 
 	if (!appConfig().autoConfigPrompted()) {
 		promptAutoConfig();
@@ -290,8 +271,6 @@ void MainWindow::createMenuBar()
 
 	m_pMenuFile->addAction(m_pActionStartSynergy);
 	m_pMenuFile->addAction(m_pActionStopSynergy);
-	m_pMenuFile->addSeparator();
-	m_pMenuFile->addAction(m_pActivate);
 	m_pMenuFile->addSeparator();
 	m_pMenuFile->addAction(m_pActionSave);
 	m_pMenuFile->addSeparator();
@@ -532,7 +511,8 @@ void MainWindow::restartSynergy()
 
 void MainWindow::proofreadInfo()
 {
-	setEdition(m_AppConfig->edition()); // Why is this here?
+	//setEdition(m_AppConfig->edition()); // Why is this here?
+	// You do not need to wonder anymore.
 
 	int oldState = m_SynergyState;
 	m_SynergyState = synergyDisconnected;
@@ -552,14 +532,6 @@ void MainWindow::clearLog()
 
 void MainWindow::startSynergy()
 {
-	SerialKey serialKey = m_LicenseManager->serialKey();
-	time_t currentTime = ::time(0);
-	if (serialKey.isExpired(currentTime)) {
-		if (QDialog::Rejected == raiseActivationDialog()) {
-			return;
-		}
-	}
-
 	bool desktopMode = appConfig().processMode() == Desktop;
 	bool serviceMode = appConfig().processMode() == Service;
 
@@ -804,10 +776,6 @@ bool MainWindow::serverArgs(QStringList& args, QString& app)
 #endif
 	args << "-c" << configFilename << "--address" << address();
 
-	if (!appConfig().serialKey().isEmpty()) {
-		args << "--serial-key" << appConfig().serialKey();
-	}
-
 	return true;
 }
 
@@ -1049,6 +1017,7 @@ void MainWindow::serverDetected(const QString name)
 	}
 }
 
+#if 0
 void MainWindow::setEdition(Edition edition)
 {
 	setWindowTitle(m_LicenseManager->getEditionName (edition));
@@ -1059,57 +1028,7 @@ void MainWindow::setEdition(Edition edition)
 	updateLocalFingerprint();
 	saveSettings();
 }
-
-void MainWindow::beginTrial(bool isExpiring)
-{
-	//Hack
-	//if (isExpiring) {
-	time_t daysLeft = m_LicenseManager->serialKey().daysLeft(::time(0));
-		QString expiringNotice ("<html><head/><body><p><span style=\""
-					 "font-weight:600;\">%1</span> day%3 of "
-					 "your %2 trial remain%5. <a href="
-					 "\"https://symless.com/synergy/trial/thanks?id=%4\">"
-					 "<span style=\"text-decoration: underline;"
-					 " color:#0000ff;\">Buy now!</span></a>"
-					 "</p></body></html>");
-		expiringNotice = expiringNotice
-			.arg (daysLeft)
-			.arg (LicenseManager::getEditionName
-					(m_LicenseManager->activeEdition()))
-			.arg ((daysLeft == 1) ? "" : "s")
-			.arg (QString::fromStdString
-					(m_LicenseManager->serialKey().toString()))
-			.arg ((daysLeft == 1) ? "s" : "");
-		this->m_trialLabel->setText(expiringNotice);
-		this->m_trialWidget->show();
-	//}
-	setWindowTitle (m_LicenseManager->activeEditionName());
-}
-
-void MainWindow::endTrial(bool isExpired)
-{
-	if (isExpired) {
-		QString expiredNotice (
-			"<html><head/><body><p>Your %1 trial has expired. <a href="
-			"\"https://symless.com/synergy/trial/thanks?id=%2\">"
-			"<span style=\"text-decoration: underline;color:#0000ff;\">"
-			"Buy now!</span></a></p></body></html>"
-		);
-		expiredNotice = expiredNotice
-			.arg(LicenseManager::getEditionName
-					(m_LicenseManager->activeEdition()))
-			.arg(QString::fromStdString
-					(m_LicenseManager->serialKey().toString()));
-
-		this->m_trialLabel->setText(expiredNotice);
-		this->m_trialWidget->show();
-		stopSynergy();
-		m_AppConfig->activationHasRun(false);
-	} else {
-		this->m_trialWidget->hide();
-	}
-	setWindowTitle (m_LicenseManager->activeEditionName());
-}
+#endif
 
 void MainWindow::updateLocalFingerprint()
 {
@@ -1122,12 +1041,6 @@ void MainWindow::updateLocalFingerprint()
 		m_pLabelFingerprint->setVisible(false);
 		m_pLabelLocalFingerprint->setVisible(false);
 	}
-}
-
-LicenseManager&
-MainWindow::licenseManager() const
-{
-	return *m_LicenseManager;
 }
 
 void MainWindow::on_m_pGroupClient_toggled(bool on)
@@ -1235,11 +1148,6 @@ void MainWindow::showConfigureServer(const QString& message)
 void MainWindow::on_m_pButtonConfigureServer_clicked()
 {
 	showConfigureServer();
-}
-
-void MainWindow::on_m_pActivate_triggered()
-{
-	raiseActivationDialog();
 }
 
 void MainWindow::on_m_pButtonApply_clicked()
@@ -1458,6 +1366,7 @@ void MainWindow::bonjourInstallFinished()
 	m_pCheckBoxAutoConfig->setChecked(true);
 }
 
+#if 0
 int MainWindow::raiseActivationDialog()
 {
 	if (m_ActivationDialogRunning) {
@@ -1481,15 +1390,11 @@ int MainWindow::raiseActivationDialog()
 	}
 	return result;
 }
+#endif
 
 void MainWindow::on_windowShown()
 {
-	time_t currentTime = ::time(0);
-	if (!m_AppConfig->activationHasRun()
-			&& ((m_AppConfig->edition() == kUnregistered) ||
-				(m_LicenseManager->serialKey().isExpired(currentTime)))) {
-		raiseActivationDialog();
-	}
+	//raiseActivationDialog();
 }
 
 QString MainWindow::getProfileRootForArg()
