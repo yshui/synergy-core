@@ -1178,7 +1178,6 @@ Ciò consentirà a Synergy di interagire con molti processi e con il dialogo UAC
         <source>Please select an option.</source>
         <translation type="finished">Pregasi selezionare un'opzione</translation>
     </message>
-
 </context>
 <context>
     <name>SetupWizardBase</name>

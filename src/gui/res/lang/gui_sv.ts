@@ -1178,7 +1178,6 @@ Detta låter Synergy interagera med förhöjda processer och UAC-dialogen, men k
         <source>Please select an option.</source>
         <translation type="finished">Välj ett alternativ.</translation>
     </message>
-
 </context>
 <context>
     <name>SetupWizardBase</name>

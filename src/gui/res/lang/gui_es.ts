@@ -1179,7 +1179,6 @@ Esto permitirá que puedas interactuar con procesos elevados y el cuadro de diá
         <source>Please select an option.</source>
         <translation type="finished">Elige una opción, por favor.</translation>
     </message>
-
 </context>
 <context>
     <name>SetupWizardBase</name>

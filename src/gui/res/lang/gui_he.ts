@@ -1175,7 +1175,6 @@ This allows Synergy to interact with elevated processes and the UAC dialog, but 
         <source>Please select an option.</source>
         <translation type="finished">אנא בחר אופציה.</translation>
     </message>
-
 </context>
 <context>
     <name>SetupWizardBase</name>

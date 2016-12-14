@@ -1178,7 +1178,6 @@ Tämä mahdollistaa Synergyn käyttämisen korotetuissa prosesseissa ja UAC-dial
         <source>Please select an option.</source>
         <translation type="finished">Tee valinta.</translation>
     </message>
-
 </context>
 <context>
     <name>SetupWizardBase</name>

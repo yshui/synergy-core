@@ -1178,7 +1178,6 @@ To omogućuje Synergyu interakciju s ovlaštenim procesima i UAC dijalogom, ali 
         <source>Please select an option.</source>
         <translation type="finished">Molim, odaberite mogućnost.</translation>
     </message>
-
 </context>
 <context>
     <name>SetupWizardBase</name>

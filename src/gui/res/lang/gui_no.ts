@@ -1178,7 +1178,6 @@ Dette tillater Synergy å kommunisere med forhøyede prosesser og UAC dialoger. 
         <source>Please select an option.</source>
         <translation type="finished">Vennligst velg et alternativ.</translation>
     </message>
-
 </context>
 <context>
     <name>SetupWizardBase</name>

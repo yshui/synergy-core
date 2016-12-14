@@ -1178,7 +1178,6 @@ Pozwoli to Synergy współpracować z innymi aplikacjami o podniesionych uprawni
         <source>Please select an option.</source>
         <translation type="finished">Proszę wybrać opcję,</translation>
     </message>
-
 </context>
 <context>
     <name>SetupWizardBase</name>

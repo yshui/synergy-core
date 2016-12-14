@@ -1178,7 +1178,6 @@ Sice to Synergy umožní pracovat s procesy, které mají také takový stupeň 
         <source>Please select an option.</source>
         <translation type="finished">Zvolte možnost.</translation>
     </message>
-
 </context>
 <context>
     <name>SetupWizardBase</name>

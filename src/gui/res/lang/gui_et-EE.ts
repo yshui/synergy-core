@@ -1178,7 +1178,6 @@ See võimaldab Synergy'l toimetada ülendatud protsessidega ja UAC dialoogiga, k
         <source>Please select an option.</source>
         <translation type="finished">Palun valida sobiv funktsioon.</translation>
     </message>
-
 </context>
 <context>
     <name>SetupWizardBase</name>

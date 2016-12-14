@@ -1178,7 +1178,6 @@ Das erlaubt Synergy mit Prozessen die höhere Rechte haben und dem UAC-Dialog zu
         <source>Please select an option.</source>
         <translation type="finished">Bitte wählen Sie eine option aus.</translation>
     </message>
-
 </context>
 <context>
     <name>SetupWizardBase</name>

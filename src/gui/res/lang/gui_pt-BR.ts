@@ -1178,7 +1178,6 @@ Isso permite ao Synergy interagir com processos privilegiados e com o UAC, mas p
         <source>Please select an option.</source>
         <translation type="finished">Por favor, selecione uma opção</translation>
     </message>
-
 </context>
 <context>
     <name>SetupWizardBase</name>

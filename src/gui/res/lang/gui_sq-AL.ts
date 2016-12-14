@@ -1178,7 +1178,6 @@ Kjo i jep mundesi Synergy te bashkeveproje me procese te larta dhe UAC, por ju m
         <source>Please select an option.</source>
         <translation type="finished">Ju lutem zgjidhni nje opsion.</translation>
     </message>
-
 </context>
 <context>
     <name>SetupWizardBase</name>

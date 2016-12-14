@@ -1178,7 +1178,6 @@ This allows Synergy to interact with elevated processes and the UAC dialog, but 
         <source>Please select an option.</source>
         <translation type="finished">옵션을 선택하세요.</translation>
     </message>
-
 </context>
 <context>
     <name>SetupWizardBase</name>

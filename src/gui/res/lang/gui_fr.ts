@@ -1178,7 +1178,6 @@ Ceci autorise Synergy à interagir avec les processus élevés et le dialogue UA
         <source>Please select an option.</source>
         <translation type="finished">Choisissez une option s'il vous plait.</translation>
     </message>
-
 </context>
 <context>
     <name>SetupWizardBase</name>
