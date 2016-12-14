@@ -23,7 +23,7 @@
 #if HAVE_CONFIG_H
 // afaik config.h hasn't been in the common folder
 //#	include "config.h"
-#	include "../../../synergy/config.h"
+#	include "../synergy/config.h"
 
 	// don't use poll() on mac
 #	if defined(__APPLE__)

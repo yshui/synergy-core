@@ -530,6 +530,8 @@ class InternalCommands:
 
 		qmake_cmd_string += " QMAKE_VERSION_STAGE=" + self.getVersionStage()
 		qmake_cmd_string += " QMAKE_VERSION_REVISION=" + self.getGitRevision()
+		if target == "debug":
+			qmake_cmd_string += " CONFIG+=debug CONFIG+=qml_debug"
 		print "QMake command: " + qmake_cmd_string
 
 		# run qmake from the gui dir

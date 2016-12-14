@@ -40,11 +40,12 @@ endif()
 project(synergy C CXX)
 
 # put binaries in a different dir to make them easier to find.
-set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
-set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin/release)
+set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/release)
 
 # for unix, put debug files in a separate bin "debug" dir.
 # release bin files should stay in the root of the bin dir.
+# i think that's dumb
 if (CMAKE_GENERATOR STREQUAL "Unix Makefiles")
 	if (CMAKE_BUILD_TYPE STREQUAL Debug)
 		set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin/debug)
@@ -296,7 +297,7 @@ if (UNIX)
 	set(HAVE_SOCKLEN_T 1)
 
 	# For config.h, save the results based on a template (config.h.in).
-	configure_file(res/config.h.in ${root_dir}/synergy/config.h)
+	configure_file(res/config.h.in src/lib/synergy/config.h)
 
 	add_definitions(-DSYSAPI_UNIX=1 -DHAVE_CONFIG_H)
 

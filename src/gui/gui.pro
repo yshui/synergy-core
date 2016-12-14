@@ -7,8 +7,7 @@ DEFINES += VERSION_REVISION=\\\"$$QMAKE_VERSION_REVISION\\\"
 DEPENDPATH += . \
     res
 INCLUDEPATH += . \
-    src \
-    ../lib/shared/
+    src
 TRANSLATIONS += res/lang/gui_af-ZA.ts \
     res/lang/gui_ar.ts \
     res/lang/gui_bg-BG.ts \
@@ -156,12 +155,13 @@ macx {
     LIBS += $$MACX_LIBS
 }
 unix:!macx:LIBS += -ldns_sd
-debug {
+CONFIG(debug, debug|release) {
+    DESTDIR = ../../bin/debug
     OBJECTS_DIR = tmp/debug
     MOC_DIR = tmp/debug
     RCC_DIR = tmp/debug
-}
-release {
+} else {
+    DESTDIR = ../../bin/release
     OBJECTS_DIR = tmp/release
     MOC_DIR = tmp/release
     RCC_DIR = tmp/release
@@ -182,8 +182,5 @@ win32-msvc* {
     }
 }
 win32 {
-    Debug:DESTDIR = ../../bin/Debug
-    Release:DESTDIR = ../../bin/Release
     INCLUDEPATH += "$$(BONJOUR_SDK_HOME)/Include"
 }
-else:DESTDIR = ../../bin
