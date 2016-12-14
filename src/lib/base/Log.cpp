@@ -2,11 +2,11 @@
  * synergy -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
- * 
+ *
  * This package is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * found in the file LICENSE that should have accompanied this file.
- * 
+ *
  * This package is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
@@ -26,7 +26,7 @@
 #include <cstdio>
 #include <cstring>
 #include <iostream>
-#include <ctime> 
+#include <ctime>
 
 // names of priorities
 static const char*		g_priority[] = {
@@ -180,7 +180,7 @@ Log::print(const char* file, int line, const char* fmt, ...)
 		sprintf(timestamp, "%04i-%02i-%02iT%02i:%02i:%02i", tm->tm_year + 1900, tm->tm_mon+1, tm->tm_mday, tm->tm_hour, tm->tm_min, tm->tm_sec);
 
 		// square brackets, spaces, comma and null terminator take about 10
-		int size = 10;
+		size_t size = 10;
 		size += strlen(timestamp);
 		size += strlen(g_priority[priority]);
 		size += strlen(buffer);

@@ -414,6 +414,8 @@ class InternalCommands:
 			print 'Defaulting target to: ' + self.defaultTarget
 			target = self.defaultTarget
 
+		os.system('lrelease -silent -compress src/gui/gui.pro')
+
 		# allow user to skip core compile
 		if self.enableMakeCore:
 			self.configureCore(target, extraArgs)
