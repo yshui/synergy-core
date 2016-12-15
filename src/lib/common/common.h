@@ -21,9 +21,7 @@
 // this file should be included, directly or indirectly by every other.
 
 #if HAVE_CONFIG_H
-// afaik config.h hasn't been in the common folder
-//#	include "config.h"
-#	include "../synergy/config.h"
+#	include "../../../build/config.h"
 
 	// don't use poll() on mac
 #	if defined(__APPLE__)

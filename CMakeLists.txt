@@ -48,7 +48,7 @@ else()
 	if (CMAKE_BUILD_TYPE STREQUAL "Debug")
 		set (OUR_BUILD_TYPE_HEY_HEY_HEY "debug")
 	endif()
-	
+
 	set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin/${OUR_BUILD_TYPE_HEY_HEY_HEY})
 	set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/${OUR_BUILD_TYPE_HEY_HEY_HEY})
 endif()
@@ -311,7 +311,7 @@ if (UNIX)
 	set(HAVE_SOCKLEN_T 1)
 
 	# For config.h, save the results based on a template (config.h.in).
-	configure_file(res/config.h.in src/lib/synergy/config.h)
+	configure_file(res/config.h.in ${root_dir}/build/config.h)
 
 	add_definitions(-DSYSAPI_UNIX=1 -DHAVE_CONFIG_H)
 
