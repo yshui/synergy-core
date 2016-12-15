@@ -1,11 +1,11 @@
 /*
  * synergy -- mouse and keyboard sharing utility
  * Copyright (C) 2015-2016 Symless Ltd.
- * 
+ *
  * This package is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * found in the file LICENSE that should have accompanied this file.
- * 
+ *
  * This package is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -118,7 +118,7 @@ SecureSocket::newJob()
 	if (m_connected && !m_secureReady) {
 		return NULL;
 	}
-	
+
 	return TCPSocket::newJob();
 }
 
@@ -158,20 +158,20 @@ SecureSocket::doRead()
 	else {
 		return kRetry;
 	}
-	
+
 	if (bytesRead > 0) {
 		bool wasEmpty = (m_inputBuffer.getSize() == 0);
-		
+
 		// slurp up as much as possible
 		do {
 			m_inputBuffer.write(buffer, bytesRead);
-			
+
 			status = secureRead(buffer, sizeof(buffer), bytesRead);
 			if (status < 0) {
 				return kBreak;
 			}
 		} while (bytesRead > 0 || status > 0);
-		
+
 		// send input ready if input buffer was empty
 		if (wasEmpty) {
 			sendEvent(m_events->forIStream().inputReady());
@@ -189,7 +189,7 @@ SecureSocket::doRead()
 		m_readable = false;
 		return kNew;
 	}
-	
+
 	return kRetry;
 }
 
@@ -204,7 +204,7 @@ SecureSocket::doWrite()
 	int bufferSize = 0;
 	int bytesWrote = 0;
 	int status = 0;
-	
+
 	if (s_retry) {
 		bufferSize = s_retrySize;
 	}
@@ -213,7 +213,7 @@ SecureSocket::doWrite()
 		s_staticBuffer = malloc(bufferSize);
 		memcpy(s_staticBuffer, m_outputBuffer.peek(bufferSize), bufferSize);
 	}
-	
+
 	if (bufferSize == 0) {
 		return kRetry;
 	}
@@ -238,7 +238,7 @@ SecureSocket::doWrite()
 	else {
 		return kRetry;
 	}
-	
+
 	if (bytesWrote > 0) {
 		discardWrittenData(bytesWrote);
 		return kNew;
@@ -253,12 +253,12 @@ SecureSocket::secureRead(void* buffer, int size, int& read)
 	if (m_ssl->m_ssl != NULL) {
 		LOG((CLOG_DEBUG2 "reading secure socket"));
 		read = SSL_read(m_ssl->m_ssl, buffer, size);
-		
+
 		static int retry;
 
 		// Check result will cleanup the connection in the case of a fatal
 		checkResult(read, retry);
-		
+
 		if (retry) {
 			return 0;
 		}
@@ -280,7 +280,7 @@ SecureSocket::secureWrite(const void* buffer, int size, int& wrote)
 		LOG((CLOG_DEBUG2 "writing secure socket:%p", this));
 
 		wrote = SSL_write(m_ssl->m_ssl, buffer, size);
-		
+
 		static int retry;
 
 		// Check result will cleanup the connection in the case of a fatal
@@ -364,7 +364,7 @@ SecureSocket::initContext(bool server)
 	SSL_library_init();
 
 	const SSL_METHOD* method;
- 
+
 	// load & register all cryptos, etc.
 	OpenSSL_add_all_algorithms();
 
@@ -382,7 +382,7 @@ SecureSocket::initContext(bool server)
 	else {
 		method = SSLv23_client_method();
 	}
-	
+
 	// create new context from method
 	SSL_METHOD* m = const_cast<SSL_METHOD*>(method);
 	m_ssl->m_context = SSL_CTX_new(m);
@@ -412,10 +412,10 @@ SecureSocket::secureAccept(int socket)
 
 	// set connection socket to SSL state
 	SSL_set_fd(m_ssl->m_ssl, socket);
-	
+
 	LOG((CLOG_DEBUG2 "accepting secure socket"));
 	int r = SSL_accept(m_ssl->m_ssl);
-	
+
 	static int retry;
 
 	checkResult(r, retry);
@@ -461,10 +461,10 @@ SecureSocket::secureConnect(int socket)
 
 	// attach the socket descriptor
 	SSL_set_fd(m_ssl->m_ssl, socket);
-	
+
 	LOG((CLOG_DEBUG2 "connecting secure socket"));
 	int r = SSL_connect(m_ssl->m_ssl);
-	
+
 	static int retry;
 
 	checkResult(r, retry);
@@ -511,7 +511,7 @@ SecureSocket::showCertificate()
 {
 	X509* cert;
 	char* line;
- 
+
 	// get the server's certificate
 	cert = SSL_get_peer_certificate(m_ssl->m_ssl);
 	if (cert != NULL) {
@@ -555,7 +555,7 @@ SecureSocket::checkResult(int status, int& retry)
 
 	case SSL_ERROR_WANT_WRITE:
 		// Need to make sure the socket is known to be writable so the impending
-		// select action actually triggers on a write. This isn't necessary for 
+		// select action actually triggers on a write. This isn't necessary for
 		// m_readable because the socket logic is always readable
 		m_writable = true;
 		retry++;
@@ -805,10 +805,21 @@ SecureSocket::showSecureCipherInfo()
 		showCipherStackDesc(sStack);
 	}
 
-	// m_ssl->m_ssl->session->ciphers is not forward compatable, In future release
-	// of OpenSSL, it's not visible, need to use SSL_get_client_ciphers() instead
+#ifdef SSLEAY_VERSION_NUMBER
+	// the OPENSSL_API_COMPAT macro can determine if SSLEAY_VERSION_NUMBER exists
+	#define _TMPVER SSLEAY_VERSION_NUMBER
+#else
+	#define _TMPVER OPENSSL_VERSION_NUMBER
+#endif
+
+#if _TMPVER >= 0x10100000L
+	STACK_OF(SSL_CIPHER) * cStack = SSL_get_client_ciphers(m_ssl->m_ssl);
+#else
 	STACK_OF(SSL_CIPHER) * cStack = m_ssl->m_ssl->session->ciphers;
-		if (cStack == NULL) {
+#endif
+#undef _TMPVER
+
+	if (cStack == NULL) {
 		LOG((CLOG_DEBUG1 "remote cipher list not available"));
 	}
 	else {
