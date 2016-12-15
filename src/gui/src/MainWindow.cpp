@@ -135,9 +135,6 @@ MainWindow::MainWindow(QSettings& settings, AppConfig& appConfig) :
 
 	sslToggled(m_AppConfig->getCryptoEnabled());
 
-	connect (this, SIGNAL(windowShown()),
-			 this, SLOT(on_windowShown()), Qt::QueuedConnection);
-
 	connect (m_AppConfig, SIGNAL(sslToggled(bool)),
 			 this, SLOT(sslToggled(bool)), Qt::QueuedConnection);
 
@@ -511,7 +508,6 @@ void MainWindow::proofreadInfo()
 void MainWindow::showEvent(QShowEvent* event)
 {
 	QMainWindow::showEvent(event);
-	emit windowShown();
 }
 
 void MainWindow::clearLog()
@@ -1364,11 +1360,6 @@ int MainWindow::raiseActivationDialog()
 	return result;
 }
 #endif
-
-void MainWindow::on_windowShown()
-{
-	//raiseActivationDialog();
-}
 
 QString MainWindow::getProfileRootForArg()
 {
