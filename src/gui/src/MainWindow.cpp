@@ -133,8 +133,7 @@ MainWindow::MainWindow(QSettings& settings, AppConfig& appConfig) :
 	m_pComboServerList->hide();
 	m_pLabelPadlock->hide();
 
-	// blocking the main thread with file io, I love it
-	updateLocalFingerprint();
+	sslToggled(m_AppConfig->getCryptoEnabled());
 
 	connect (this, SIGNAL(windowShown()),
 			 this, SLOT(on_windowShown()), Qt::QueuedConnection);
