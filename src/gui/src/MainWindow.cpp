@@ -132,7 +132,9 @@ MainWindow::MainWindow(QSettings& settings, AppConfig& appConfig) :
 
 	m_pComboServerList->hide();
 	m_pLabelPadlock->hide();
-	m_trialWidget->hide();
+
+	// blocking the main thread with file io, I love it
+	updateLocalFingerprint();
 
 	connect (this, SIGNAL(windowShown()),
 			 this, SLOT(on_windowShown()), Qt::QueuedConnection);
@@ -502,9 +504,6 @@ void MainWindow::restartSynergy()
 
 void MainWindow::proofreadInfo()
 {
-	//setEdition(m_AppConfig->edition()); // Why is this here?
-	// You do not need to wonder anymore.
-
 	int oldState = m_SynergyState;
 	m_SynergyState = synergyDisconnected;
 	setSynergyState((qSynergyState)oldState);
@@ -1008,29 +1007,13 @@ void MainWindow::serverDetected(const QString name)
 	}
 }
 
-#if 0
-void MainWindow::setEdition(Edition edition)
-{
-	setWindowTitle(m_LicenseManager->getEditionName (edition));
-	if (m_AppConfig->getCryptoEnabled()) {
-		m_pSslCertificate = new SslCertificate(this);
-		m_pSslCertificate->generateCertificate();
-	}
-	updateLocalFingerprint();
-	saveSettings();
-}
-#endif
-
 void MainWindow::updateLocalFingerprint()
 {
 	if (m_AppConfig->getCryptoEnabled() && Fingerprint::local().fileExists()) {
-		m_pLabelFingerprint->setVisible(true);
-		m_pLabelLocalFingerprint->setVisible(true);
 		m_pLabelLocalFingerprint->setText(Fingerprint::local().readFirst());
 	}
 	else {
-		m_pLabelFingerprint->setVisible(false);
-		m_pLabelLocalFingerprint->setVisible(false);
+		m_pLabelLocalFingerprint->setText("<SSL disabled>");
 	}
 }
 

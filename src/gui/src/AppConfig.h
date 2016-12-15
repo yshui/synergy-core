@@ -78,8 +78,6 @@ class AppConfig: public QObject
 		void setAutoConfig(bool autoConfig);
 		bool autoConfigPrompted();
 		void setAutoConfigPrompted(bool prompted);
-		int lastExpiringWarningTime() const;
-		void setLastExpiringWarningTime(int t);
 
 		QString synergysName() const;
 		QString synergycName() const;
@@ -133,7 +131,6 @@ protected:
 		bool m_CryptoEnabled;
 		bool m_AutoHide;
 		QString m_lastVersion;
-		int m_LastExpiringWarningTime;
 
 		static const char m_SynergysName[];
 		static const char m_SynergycName[];

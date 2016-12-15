@@ -59,8 +59,7 @@ AppConfig::AppConfig(QSettings* settings) :
 	m_ElevateMode(defaultElevateMode),
 	m_AutoConfigPrompted(false),
 	m_CryptoEnabled(false),
-	m_AutoHide(false),
-	m_LastExpiringWarningTime(0)
+	m_AutoHide(false)
 {
 	Q_ASSERT(m_pSettings);
 
@@ -159,7 +158,6 @@ void AppConfig::loadSettings()
 	m_CryptoEnabled = settings().value("cryptoEnabled", true).toBool();
 	m_AutoHide = settings().value("autoHide", false).toBool();
 	m_lastVersion = settings().value("lastVersion", "Unknown").toString();
-	m_LastExpiringWarningTime = settings().value("lastExpiringWarningTime", 0).toInt();
 }
 
 void AppConfig::saveSettings()
@@ -227,10 +225,6 @@ void AppConfig::setAutoConfigPrompted(bool prompted)
 {
 	m_AutoConfigPrompted = prompted;
 }
-
-int AppConfig::lastExpiringWarningTime() const { return m_LastExpiringWarningTime; }
-
-void AppConfig::setLastExpiringWarningTime(int t) { m_LastExpiringWarningTime = t; }
 
 QString AppConfig::synergysName() const { return m_SynergysName; }
 
