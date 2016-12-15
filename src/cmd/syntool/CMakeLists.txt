@@ -37,7 +37,7 @@ if (WIN32)
 	#	POST_BUILD
 	#	COMMAND xcopy /Y /Q
 	#		..\\..\\..\\..\\bin\\${CMAKE_CFG_INTDIR}\\syntool.*
-	#		..\\..\\..\\..\\bin\\${CMAKE_CFG_INTDIR}
+	#		..\\..\\..\\..\\bin\\${CMAKE_CFG_INTDIR}\\
 	#)
 else ()
 	if (CONF_CPACK)

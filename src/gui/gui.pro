@@ -146,6 +146,15 @@ HEADERS += src/MainWindow.h \
     src/ElevateMode.h
 RESOURCES += res/Synergy.qrc
 RC_FILE = res/win/Synergy.rc
+
+CONFIG(debug, debug|release) {
+    SYN_BUILD_TYPE = debug
+} else {
+    SYN_BUILD_TYPE = release
+}
+
+SYN_BONJOUR_SRC_DIR = ../../ext/mDNSResponder-765.20.4
+
 macx {
     QMAKE_INFO_PLIST = res/mac/Info.plist
     TARGET = Synergy
@@ -155,32 +164,32 @@ macx {
     LIBS += $$MACX_LIBS
 }
 unix:!macx:LIBS += -ldns_sd
-CONFIG(debug, debug|release) {
-    DESTDIR = ../../bin/debug
-    OBJECTS_DIR = tmp/debug
-    MOC_DIR = tmp/debug
-    RCC_DIR = tmp/debug
-} else {
-    DESTDIR = ../../bin/release
-    OBJECTS_DIR = tmp/release
-    MOC_DIR = tmp/release
-    RCC_DIR = tmp/release
-}
 win32-msvc2015 {
     LIBS += -lAdvapi32
     QMAKE_LFLAGS += /NODEFAULTLIB:LIBCMT
 }
 win32-msvc* {
     contains(QMAKE_HOST.arch, x86):{
+        SYN_VC_PLATFORM_NAME = Win32
         QMAKE_LFLAGS *= /MACHINE:X86
-        LIBS += -L"$$(BONJOUR_SDK_HOME)/Lib/Win32" -ldnssd
+        #LIBS += -L"$${BONJOUR_SDK_HOME}/Lib/Win32" -ldnssd
     }
 
     contains(QMAKE_HOST.arch, x86_64):{
+        SYN_VC_PLATFORM_NAME = x64
         QMAKE_LFLAGS *= /MACHINE:X64
-        LIBS += -L"$$(BONJOUR_SDK_HOME)/Lib/x64" -ldnssd
+        #LIBS += -L"$${BONJOUR_SDK_HOME}/Lib/x64" -ldnssd
     }
+
+    LIBS += -L"$${SYN_BONJOUR_SRC_DIR}/mDNSWindows/DLL/$${SYN_VC_PLATFORM_NAME}/$${SYN_BUILD_TYPE}" -ldnssd
 }
 win32 {
-    INCLUDEPATH += "$$(BONJOUR_SDK_HOME)/Include"
+    INCLUDEPATH += $${SYN_BONJOUR_SRC_DIR}/mDNSShared
+    #INCLUDEPATH += "$$(BONJOUR_SDK_HOME)/Include"
 }
+
+
+DESTDIR = ../../bin/$${SYN_VC_PLATFORM_NAME}/$${SYN_BUILD_TYPE}
+OBJECTS_DIR = tmp/$${SYN_VC_PLATFORM_NAME}/$${SYN_BUILD_TYPE}
+MOC_DIR = tmp/$${SYN_BUILD_TYPE}
+RCC_DIR = tmp/$${SYN_BUILD_TYPE}

@@ -14,6 +14,7 @@ config.h
 /ext/gmock-1.6.0
 /ext/gtest-1.6.0
 /ext/openssl
+/ext/mDNSResponder-765.20.4/
 /src/gui/Makefile*
 /src/gui/object_script*
 /src/gui/tmp

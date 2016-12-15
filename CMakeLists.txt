@@ -39,19 +39,33 @@ endif()
 # First, declare project (important for prerequisite checks).
 project(synergy C CXX)
 
+if (WIN32)
+	# windows automatically creates bin/$BUILD_TYPE
+	set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin/${CMAKE_VS_PLATFORM_NAME})
+	set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/${CMAKE_VS_PLATFORM_NAME})
+else()
+	set (OUR_BUILD_TYPE_HEY_HEY_HEY "release")
+	if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+		set (OUR_BUILD_TYPE_HEY_HEY_HEY "debug")
+	endif()
+	
+	set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin/${OUR_BUILD_TYPE_HEY_HEY_HEY})
+	set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/${OUR_BUILD_TYPE_HEY_HEY_HEY})
+endif()
+
 # put binaries in a different dir to make them easier to find.
-set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin/release)
-set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/release)
+#set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin/release)
+#set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/release)
 
 # for unix, put debug files in a separate bin "debug" dir.
 # release bin files should stay in the root of the bin dir.
 # i think that's dumb
-if (CMAKE_GENERATOR STREQUAL "Unix Makefiles")
-	if (CMAKE_BUILD_TYPE STREQUAL Debug)
-		set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin/debug)
-		set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/debug)
-	endif()
-endif()
+#if (CMAKE_GENERATOR STREQUAL "Unix Makefiles")
+#	if (CMAKE_BUILD_TYPE STREQUAL Debug)
+#		set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin/debug)
+#		set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/debug)
+#	endif()
+#endif()
 
 # Set some easy to type variables.
 set(root_dir ${CMAKE_SOURCE_DIR})
