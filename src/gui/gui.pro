@@ -162,6 +162,8 @@ macx {
     QSYNERGY_ICON.path = Contents/Resources
     QMAKE_BUNDLE_DATA += QSYNERGY_ICON
     LIBS += $$MACX_LIBS
+    HEADERS += src/OSXHelpers.h
+    SOURCES += src/OSXHelpers.mm
 }
 unix:!macx:LIBS += -ldns_sd
 win32-msvc2015 {
