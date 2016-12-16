@@ -22,7 +22,7 @@
 #include "base/String.h"
 
 #define WIN32_LEAN_AND_MEAN
-#include "Windows.h"
+#include <Windows.h>
 
 #define ARCH_APP_UTIL AppUtilWindows
 

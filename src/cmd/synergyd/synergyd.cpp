@@ -34,8 +34,13 @@ main(int argc, char** argv)
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 
+// Useful for debugging on Windows.
+#if 0
+int main(int argc, char** argv)
+#else
 int WINAPI
 WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
+#endif
 {
 	DaemonApp app;
 	return app.run(__argc, __argv);
