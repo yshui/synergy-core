@@ -16,13 +16,13 @@
 
 add_subdirectory(synergyc)
 add_subdirectory(synergys)
-add_subdirectory(usynergy)
+#add_subdirectory(usynergy)
 add_subdirectory(syntool)
 
 if (BUILD_SERVICE)
 	add_subdirectory(synergyd)
 endif (BUILD_SERVICE)
 
-if (WIN32)
-  add_subdirectory(synergyp)
-endif()
+#if (WIN32)
+#  add_subdirectory(synergyp)
+#endif()
