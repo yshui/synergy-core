@@ -5,6 +5,7 @@ config.h
 *~
 *.qm
 \.*.swp
+*.patch
 *build-gui-Desktop_Qt*
 /bin
 /lib
