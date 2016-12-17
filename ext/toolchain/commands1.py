@@ -16,12 +16,28 @@
 
 # TODO: split this file up, it's too long!
 
-import sys, os, ConfigParser, shutil, re, ftputil, zipfile, glob, commands
-from generators import VisualStudioGenerator, EclipseGenerator, XcodeGenerator, MakefilesGenerator
+import sys, os, shutil, re, zipfile, glob
+from .generators import VisualStudioGenerator, EclipseGenerator, XcodeGenerator, MakefilesGenerator
 from getopt import gnu_getopt
 
-if sys.version_info >= (2, 4):
-	import subprocess
+try:
+	import commands as commands_or_subprocess
+except ImportError:
+	import subprocess as commands_or_subprocess
+
+import subprocess
+
+try:
+	import ConfigParser as cfg_parser
+except ImportError:
+	import configparser as cfg_parser
+
+
+def pipe_to_str(p):
+	try:
+		return p.decode('utf-8')
+	except AttributeError:
+		return p
 
 class Toolchain:
 
@@ -44,11 +60,10 @@ class Toolchain:
 		'configure' : ['g:dr', ['generator=', 'debug', 'release', 'mac-sdk=', 'mac-deploy=', 'mac-identity=']],
 		'build'     : ['dr', ['debug', 'release']],
 		'clean'     : ['dr', ['debug', 'release']],
-		'update'    : ['', []],
 		'install'   : ['', []],
 		'doxygen'   : ['', []],
 		'dist'      : ['', ['vcredist-dir=', 'qt-dir=']],
-		'distftp'   : ['', ['host=', 'user=', 'pass=', 'dir=']],
+		#'distftp'   : ['', ['host=', 'user=', 'pass=', 'dir=']],
 		'kill'      : ['', []],
 		'usage'     : ['', []],
 		'revision'  : ['', []],
@@ -73,7 +88,15 @@ class Toolchain:
 	def complete_command(self, arg):
 		completions = []
 
-		for cmd, optarg in self.cmd_opt_dict.iteritems():
+		cmd_opt_s = None
+		cmd_alias_s = None
+
+		try:
+			cmd_opt_s = self.cmd_opt_dict.iteritems()
+		except AttributeError:
+			cmd_opt_s = self.cmd_opt_dict.items()
+
+		for cmd, optarg in cmd_opt_s:
 			# if command was matched fully, return only this, so that
 			# if `dist` is typed, it will return only `dist` and not
 			# `dist` and `distftp` for example.
@@ -82,7 +105,12 @@ class Toolchain:
 			if cmd.startswith(arg):
 				completions.append(cmd)
 
-		for alias, cmd in self.cmd_alias_dict.iteritems():
+		try:
+			cmd_alias_s = self.cmd_alias_dict.iteritems()
+		except AttributeError:
+			cmd_alias_s = self.cmd_alias_dict.items()
+
+		for alias, cmd in cmd_alias_s:
 			# don't know if this will work just like above, but it's
 			# probably worth adding.
 			if alias == arg:
@@ -118,7 +146,7 @@ class Toolchain:
 					cmd_map.append(cmd)
 
 				# map an alias to the command, and build up the map
-				if cmd in self.cmd_alias_dict.keys():
+				if cmd in list(self.cmd_alias_dict.keys()):
 					alias = cmd
 					if cmd_arg == cmd:
 						cmd_map.append(alias)
@@ -303,7 +331,6 @@ class InternalCommands:
 			'  build       Builds using the platform build chain\n'
 			'  clean       Cleans using the platform build chain\n'
 			'  kill        Kills all synergy processes (run as admin)\n'
-			'  update      Updates the source code from repository\n'
 			'  revision    Display the current source code revision\n'
 			'  package     Create a distribution package (e.g. tar.gz)\n'
 			'  install     Installs the program\n'
@@ -543,7 +570,7 @@ class InternalCommands:
 			raise Exception('QMake encountered error: ' + str(err))
 
 	def getQmakeVersion(self):
-		version = commands.getoutput("qmake --version")
+		version = commands_or_subprocess.getoutput("qmake --version")
 		result = re.search('(\d+)\.(\d+)\.(\d)', version)
 
 		if not result:
@@ -560,7 +587,7 @@ class InternalCommands:
 
 		# Ideally we'll use xcrun (which is influenced by $DEVELOPER_DIR), then try a couple
 		# fallbacks to known paths if xcrun is not available
-		status, sdkPath = commands.getstatusoutput("xcrun --show-sdk-path --sdk " + sdkName)
+		status, sdkPath = commands_or_subprocess.getstatusoutput("xcrun --show-sdk-path --sdk " + sdkName)
 		if status == 0 and sdkPath:
 			return sdkPath
 
@@ -608,10 +635,6 @@ class InternalCommands:
 		self.persist_qmake()
 
 	def persist_qmake(self):
-		# cannot use subprocess on < python 2.4
-		if sys.version_info < (2, 4):
-			return
-
 		try:
 			p = subprocess.Popen(
 				[self.qmake_cmd, '--version'],
@@ -628,9 +651,9 @@ class InternalCommands:
 
 		stdout, stderr = p.communicate()
 		if p.returncode != 0:
-			raise Exception('Could not test for qmake: %s' % stderr)
+			raise Exception('Could not test for qmake: %s' % pipe_to_str(stderr))
 		else:
-			m = re.search('.*Using Qt version (\d+\.\d+\.\d+).*', stdout)
+			m = re.search('.*Using Qt version (\d+\.\d+\.\d+).*', pipe_to_str(stdout))
 			if m:
 				if sys.platform == 'win32':
 					ver = m.group(1)
@@ -720,7 +743,7 @@ class InternalCommands:
 				if err != 0:
 					raise Exception(gui_make_cmd + ' failed with error: ' + str(err))
 
-			elif sys.platform in ['linux2', 'sunos5', 'freebsd7', 'darwin']:
+			elif sys.platform in ['linux', 'linux2', 'sunos5', 'freebsd7', 'darwin']:
 
 				gui_make_cmd = self.make_cmd + " -w" + args
 				print('Make GUI command: ' + gui_make_cmd)
@@ -785,7 +808,7 @@ class InternalCommands:
 			if err != 0:
 				raise Exception(bin + " failed with error: " + str(err))
 
-			frameworkRootDir = commands.getoutput("qmake -query QT_INSTALL_LIBS")
+			frameworkRootDir = commands_or_subprocess.getoutput("qmake -query QT_INSTALL_LIBS")
 
 			target = bundleTargetDir + "/Contents/Frameworks"
 
@@ -957,12 +980,6 @@ class InternalCommands:
 		else:
 			raise Exception('Not supported with generator: ' + generator)
 
-	def update(self):
-		print("Running Subversion update...")
-		err = os.system('svn update')
-		if err != 0:
-			raise Exception('Could not update from repository with error code code: ' + str(err))
-
 	def revision(self):
 		print(self.find_revision())
 
@@ -970,9 +987,6 @@ class InternalCommands:
 		return self.getGitRevision()
 
 	def getGitRevision(self):
-		if sys.version_info < (2, 4):
-			raise Exception("Python 2.4 or greater required.")
-
 		p = subprocess.Popen(
 			["git", "log", "--pretty=format:%h", "-n", "1"],
 			stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -982,12 +996,9 @@ class InternalCommands:
 		if p.returncode != 0:
 			raise Exception('Could not get revision, git error: ' + str(p.returncode))
 
-		return stdout.strip()
+		return pipe_to_str(stdout).strip()
 
 	def getGitBranchName(self):
-		if sys.version_info < (2, 4):
-			raise Exception("Python 2.4 or greater required.")
-
 		p = subprocess.Popen(
 			["git", "rev-parse", "--abbrev-ref", "HEAD"],
 			stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -997,29 +1008,13 @@ class InternalCommands:
 		if p.returncode != 0:
 			raise Exception('Could not get branch name, git error: ' + str(p.returncode))
 
-		result = stdout.strip()
+		result = pipe_to_str(stdout).strip()
 
 		# sometimes, git will prepend "heads/" infront of the branch name,
 		# remove this as it's not useful to us and causes ftp issues.
 		result = re.sub("heads/", "", result)
 
 		return result
-
-	def find_revision_svn(self):
-		if sys.version_info < (2, 4):
-			stdout = commands.getoutput('svn info')
-		else:
-			p = subprocess.Popen(['svn', 'info'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-			stdout, stderr = p.communicate()
-
-			if p.returncode != 0:
-				raise Exception('Could not get revision - svn info failed with code: ' + str(p.returncode))
-
-		m = re.search('.*Revision: (\d+).*', stdout)
-		if not m:
-			raise Exception('Could not find revision number in svn info output.')
-
-		return m.group(1)
 
 	def kill(self):
 		if sys.platform == 'win32':
@@ -1389,18 +1384,18 @@ class InternalCommands:
 		gitRevision = self.getGitRevision()
 		return "%s-%s-%s" % (gitBranch, versionStage, gitRevision)
 
-	def distftp(self, type, ftp):
-		if not type:
-			raise Exception('Platform type not specified.')
+	# def distftp(self, type, ftp):
+	# 	if not type:
+	# 		raise Exception('Platform type not specified.')
 
-		self.loadConfig()
+	# 	self.loadConfig()
 
-		binDir = self.getGenerator().getBinDir('Release')
+	# 	binDir = self.getGenerator().getBinDir('Release')
 
-		filename = self.getDistFilename(type)
-		packageSource = binDir + '/' + filename
-		packageTarget = filename
-		ftp.upload(packageSource, packageTarget)
+	# 	filename = self.getDistFilename(type)
+	# 	packageSource = binDir + '/' + filename
+	# 	packageTarget = filename
+	# 	ftp.upload(packageSource, packageTarget)
 
 	def getLibraryDistFilename(self, type, dir, name):
 		(platform, packageExt, libraryExt) = self.getDistributePlatformInfo(type)
@@ -1580,7 +1575,7 @@ class InternalCommands:
 		generator = self.get_generator_from_prompt()
 
 		config = self.getConfig()
-		config.set('hm', 'setup_version', self.setup_version)
+		config.set('hm', 'setup_version', str(self.setup_version))
 
 		# store the generator so we don't need to ask again
 		config.set('cmake', 'generator', generator)
@@ -1596,10 +1591,10 @@ class InternalCommands:
 
 	def getConfig(self):
 		if os.path.exists(self.configFilename):
-			config = ConfigParser.ConfigParser()
+			config = cfg_parser.ConfigParser()
 			config.read(self.configFilename)
 		else:
-			config = ConfigParser.ConfigParser()
+			config = cfg_parser.ConfigParser()
 
 		if not config.has_section('hm'):
 			config.add_section('hm')
@@ -1612,7 +1607,7 @@ class InternalCommands:
 	def write_config(self, config, target=''):
 		if not os.path.isdir(self.configDir):
 			os.mkdir(self.configDir)
-		configfile = open(self.configFilename, 'wb')
+		configfile = open(self.configFilename, 'w')
 		config.write(configfile)
 
 	def getGeneratorFromConfig(self):
@@ -1623,7 +1618,7 @@ class InternalCommands:
 		raise Exception("Could not find generator: " + name)
 
 	def findGeneratorFromConfig(self):
-		config = ConfigParser.RawConfigParser()
+		config = cfg_parser.RawConfigParser()
 		config.read(self.configFilename)
 
 		if not config.has_section('cmake'):
@@ -1632,7 +1627,7 @@ class InternalCommands:
 		name = config.get('cmake', 'generator')
 
 		generators = self.get_generators()
-		keys = generators.keys()
+		keys = list(generators.keys())
 		keys.sort()
 		for k in keys:
 			if generators[k].cmakeName == name:
@@ -1642,7 +1637,7 @@ class InternalCommands:
 
 	def min_setup_version(self, version):
 		if os.path.exists(self.configFilename):
-			config = ConfigParser.RawConfigParser()
+			config = cfg_parser.RawConfigParser()
 			config.read(self.configFilename)
 
 			try:
@@ -1654,7 +1649,7 @@ class InternalCommands:
 
 	def hasConfRun(self, target):
 		if self.min_setup_version(2):
-			config = ConfigParser.RawConfigParser()
+			config = cfg_parser.RawConfigParser()
 			config.read(self.configFilename)
 			try:
 				return config.getboolean('hm', 'conf_done_' + target)
@@ -1665,7 +1660,7 @@ class InternalCommands:
 
 	def setConfRun(self, target, hasRun=True):
 		if self.min_setup_version(3):
-			config = ConfigParser.RawConfigParser()
+			config = cfg_parser.RawConfigParser()
 			config.read(self.configFilename)
 			config.set('hm', 'conf_done_' + target, hasRun)
 			self.write_config(config)
@@ -1675,7 +1670,7 @@ class InternalCommands:
 	def get_generators(self):
 		if sys.platform == 'win32':
 			return self.win32_generators
-		elif sys.platform in ['linux2', 'sunos5', 'freebsd7', 'aix5']:
+		elif sys.platform in ['linux', 'linux2', 'sunos5', 'freebsd7', 'aix5']:
 			return self.unix_generators
 		elif sys.platform == 'darwin':
 			return self.darwin_generators
@@ -1687,8 +1682,8 @@ class InternalCommands:
 
 	def getGenerator(self):
 		generators = self.get_generators()
-		if len(generators.keys()) == 1:
-			return generators[generators.keys()[0]]
+		if len(list(generators.keys())) == 1:
+			return generators[list(generators.keys())[0]]
 
 		# if user has specified a generator as an argument
 		if self.generator_id:
@@ -1702,26 +1697,12 @@ class InternalCommands:
 			'Generator not specified, use -g arg ' +
 			'(use `hm genlist` for a list of generators).')
 
-	def setup_generator_prompt(self, generators):
-
-		if self.no_prompts:
-			raise Exception('User prompting is disabled.')
-
-		prompt = 'Enter a number:'
-		print(prompt)
-
-		generator_id = raw_input()
-
-		if generator_id in generators:
-			print('Selected generator:', generators[generator_id])
-		else:
-			print('Invalid number, try again.')
-			self.setup_generator_prompt(generators)
-
-		return generators[generator_id]
-
 	def get_vcvarsall(self, generator):
-		import platform, _winreg
+		import platform
+		try:
+			import _winreg as winreg
+		except ImportError:
+			import winreg
 
 		# os_bits should be loaded with '32bit' or '64bit'
 		(os_bits, other) = platform.architecture()
@@ -1826,7 +1807,7 @@ class InternalCommands:
 
 	def printGeneratorList(self):
 		generators = self.get_generators()
-		keys = generators.keys()
+		keys = list(generators.keys())
 		keys.sort()
 		for k in keys:
 			print(str(k) + ': ' + generators[k].cmakeName)
@@ -1945,9 +1926,6 @@ class CommandHandler:
 	def clean(self):
 		self.ic.clean(self.build_targets)
 
-	def update(self):
-		self.ic.update()
-
 	def install(self):
 		print('Not yet implemented: install')
 
@@ -1962,33 +1940,33 @@ class CommandHandler:
 
 		self.ic.dist(type, self.vcRedistDir, self.qtDir)
 
-	def distftp(self):
-		type = None
-		host = None
-		user = None
-		password = None
-		dir = None
+	# def distftp(self):
+	# 	type = None
+	# 	host = None
+	# 	user = None
+	# 	password = None
+	# 	dir = None
 
-		if len(self.args) > 0:
-			type = self.args[0]
+	# 	if len(self.args) > 0:
+	# 		type = self.args[0]
 
-		for o, a in self.opts:
-			if o == '--host':
-				host = a
-			elif o == '--user':
-				user = a
-			elif o == '--pass':
-				password = a
-			elif o == '--dir':
-				dir = a
+	# 	for o, a in self.opts:
+	# 		if o == '--host':
+	# 			host = a
+	# 		elif o == '--user':
+	# 			user = a
+	# 		elif o == '--pass':
+	# 			password = a
+	# 		elif o == '--dir':
+	# 			dir = a
 
-		if not host:
-			raise Exception('FTP host was not specified.')
+	# 	if not host:
+	# 		raise Exception('FTP host was not specified.')
 
-		ftp = ftputil.FtpUploader(
-			host, user, password, dir)
+	# 	ftp = ftputil.FtpUploader(
+	# 		host, user, password, dir)
 
-		self.ic.distftp(type, ftp)
+	# 	self.ic.distftp(type, ftp)
 
 	def destroy(self):
 		self.ic.destroy()
