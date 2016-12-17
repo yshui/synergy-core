@@ -2,11 +2,11 @@
  * synergy -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2004 Chris Schoeneman
- * 
+ *
  * This package is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * found in the file LICENSE that should have accompanied this file.
- * 
+ *
  * This package is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -110,10 +110,10 @@ OSXScreen::OSXScreen(IEventQueue* events, bool isPrimary, bool autoShowHideCurso
 		updateScreenShape(m_displayID, 0);
 		m_screensaver = new OSXScreenSaver(m_events, getEventTarget());
 		m_keyState	  = new OSXKeyState(m_events);
-		
+
 		// only needed when running as a server.
 		if (m_isPrimary) {
-		
+
 #if defined(MAC_OS_X_VERSION_10_9)
 			// we can't pass options to show the dialog, this must be done by the gui.
 			if (!AXIsProcessTrusted()) {
@@ -126,7 +126,7 @@ OSXScreen::OSXScreen(IEventQueue* events, bool isPrimary, bool autoShowHideCurso
 			}
 #endif
 		}
-		
+
 		// install display manager notification handler
 		CGDisplayRegisterReconfigurationCallback(displayReconfigurationCallback, this);
 
@@ -166,7 +166,7 @@ OSXScreen::OSXScreen(IEventQueue* events, bool isPrimary, bool autoShowHideCurso
 		if (m_switchEventHandlerRef != 0) {
 			RemoveEventHandler(m_switchEventHandlerRef);
 		}
-		
+
 		CGDisplayRemoveReconfigurationCallback(displayReconfigurationCallback, this);
 
 		delete m_keyState;
@@ -217,7 +217,7 @@ OSXScreen::~OSXScreen()
 
 	delete m_keyState;
 	delete m_screensaver;
-	
+
 #if defined(MAC_OS_X_VERSION_10_7)
 	delete m_carbonLoopMutex;
 	delete m_carbonLoopReady;
@@ -273,7 +273,7 @@ OSXScreen::warpCursor(SInt32 x, SInt32 y)
 	pos.x = x;
 	pos.y = y;
 	CGWarpMouseCursorPosition(pos);
-	
+
 	// save new cursor position
 	m_xCursor        = x;
 	m_yCursor        = y;
@@ -325,7 +325,7 @@ OSXScreen::registerHotKey(KeyID key, KeyModifierMask mask)
 		LOG((CLOG_DEBUG "could not map hotkey id=%04x mask=%04x", key, mask));
 		return 0;
 	}
-	
+
 	// choose hotkey id
 	UInt32 id;
 	if (!m_oldHotKeyIDs.empty()) {
@@ -351,7 +351,7 @@ OSXScreen::registerHotKey(KeyID key, KeyModifierMask mask)
 	}
 	else {
 		EventHotKeyID hkid = { 'SNRG', (UInt32)id };
-		OSStatus status = RegisterEventHotKey(macKey, macMask, hkid, 
+		OSStatus status = RegisterEventHotKey(macKey, macMask, hkid,
 								GetApplicationEventTarget(), 0,
 								&ref);
 		okay = (status == noErr);
@@ -366,7 +366,7 @@ OSXScreen::registerHotKey(KeyID key, KeyModifierMask mask)
 	}
 
 	m_hotKeys.insert(std::make_pair(id, HotKeyItem(ref, macKey, macMask)));
-	
+
 	LOG((CLOG_DEBUG "registered hotkey %s (id=%04x mask=%04x) as id=%d", synergy::KeyMap::formatKey(key, mask).c_str(), key, mask, id));
 	return id;
 }
@@ -467,7 +467,7 @@ OSXScreen::postMouseEvent(CGPoint& pos) const
 			}
 		}
 	}
-	
+
 	CGEventType type = kCGEventMouseMoved;
 
 	SInt8 button = m_buttonState.getFirstButtonDown();
@@ -477,16 +477,16 @@ OSXScreen::postMouseEvent(CGPoint& pos) const
 	}
 
 	CGEventRef event = CGEventCreateMouseEvent(NULL, type, pos, static_cast<CGMouseButton>(button));
-    
+
     // Dragging events also need the click state
     CGEventSetIntegerValueField(event, kCGMouseEventClickState, m_clickState);
-    
+
     // Fix for sticky keys
     CGEventFlags modifiers = m_keyState->getModifierStateAsOSXFlags();
     CGEventSetFlags(event, modifiers);
-    
+
 	CGEventPost(kCGHIDEventTap, event);
-	
+
 	CFRelease(event);
 }
 
@@ -498,7 +498,7 @@ OSXScreen::fakeMouseButton(ButtonID id, bool press)
 	if (index >= NumButtonIDs) {
 		return;
 	}
-	
+
 	CGPoint pos;
 	if (!m_cursorPosValid) {
 		SInt32 x, y;
@@ -516,9 +516,9 @@ OSXScreen::fakeMouseButton(ButtonID id, bool press)
 	// since we don't have double click distance in NX APIs
 	// we define our own defaults.
 	const double maxDiff = sqrt(2) + 0.0001;
-    
+
     double clickTime = [NSEvent doubleClickInterval];
-    
+
     // As long as the click is within the time window and distance window
     // increase clickState (double click, triple click, etc)
     // This will allow for higher than triple click but the quartz documenation
@@ -530,41 +530,41 @@ OSXScreen::fakeMouseButton(ButtonID id, bool press)
         else {
             m_clickState = 1;
         }
-        
+
         m_lastClickTime = ARCH->time();
     }
-    
+
     if (m_clickState == 1){
         m_lastSingleClickXCursor = m_xCursor;
         m_lastSingleClickYCursor = m_yCursor;
     }
-    
+
     EMouseButtonState state = press ? kMouseButtonDown : kMouseButtonUp;
-    
+
     LOG((CLOG_DEBUG1 "faking mouse button id: %d press: %s", index, press ? "pressed" : "released"));
-    
+
     MouseButtonEventMapType thisButtonMap = MouseButtonEventMap[index];
     CGEventType type = thisButtonMap[state];
 
     CGEventRef event = CGEventCreateMouseEvent(NULL, type, pos, static_cast<CGMouseButton>(index));
-    
+
     CGEventSetIntegerValueField(event, kCGMouseEventClickState, m_clickState);
-    
+
     // Fix for sticky keys
     CGEventFlags modifiers = m_keyState->getModifierStateAsOSXFlags();
     CGEventSetFlags(event, modifiers);
-    
+
     m_buttonState.set(index, state);
     CGEventPost(kCGHIDEventTap, event);
-    
+
     CFRelease(event);
-    
+
 	if (!press && (id == kButtonLeft)) {
 		if (m_fakeDraggingStarted) {
 			m_getDropTargetThread = new Thread(new TMethodJob<OSXScreen>(
 				this, &OSXScreen::getDropTargetThread));
 		}
-		
+
 		m_draggingStarted = false;
 	}
 }
@@ -574,21 +574,21 @@ OSXScreen::getDropTargetThread(void*)
 {
 #if defined(MAC_OS_X_VERSION_10_7)
 	char* cstr = NULL;
-	
+
 	// wait for 5 secs for the drop destinaiton string to be filled.
 	UInt32 timeout = ARCH->time() + 5;
-	
+
 	while (ARCH->time() < timeout) {
 		CFStringRef cfstr = getCocoaDropTarget();
 		cstr = CFStringRefToUTF8String(cfstr);
 		CFRelease(cfstr);
-		
+
 		if (cstr != NULL) {
 			break;
 		}
 		ARCH->sleep(.1f);
 	}
-	
+
 	if (cstr != NULL) {
 		LOG((CLOG_DEBUG "drop target: %s", cstr));
 		m_dropTarget = cstr;
@@ -609,12 +609,12 @@ OSXScreen::fakeMouseMove(SInt32 x, SInt32 y)
 	if (m_fakeDraggingStarted) {
 		m_buttonState.set(0, kMouseButtonDown);
 	}
-	
+
 	// index 0 means left mouse button
 	if (m_buttonState.test(0)) {
 		m_draggingStarted = true;
 	}
-	
+
 	// synthesize event
 	CGPoint pos;
 	pos.x = x;
@@ -662,11 +662,11 @@ OSXScreen::fakeMouseWheel(SInt32 xDelta, SInt32 yDelta) const
 			NULL, kCGScrollEventUnitLine, 2,
 			mapScrollWheelFromSynergy(yDelta),
 			-mapScrollWheelFromSynergy(xDelta));
-		
+
         // Fix for sticky keys
         CGEventFlags modifiers = m_keyState->getModifierStateAsOSXFlags();
         CGEventSetFlags(scrollEvent, modifiers);
-        
+
 		CGEventPost(kCGHIDEventTap, scrollEvent);
 		CFRelease(scrollEvent);
 	}
@@ -737,11 +737,11 @@ OSXScreen::enable()
 
 	if (m_isPrimary) {
 		// FIXME -- start watching jump zones
-		
+
 		// kCGEventTapOptionDefault = 0x00000000 (Missing in 10.4, so specified literally)
 		m_eventTapPort = CGEventTapCreate(kCGHIDEventTap, kCGHeadInsertEventTap, kCGEventTapOptionDefault,
-										kCGEventMaskForAllEvents, 
-										handleCGInputEvent, 
+										kCGEventMaskForAllEvents,
+										handleCGInputEvent,
 										this);
 	}
 	else {
@@ -756,10 +756,10 @@ OSXScreen::enable()
 
                 // there may be a better way to do this, but we register an event handler even if we're
                 // not on the primary display (acting as a client). This way, if a local event comes in
-                // (either keyboard or mouse), we can make sure to show the cursor if we've hidden it. 
+                // (either keyboard or mouse), we can make sure to show the cursor if we've hidden it.
 		m_eventTapPort = CGEventTapCreate(kCGHIDEventTap, kCGHeadInsertEventTap, kCGEventTapOptionDefault,
-										kCGEventMaskForAllEvents, 
-										handleCGInputEventSecondary, 
+										kCGEventMaskForAllEvents,
+										handleCGInputEventSecondary,
 										this);
 	}
 
@@ -781,9 +781,9 @@ OSXScreen::disable()
 	if (m_autoShowHideCursor) {
 		showCursor();
 	}
-    
+
 	// FIXME -- stop watching jump zones, stop capturing input
-	
+
 	if (m_eventTapRLSR) {
 		CFRunLoopRemoveSource(CFRunLoopGetCurrent(), m_eventTapRLSR, kCFRunLoopDefaultMode);
 		CFRelease(m_eventTapRLSR);
@@ -829,7 +829,7 @@ OSXScreen::enter()
 		io_registry_entry_t entry = IORegistryEntryFromPath(
 			kIOMasterPortDefault,
 			"IOService:/IOResources/IODisplayWrangler");
-		
+
 		if (entry != MACH_PORT_NULL) {
 			IORegistryEntrySetCFProperty(entry, CFSTR("IORequestIdle"), kCFBooleanFalse);
 			IOObjectRelease(entry);
@@ -846,15 +846,15 @@ bool
 OSXScreen::leave()
 {
     hideCursor();
-    
+
 	if (isDraggingStarted()) {
 		String& fileList = getDraggingFilename();
-		
+
 		if (!m_isPrimary) {
 			if (fileList.empty() == false) {
 				ClientApp& app = ClientApp::instance();
 				Client* client = app.getClientPtr();
-				
+
 				DragInformation di;
 				di.setFilename(fileList);
 				DragFileList dragFileList;
@@ -864,7 +864,7 @@ OSXScreen::leave()
 					dragFileList, info);
 				client->sendDragInfo(fileCount, info, info.size());
 				LOG((CLOG_DEBUG "send dragging file to server"));
-				
+
 				// TODO: what to do with multiple file or even
 				// a folder
 				client->sendFileToServer(fileList.c_str());
@@ -872,7 +872,7 @@ OSXScreen::leave()
 		}
 		m_draggingStarted = false;
 	}
-	
+
 	if (m_isPrimary) {
 		avoidHesitatingCursor();
 
@@ -889,8 +889,8 @@ OSXScreen::setClipboard(ClipboardID, const IClipboard* src)
 {
 	if (src != NULL) {
 		LOG((CLOG_DEBUG "setting clipboard"));
-		Clipboard::copy(&m_pasteboard, src);	
-	}	
+		Clipboard::copy(&m_pasteboard, src);
+	}
 	return true;
 }
 
@@ -1019,16 +1019,16 @@ OSXScreen::handleSystemEvent(const Event& event, void*)
 		}
 		break;
 
-	case kEventClassKeyboard: 
+	case kEventClassKeyboard:
 			switch (GetEventKind(*carbonEvent)) {
 				case kEventHotKeyPressed:
 				case kEventHotKeyReleased:
 					onHotKey(*carbonEvent);
 					break;
 			}
-			
+
 			break;
-			
+
 	case kEventClassWindow:
 		// 2nd param was formerly GetWindowEventTarget(m_userInputWindow) which is 32-bit only,
 		// however as m_userInputWindow is never initialized to anything we can take advantage of
@@ -1059,7 +1059,7 @@ OSXScreen::handleSystemEvent(const Event& event, void*)
 	}
 }
 
-bool 
+bool
 OSXScreen::onMouseMove(SInt32 mx, SInt32 my)
 {
 	LOG((CLOG_DEBUG2 "mouse move %+d,%+d", mx, my));
@@ -1109,7 +1109,7 @@ OSXScreen::onMouseMove(SInt32 mx, SInt32 my)
 	return true;
 }
 
-bool				
+bool
 OSXScreen::onMouseButton(bool pressed, UInt16 macButton)
 {
 	// Buttons 2 and 3 are inverted on the mac
@@ -1145,7 +1145,7 @@ OSXScreen::onMouseButton(bool pressed, UInt16 macButton)
 			}
 		}
 	}
-	
+
 	if (macButton == kButtonLeft) {
 		EMouseButtonState state = pressed ? kMouseButtonDown : kMouseButtonUp;
 		m_buttonState.set(kButtonLeft - 1, state);
@@ -1158,7 +1158,7 @@ OSXScreen::onMouseButton(bool pressed, UInt16 macButton)
 				m_getDropTargetThread = new Thread(new TMethodJob<OSXScreen>(
 																			   this, &OSXScreen::getDropTargetThread));
 			}
-			
+
 			m_draggingStarted = false;
 		}
 	}
@@ -1187,16 +1187,16 @@ OSXScreen::displayReconfigurationCallback(CGDirectDisplayID displayID, CGDisplay
 
 	// Closing or opening the lid when an external monitor is
     // connected causes an kCGDisplayBeginConfigurationFlag event
-	CGDisplayChangeSummaryFlags mask = kCGDisplayBeginConfigurationFlag | kCGDisplayMovedFlag | 
-		kCGDisplaySetModeFlag | kCGDisplayAddFlag | kCGDisplayRemoveFlag | 
-		kCGDisplayEnabledFlag | kCGDisplayDisabledFlag | 
-		kCGDisplayMirrorFlag | kCGDisplayUnMirrorFlag | 
+	CGDisplayChangeSummaryFlags mask = kCGDisplayBeginConfigurationFlag | kCGDisplayMovedFlag |
+		kCGDisplaySetModeFlag | kCGDisplayAddFlag | kCGDisplayRemoveFlag |
+		kCGDisplayEnabledFlag | kCGDisplayDisabledFlag |
+		kCGDisplayMirrorFlag | kCGDisplayUnMirrorFlag |
 		kCGDisplayDesktopShapeChangedFlag;
- 
+
 	LOG((CLOG_DEBUG1 "event: display was reconfigured: %x %x %x", flags, mask, flags & mask));
 
 	if (flags & mask) { /* Something actually did change */
-		
+
 		LOG((CLOG_DEBUG1 "event: screen changed shape; refreshing dimensions"));
 		screen->updateScreenShape(displayID, flags);
 	}
@@ -1243,40 +1243,37 @@ OSXScreen::onKey(CGEventRef event)
 				m_activeModifierHotKeyMask = 0;
 			}
 		}
-			
+
 		return true;
 	}
 
-	// check for hot key.  when we're on a secondary screen we disable
-	// all hotkeys so we can capture the OS defined hot keys as regular
-	// keystrokes but that means we don't get our own hot keys either.
-	// so we check for a key/modifier match in our hot key map.
-	if (!m_isOnScreen) {
-		HotKeyToIDMap::const_iterator i =
-			m_hotKeyToIDMap.find(HotKeyItem(virtualKey, 
-											 m_keyState->mapModifiersToCarbon(macMask) 
-											 & 0xff00u));
-		if (i != m_hotKeyToIDMap.end()) {
-			UInt32 id = i->second;
-	
-			// determine event type
-			Event::Type type;
-			//UInt32 eventKind = GetEventKind(event);
-			if (eventKind == kCGEventKeyDown) {
-				type = m_events->forIPrimaryScreen().hotKeyDown();
-			}
-			else if (eventKind == kCGEventKeyUp) {
-				type = m_events->forIPrimaryScreen().hotKeyUp();
-			}
-			else {
-				return false;
-			}
-	
-			m_events->addEvent(Event(type, getEventTarget(),
-										HotKeyInfo::alloc(id)));
-		
-			return true;
+	// check for hot key
+	HotKeyToIDMap::const_iterator i = m_hotKeyToIDMap.find(
+		HotKeyItem(
+			virtualKey,
+			m_keyState->mapModifiersToCarbon(macMask) & 0xff00u
+	));
+	if (i != m_hotKeyToIDMap.end()) {
+		UInt32 id = i->second;
+
+		// determine event type
+		Event::Type type;
+		//UInt32 eventKind = GetEventKind(event);
+		if (eventKind == kCGEventKeyDown) {
+			type = m_events->forIPrimaryScreen().hotKeyDown();
 		}
+		else if (eventKind == kCGEventKeyUp) {
+			type = m_events->forIPrimaryScreen().hotKeyUp();
+		}
+		else {
+			return false;
+		}
+
+		m_events->addEvent(
+			Event(type, getEventTarget(), HotKeyInfo::alloc(id))
+		);
+
+		return true;
 	}
 
 	// decode event type
@@ -1324,7 +1321,7 @@ OSXScreen::onKey(CGEventRef event)
 }
 
 void
-OSXScreen::onMediaKey(CGEventRef event) 
+OSXScreen::onMediaKey(CGEventRef event)
 {
 	KeyID keyID;
 	bool down;
@@ -1387,7 +1384,7 @@ OSXScreen::mapSynergyButtonToMac(UInt16 button) const
     return static_cast<ButtonID>(button);
 }
 
-ButtonID 
+ButtonID
 OSXScreen::mapMacButtonToSynergy(UInt16 macButton) const
 {
 	switch (macButton) {
@@ -1400,7 +1397,7 @@ OSXScreen::mapMacButtonToSynergy(UInt16 macButton) const
 	case 3:
 		return kButtonMiddle;
 	}
-	
+
 	return static_cast<ButtonID>(macButton);
 }
 
@@ -1427,8 +1424,8 @@ OSXScreen::getScrollSpeed() const
 	double scaling = 0.0;
 
 	CFPropertyListRef pref = ::CFPreferencesCopyValue(
-							CFSTR("com.apple.scrollwheel.scaling") , 
-							kCFPreferencesAnyApplication, 
+							CFSTR("com.apple.scrollwheel.scaling") ,
+							kCFPreferencesAnyApplication,
 							kCFPreferencesCurrentUser,
 							kCFPreferencesAnyHost);
 	if (pref != NULL) {
@@ -1517,7 +1514,7 @@ OSXScreen::updateScreenShape()
 	if (CGGetActiveDisplayList(0, NULL, &displayCount) != CGDisplayNoErr) {
 		return;
 	}
-	
+
 	if (displayCount == 0) {
 		return;
 	}
@@ -1561,13 +1558,13 @@ OSXScreen::updateScreenShape()
          (displayCount == 1) ? "display" : "displays"));
 }
 
-#pragma mark - 
+#pragma mark -
 
 //
 // FAST USER SWITCH NOTIFICATION SUPPORT
 //
 // OSXScreen::userSwitchCallback(void*)
-// 
+//
 // gets called if a fast user switch occurs
 //
 
@@ -1593,13 +1590,13 @@ OSXScreen::userSwitchCallback(EventHandlerCallRef nextHandler,
 	return (CallNextEventHandler(nextHandler, theEvent));
 }
 
-#pragma mark - 
+#pragma mark -
 
 //
 // SLEEP/WAKEUP NOTIFICATION SUPPORT
 //
 // OSXScreen::watchSystemPowerThread(void*)
-// 
+//
 // main of thread monitoring system power (sleep/wakup) using a CFRunLoop
 //
 
@@ -1623,7 +1620,7 @@ OSXScreen::watchSystemPowerThread(void*)
 		CFRunLoopAddSource(m_pmRunloop, runloopSourceRef,
 								kCFRunLoopCommonModes);
 	}
-	
+
 	// thread is ready
 	{
 		Lock lock(m_pmMutex);
@@ -1640,15 +1637,15 @@ OSXScreen::watchSystemPowerThread(void*)
 	}
 
 	LOG((CLOG_DEBUG "started watchSystemPowerThread"));
-	
+
 	LOG((CLOG_DEBUG "waiting for event loop"));
 	m_events->waitForReady();
-    
+
 #if defined(MAC_OS_X_VERSION_10_7)
 	{
 		Lock lockCarbon(m_carbonLoopMutex);
 		if (*m_carbonLoopReady == false) {
-			
+
 			// we signalling carbon loop ready before starting
 			// unless we know how to do it within the loop
 			LOG((CLOG_DEBUG "signalling carbon loop ready"));
@@ -1658,12 +1655,12 @@ OSXScreen::watchSystemPowerThread(void*)
 		}
 	}
 #endif
-	
+
 	// start the run loop
 	LOG((CLOG_DEBUG "starting carbon loop"));
 	CFRunLoopRun();
 	LOG((CLOG_DEBUG "carbon loop has stopped"));
-	
+
 	// cleanup
 	if (notificationPortRef) {
 		CFRunLoopRemoveSource(m_pmRunloop,
@@ -1698,7 +1695,7 @@ OSXScreen::handlePowerChangeRequest(natural_t messageType, void* messageArg)
 								getEventTarget(), messageArg,
 								Event::kDontFreeData));
 		return;
-			
+
 	case kIOMessageSystemHasPoweredOn:
 		LOG((CLOG_DEBUG "system wakeup"));
 		m_events->addEvent(Event(m_events->forIScreen().resume(),
@@ -1724,16 +1721,16 @@ OSXScreen::handleConfirmSleep(const Event& event, void*)
 		if (m_pmRootPort != 0) {
 			// deliver suspend event immediately.
 			m_events->addEvent(Event(m_events->forIScreen().suspend(),
-									getEventTarget(), NULL, 
+									getEventTarget(), NULL,
 									Event::kDeliverImmediately));
-	
+
 			LOG((CLOG_DEBUG "system will sleep"));
 			IOAllowPowerChange(m_pmRootPort, messageArg);
 		}
 	}
 }
 
-#pragma mark - 
+#pragma mark -
 
 //
 // GLOBAL HOTKEY OPERATING MODE SUPPORT (10.3)
@@ -1923,7 +1920,7 @@ OSXScreen::handleCGInputEvent(CGEventTapProxy proxy,
 		case kCGEventMouseMoved:
 			pos = CGEventGetLocation(event);
 			screen->onMouseMove(pos.x, pos.y);
-			
+
 			// The system ignores our cursor-centering calls if
 			// we don't return the event. This should be harmless,
 			// but might register as slight movement to other apps
@@ -1967,10 +1964,10 @@ OSXScreen::handleCGInputEvent(CGEventTapProxy proxy,
 				}
 				break;
 			}
-			
+
 			LOG((CLOG_WARN "unknown quartz event type: 0x%02x", type));
 	}
-	
+
 	if (screen->m_isOnScreen) {
 		return event;
 	} else {
@@ -1979,38 +1976,38 @@ OSXScreen::handleCGInputEvent(CGEventTapProxy proxy,
 }
 
 void
-OSXScreen::MouseButtonState::set(UInt32 button, EMouseButtonState state) 
+OSXScreen::MouseButtonState::set(UInt32 button, EMouseButtonState state)
 {
 	bool newState = (state == kMouseButtonDown);
 	m_buttons.set(button, newState);
 }
 
 bool
-OSXScreen::MouseButtonState::any() 
+OSXScreen::MouseButtonState::any()
 {
 	return m_buttons.any();
 }
 
 void
-OSXScreen::MouseButtonState::reset() 
+OSXScreen::MouseButtonState::reset()
 {
 	m_buttons.reset();
 }
 
 void
-OSXScreen::MouseButtonState::overwrite(UInt32 buttons) 
+OSXScreen::MouseButtonState::overwrite(UInt32 buttons)
 {
 	m_buttons = std::bitset<NumButtonIDs>(buttons);
 }
 
 bool
-OSXScreen::MouseButtonState::test(UInt32 button) const 
+OSXScreen::MouseButtonState::test(UInt32 button) const
 {
 	return m_buttons.test(button);
 }
 
 SInt8
-OSXScreen::MouseButtonState::getFirstButtonDown() const 
+OSXScreen::MouseButtonState::getFirstButtonDown() const
 {
 	if (m_buttons.any()) {
 		for (unsigned short button = 0; button < m_buttons.size(); button++) {
@@ -2028,7 +2025,7 @@ OSXScreen::CFStringRefToUTF8String(CFStringRef aString)
 	if (aString == NULL) {
 		return NULL;
 	}
-	
+
 	CFIndex length = CFStringGetLength(aString);
 	CFIndex maxSize = CFStringGetMaximumSizeForEncoding(
 		length,
