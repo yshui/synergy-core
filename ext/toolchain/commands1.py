@@ -1700,9 +1700,9 @@ class InternalCommands:
 	def get_vcvarsall(self, generator):
 		import platform
 		try:
-			import _winreg as winreg
+			import _winreg as thewinreg
 		except ImportError:
-			import winreg
+			import winreg as thewinreg
 
 		# os_bits should be loaded with '32bit' or '64bit'
 		(os_bits, other) = platform.architecture()
@@ -1714,18 +1714,18 @@ class InternalCommands:
 			key_name = r'SOFTWARE\Microsoft\VisualStudio\SxS\VC7'
 
 		try:
-			key = _winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE, key_name)
+			key = thewinreg.OpenKey(thewinreg.HKEY_LOCAL_MACHINE, key_name)
 		except:
 			raise Exception('Unable to open Visual Studio registry key. Application may not be installed.')
 
 		if generator.startswith('Visual Studio 8'):
-			value,type = _winreg.QueryValueEx(key, '8.0')
+			value,type = thewinreg.QueryValueEx(key, '8.0')
 		elif generator.startswith('Visual Studio 9'):
-			value,type = _winreg.QueryValueEx(key, '9.0')
+			value,type = thewinreg.QueryValueEx(key, '9.0')
 		elif generator.startswith('Visual Studio 10'):
-			value,type = _winreg.QueryValueEx(key, '10.0')
+			value,type = thewinreg.QueryValueEx(key, '10.0')
 		elif generator.startswith('Visual Studio 14'):
-			value,type = _winreg.QueryValueEx(key, '14.0')
+			value,type = thewinreg.QueryValueEx(key, '14.0')
 		else:
 			raise Exception('Cannot determine vcvarsall.bat location for: ' + generator)
 
