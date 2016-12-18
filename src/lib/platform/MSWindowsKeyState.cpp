@@ -1071,10 +1071,10 @@ MSWindowsKeyState::getKeyMap(synergy::KeyMap& keyMap)
 			}
 		}
 
-		//// add alt+printscreen
-		//if (m_buttonToVK[0x54u] == 0) {
-		//	m_buttonToVK[0x54u] = VK_SNAPSHOT;
-		//}
+		// add the extended printscreen (alt+printscreen)
+		if (m_buttonToVK[0x54u] == 0) {
+			m_buttonToVK[0x54u] = VK_SNAPSHOT;
+		}
 
 		// set virtual key to button table
 		if (GetKeyboardLayout(0) == m_groups[g]) {
