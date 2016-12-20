@@ -2,11 +2,11 @@
  * synergy -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2004 Chris Schoeneman
- * 
+ *
  * This package is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * found in the file LICENSE that should have accompanied this file.
- * 
+ *
  * This package is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -145,11 +145,16 @@ SocketMultiplexer::removeSocket(ISocket* socket)
 void
 SocketMultiplexer::serviceThread(void*)
 {
+#ifdef SYSAPI_WIN32
 	std::vector<IArchNetwork::PollEntry> pfds;
+#endif
 	IArchNetwork::PollEntry pfd;
 
 	// service the connections
 	for (;;) {
+#ifdef SYSAPI_UNIX
+		std::vector<IArchNetwork::PollEntry> pfds;
+#endif
 		Thread::testCancel();
 
 		// wait until there are jobs to handle
@@ -184,7 +189,7 @@ SocketMultiplexer::serviceThread(void*)
 						pfd.m_events |= IArchNetwork::kPOLLOUT;
 					}
 					pfds.push_back(pfd);
-				}				
+				}
 				jobCursor = nextCursor(cursor);
 			}
 			deleteCursor(cursor);
