@@ -47,17 +47,14 @@ class QTabWidget;
 class QCheckBox;
 class QRadioButton;
 class QTemporaryFile;
-class QMessageBox;
 class QAbstractButton;
 
 class LogDialog;
 class QSynergyApplication;
 class SetupWizard;
-class ZeroconfService;
 class DataDownloader;
 class CommandProcess;
 class SslCertificate;
-class LicenseManager;
 
 class MainWindow : public QMainWindow, public Ui::MainWindowBase
 {
@@ -113,9 +110,6 @@ class MainWindow : public QMainWindow, public Ui::MainWindowBase
 		ServerConfig& serverConfig() { return m_ServerConfig; }
 		void showConfigureServer(const QString& message);
 		void showConfigureServer() { showConfigureServer(""); }
-		void autoAddScreen(const QString name);
-		void updateZeroconfService();
-		void serverDetected(const QString name);
 		void updateLocalFingerprint();
 
 public slots:
@@ -140,7 +134,6 @@ public slots:
 		void logOutput();
 		void logError();
 		void updateFound(const QString& version);
-		void bonjourInstallFinished();
 
 	protected:
 		QSettings& settings() { return m_Settings; }
@@ -167,14 +160,6 @@ public slots:
 		void stopDesktop();
 		void changeEvent(QEvent* event);
 		void retranslateMenuBar();
-#if defined(Q_OS_WIN)
-		bool isServiceRunning(QString name);
-#else
-		bool isServiceRunning();
-#endif
-		bool isBonjourRunning();
-		void downloadBonjour();
-		void promptAutoConfig();
 		QString getProfileRootForArg();
         void checkConnected(const QString& line);
 		void checkFingerprint(const QString& line);
@@ -202,25 +187,14 @@ public slots:
 		QMenu* m_pMenuEdit;
 		QMenu* m_pMenuWindow;
 		QMenu* m_pMenuHelp;
-		ZeroconfService* m_pZeroconfService;
-		DataDownloader* m_pDataDownloader;
-		QMessageBox* m_DownloadMessageBox;
 		QAbstractButton* m_pCancelButton;
-		QMutex m_UpdateZeroconfMutex;
-		bool m_SuppressAutoConfigWarning;
-		CommandProcess* m_BonjourInstall;
 		bool m_SuppressEmptyServerWarning;
 		qRuningState m_ExpectedRunningState;
 		QMutex m_StopDesktopMutex;
 		SslCertificate* m_pSslCertificate;
-		bool m_ActivationDialogRunning;
-		QStringList m_PendingClientNames;
 
 private slots:
-	void on_m_pCheckBoxAutoConfig_toggled(bool checked);
-	void on_m_pComboServerList_currentIndexChanged(QString );
 	void on_m_pButtonApply_clicked();
-	void installBonjour();
 };
 
 #endif

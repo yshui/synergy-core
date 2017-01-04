@@ -87,7 +87,7 @@ Visit our website for help and info (symless.com).
       <string/>
      </property>
      <property name="pixmap">
-      <pixmap resource="Synergy.qrc">:/res/image/about.png</pixmap>
+      <pixmap resource="../res/Synergy.qrc">:/res/image/about.png</pixmap>
      </property>
      <property name="margin">
       <number>0</number>
@@ -200,7 +200,7 @@ Visit our website for help and info (symless.com).
   </layout>
  </widget>
  <resources>
-  <include location="Synergy.qrc"/>
+  <include location="../res/Synergy.qrc"/>
  </resources>
  <connections>
   <connection>

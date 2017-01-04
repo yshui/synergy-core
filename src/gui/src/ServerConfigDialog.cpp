@@ -2,11 +2,11 @@
  * synergy -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2008 Volker Lanz (vl@fidra.de)
- * 
+ *
  * This package is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * found in the file LICENSE that should have accompanied this file.
- * 
+ *
  * This package is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -54,8 +54,6 @@ ServerConfigDialog::ServerConfigDialog(QWidget* parent, ServerConfig& config, co
 	m_pCheckBoxCornerBottomRight->setChecked(serverConfig().switchCorner(BaseConfig::BottomRight));
 	m_pSpinBoxSwitchCornerSize->setValue(serverConfig().switchCornerSize());
 
-	m_pCheckBoxIgnoreAutoConfigClient->setChecked(serverConfig().ignoreAutoConfigClient());
-
 	m_pCheckBoxEnableDragAndDrop->setChecked(serverConfig().enableDragAndDrop());
 
 	m_pCheckBoxEnableClipboard->setChecked(serverConfig().clipboardSharing());
@@ -101,7 +99,6 @@ void ServerConfigDialog::accept()
 	serverConfig().setSwitchCorner(BaseConfig::BottomLeft, m_pCheckBoxCornerBottomLeft->isChecked());
 	serverConfig().setSwitchCorner(BaseConfig::BottomRight, m_pCheckBoxCornerBottomRight->isChecked());
 	serverConfig().setSwitchCornerSize(m_pSpinBoxSwitchCornerSize->value());
-	serverConfig().setIgnoreAutoConfigClient(m_pCheckBoxIgnoreAutoConfigClient->isChecked());
 	serverConfig().setEnableDragAndDrop(m_pCheckBoxEnableDragAndDrop->isChecked());
 	serverConfig().setClipboardSharing(m_pCheckBoxEnableClipboard->isChecked());
 

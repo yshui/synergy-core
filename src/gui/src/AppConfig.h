@@ -74,10 +74,6 @@ class AppConfig: public QObject
 		bool wizardShouldRun() const;
 		const QString& language() const;
 		bool startedBefore() const;
-		bool autoConfig() const;
-		void setAutoConfig(bool autoConfig);
-		bool autoConfigPrompted();
-		void setAutoConfigPrompted(bool prompted);
 
 		QString synergysName() const;
 		QString synergycName() const;
@@ -127,7 +123,6 @@ protected:
 		bool m_StartedBefore;
 		bool m_AutoConfig;
 		ElevateMode m_ElevateMode;
-		bool m_AutoConfigPrompted;
 		bool m_CryptoEnabled;
 		bool m_AutoHide;
 		QString m_lastVersion;

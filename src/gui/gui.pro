@@ -62,8 +62,7 @@ FORMS += src/MainWindowBase.ui \
     src/ActionDialogBase.ui \
     src/HotkeyDialogBase.ui \
     src/SettingsDialogBase.ui \
-    src/SetupWizardBase.ui \
-    src/AddClientDialogBase.ui
+    src/SetupWizardBase.ui
 SOURCES += src/main.cpp \
     src/MainWindow.cpp \
     src/AboutDialog.cpp \
@@ -92,13 +91,6 @@ SOURCES += src/main.cpp \
     src/Ipc.cpp \
     src/SynergyLocale.cpp \
     src/QUtility.cpp \
-    src/ZeroconfServer.cpp \
-    src/ZeroconfThread.cpp \
-    src/ZeroconfRegister.cpp \
-    src/ZeroconfBrowser.cpp \
-    src/ZeroconfService.cpp \
-    src/DataDownloader.cpp \
-    src/AddClientDialog.cpp \
     src/CommandProcess.cpp \
     src/CoreInterface.cpp \
     src/Fingerprint.cpp \
@@ -130,14 +122,6 @@ HEADERS += src/MainWindow.h \
     src/Ipc.h \
     src/SynergyLocale.h \
     src/QUtility.h \
-    src/ZeroconfServer.h \
-    src/ZeroconfThread.h \
-    src/ZeroconfRegister.h \
-    src/ZeroconfRecord.h \
-    src/ZeroconfBrowser.h \
-    src/ZeroconfService.h \
-    src/DataDownloader.h \
-    src/AddClientDialog.h \
     src/CommandProcess.h \
     src/ProcessorArch.h \
     src/CoreInterface.h \
@@ -153,8 +137,6 @@ CONFIG(debug, debug|release) {
     SYN_BUILD_TYPE = release
 }
 
-SYN_BONJOUR_SRC_DIR = ../../ext/mDNSResponder-765.20.4
-
 macx {
     QMAKE_INFO_PLIST = res/mac/Info.plist
     TARGET = Synergy
@@ -165,7 +147,6 @@ macx {
     HEADERS += src/OSXHelpers.h
     SOURCES += src/OSXHelpers.mm
 }
-unix:!macx:LIBS += -ldns_sd
 win32-msvc2015 {
     LIBS += -lAdvapi32
     QMAKE_LFLAGS += /NODEFAULTLIB:LIBCMT
@@ -174,19 +155,15 @@ win32-msvc* {
     contains(QMAKE_HOST.arch, x86):{
         SYN_VC_PLATFORM_NAME = Win32
         QMAKE_LFLAGS *= /MACHINE:X86
-        #LIBS += -L"$${BONJOUR_SDK_HOME}/Lib/Win32" -ldnssd
     }
 
     contains(QMAKE_HOST.arch, x86_64):{
         SYN_VC_PLATFORM_NAME = x64
         QMAKE_LFLAGS *= /MACHINE:X64
-        #LIBS += -L"$${BONJOUR_SDK_HOME}/Lib/x64" -ldnssd
     }
-
-    LIBS += -L"$${SYN_BONJOUR_SRC_DIR}/mDNSWindows/DLL/$${SYN_VC_PLATFORM_NAME}/$${SYN_BUILD_TYPE}" -ldnssd
 }
 win32 {
-    INCLUDEPATH += $${SYN_BONJOUR_SRC_DIR}/mDNSShared
+    #INCLUDEPATH += $${SYN_BONJOUR_SRC_DIR}/mDNSShared
     #INCLUDEPATH += "$$(BONJOUR_SDK_HOME)/Include"
 }
 
