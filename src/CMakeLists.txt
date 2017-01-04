@@ -17,7 +17,7 @@
 add_subdirectory(lib)
 add_subdirectory(cmd)
 #add_subdirectory(micro)
-add_subdirectory(gui)
+#add_subdirectory(gui)
 
 if ((NOT ${CMAKE_SYSTEM_NAME} MATCHES "IRIX") AND (NOT ${DISABLE_TESTS}))
 	add_subdirectory(test)

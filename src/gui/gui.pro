@@ -4,10 +4,8 @@ TEMPLATE = app
 TARGET = synergy
 DEFINES += VERSION_STAGE=\\\"$$QMAKE_VERSION_STAGE\\\"
 DEFINES += VERSION_REVISION=\\\"$$QMAKE_VERSION_REVISION\\\"
-DEPENDPATH += . \
-    res
-INCLUDEPATH += . \
-    src
+DEPENDPATH += res
+INCLUDEPATH += src
 TRANSLATIONS += res/lang/gui_af-ZA.ts \
     res/lang/gui_ar.ts \
     res/lang/gui_bg-BG.ts \
@@ -172,3 +170,4 @@ DESTDIR = ../../bin/$${SYN_VC_PLATFORM_NAME}/$${SYN_BUILD_TYPE}
 OBJECTS_DIR = tmp/$${SYN_VC_PLATFORM_NAME}/$${SYN_BUILD_TYPE}
 MOC_DIR = tmp/$${SYN_BUILD_TYPE}
 RCC_DIR = tmp/$${SYN_BUILD_TYPE}
+UI_DIR = tmp/$${SYN_BUILD_TYPE}

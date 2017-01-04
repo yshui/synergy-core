@@ -26,7 +26,6 @@
 #include "AboutDialog.h"
 #include "ServerConfigDialog.h"
 #include "SettingsDialog.h"
-#include "DataDownloader.h"
 #include "CommandProcess.h"
 #include "QUtility.h"
 #include "ProcessorArch.h"
@@ -101,7 +100,6 @@ MainWindow::MainWindow(QSettings& settings, AppConfig& appConfig) :
 	m_pMenuEdit(NULL),
 	m_pMenuWindow(NULL),
 	m_pMenuHelp(NULL),
-	m_DownloadMessageBox(NULL),
 	m_pCancelButton(NULL),
 	m_SuppressEmptyServerWarning(false),
 	m_ExpectedRunningState(kStopped),
