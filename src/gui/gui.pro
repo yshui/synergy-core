@@ -55,15 +55,15 @@ TRANSLATIONS += res/lang/gui_af-ZA.ts \
     res/lang/gui_vi.ts \
     res/lang/gui_zh-CN.ts \
     res/lang/gui_zh-TW.ts
-FORMS += res/MainWindowBase.ui \
-    res/AboutDialogBase.ui \
-    res/ServerConfigDialogBase.ui \
-    res/ScreenSettingsDialogBase.ui \
-    res/ActionDialogBase.ui \
-    res/HotkeyDialogBase.ui \
-    res/SettingsDialogBase.ui \
-    res/SetupWizardBase.ui \
-    res/AddClientDialogBase.ui
+FORMS += src/MainWindowBase.ui \
+    src/AboutDialogBase.ui \
+    src/ServerConfigDialogBase.ui \
+    src/ScreenSettingsDialogBase.ui \
+    src/ActionDialogBase.ui \
+    src/HotkeyDialogBase.ui \
+    src/SettingsDialogBase.ui \
+    src/SetupWizardBase.ui \
+    src/AddClientDialogBase.ui
 SOURCES += src/main.cpp \
     src/MainWindow.cpp \
     src/AboutDialog.cpp \
