@@ -19,7 +19,7 @@
 #include "synergy/ServerArgs.h"
 #include "test/mock/synergy/MockArgParser.h"
 
-#include "test/global/gtest.h"
+#include <gtest/gtest.h>
 
 using ::testing::_;
 using ::testing::Invoke;
