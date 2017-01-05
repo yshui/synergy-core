@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+#if 0
 #include "arch/Arch.h"
 
 #include <gtest/gtest.h>
@@ -35,3 +35,4 @@ TEST(ArchInternetTests, urlEncode)
 	String result = internet.urlEncode("hello=+&world");
 	ASSERT_EQ("hello%3D%2B%26world", result);
 }
+#endif
