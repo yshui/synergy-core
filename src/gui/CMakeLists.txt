@@ -1,6 +1,6 @@
-cmake_minimum_required (VERSION 3.4)
+cmake_minimum_required (VERSION 3.0)
 
-find_package (Qt5 COMPONENTS Widgets Network)
+find_package (Qt5 COMPONENTS Widgets Network REQUIRED)
 set (CMAKE_AUTOMOC ON)
 set (CMAKE_AUTORCC ON)
 set (CMAKE_AUTOUIC ON)
@@ -9,18 +9,22 @@ set (CMAKE_INCLUDE_CURRENT_DIR ON)
 file (GLOB LEGACY_GUI_SOURCE_FILES src/*.cpp src/*.h)
 file (GLOB LEGACY_GUI_UI_FILES src/*.ui)
 
-add_executable (synergyx
+add_executable (synergygui
     ${LEGACY_GUI_SOURCE_FILES}
     ${LEGACY_GUI_UI_FILES}
     res/Synergy.qrc
 )
 
-include_directories (../lib/shared ./src)
+include_directories (./src)
 
-qt5_use_modules (synergyx Widgets Network)
+qt5_use_modules (synergygui Widgets Network)
 
-if (WIN32)
-	set_target_properties (synergyx PROPERTIES LINK_FLAGS "/NODEFAULTLIB:LIBCMT")
+if (MSVC)
+	set_target_properties (synergygui PROPERTIES LINK_FLAGS "/NODEFAULTLIB:LIBCMT")
 endif()
 
-target_link_libraries (synergyx shared)
+if (APPLE)
+	#set (MACOSX_BUNDLE_ICON_FILE Synergy.icns)
+	#set (QSYNERGY_ICONS ${CMAKE_CURRENT_SOURCE_DIR}/res/mac/Synergy.icns)
+	#set_source_files_properties ($QSYNERGY_ICONS} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
+endif()

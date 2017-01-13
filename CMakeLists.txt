@@ -15,25 +15,22 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Version number for Synergy
-set(VERSION_MAJOR 1)
-set(VERSION_MINOR 9)
-set(VERSION_REV 0)
-set(VERSION_STAGE beta)
-set(VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_REV}")
+set(VERSION_MAJOR 3)
+set(VERSION_MINOR 0)
+set(VERSION_REVISION 1)
+set(VERSION_STAGE testing)
+set(VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_REVISION}")
 
-cmake_minimum_required(VERSION 2.6)
+add_definitions(-DVERSION_MAJOR=\\"${VERSION_MAJOR}\\")
+add_definitions(-DVERSION_MINOR=\\"${VERSION_MINOR}\\")
+add_definitions(-DVERSION_REVISION=\\"${VERSION_REVISION}\\")
+add_definitions(-DVERSION_STAGE=\\"${VERSION_STAGE}\\")
+
+cmake_minimum_required(VERSION 3.0)
 
 # CMake complains if we don't have this.
 if (COMMAND cmake_policy)
 	cmake_policy(SET CMP0003 NEW)
-endif()
-
-# We're escaping quotes in the Windows version number, because
-# for some reason CMake won't do it at config version 2.4.7
-# It seems that this restores the newer behaviour where define
-# args are not auto-escaped.
-if (COMMAND cmake_policy)
-	cmake_policy(SET CMP0005 NEW)
 endif()
 
 # First, declare project (important for prerequisite checks).
@@ -92,7 +89,7 @@ if (UNIX)
 
 	# warnings as errors:
 	# we have a problem with people checking in code with warnings.
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror -Wno-unused-local-typedef")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror -Wno-unused-local-typedefs")
 
 	if (NOT APPLE)
 		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
