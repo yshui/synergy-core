@@ -348,36 +348,55 @@ else() # not-unix
 
 endif()
 
-if (WIN32)
-	if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-		set(OPENSSL_PLAT_DIR openssl-win64)
-	else()
-		set(OPENSSL_PLAT_DIR openssl-win32)
-	endif()
-	set(OPENSSL_INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/ext/${OPENSSL_PLAT_DIR}/inc32)
-endif()
+#if (WIN32)
+#	if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+#		set(OPENSSL_PLAT_DIR openssl-win64)
+#	else()
+#		set(OPENSSL_PLAT_DIR openssl-win32)
+#	endif()
+#	set(OPENSSL_INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/ext/${OPENSSL_PLAT_DIR}/inc32)
+#endif()
 
-if (APPLE)
-	set(OPENSSL_PLAT_DIR openssl-osx)
-	set(OPENSSL_INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/ext/${OPENSSL_PLAT_DIR}/include)
-endif()
+#if (APPLE)
+#	set(OPENSSL_PLAT_DIR openssl-osx)
+#	set(OPENSSL_INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/ext/${OPENSSL_PLAT_DIR}/include)
+#endif()
 
-if (WIN32)
+#if (WIN32)
+#	set(OPENSSL_LIBS
+#		${CMAKE_CURRENT_SOURCE_DIR}/ext/${OPENSSL_PLAT_DIR}/out32dll/libeay32.lib
+#		${CMAKE_CURRENT_SOURCE_DIR}/ext/${OPENSSL_PLAT_DIR}/out32dll/ssleay32.lib
+#	)
+#endif()
+
+#if (UNIX)
+#	if (APPLE)
+#		set(OPENSSL_LIBS
+#		${CMAKE_CURRENT_SOURCE_DIR}/ext/${OPENSSL_PLAT_DIR}/libssl.a
+#		${CMAKE_CURRENT_SOURCE_DIR}/ext/${OPENSSL_PLAT_DIR}/libcrypto.a
+#		)
+#	else()
+#		set(OPENSSL_LIBS ssl crypto)
+#	endif()
+#endif()
+
+#if ((not APPLE) and UNIX)
+#	set(OPENSSL_LIBS ssl crypto)
+#endif()
+
+set(OPENSSL_ROOT_DIR ${root_dir}/ext/libressl-2.4.4)
+set(OPENSSL_INCLUDE ${OPENSSL_ROOT_DIR}/include)
+
+if (MSVC)
 	set(OPENSSL_LIBS
-		${CMAKE_CURRENT_SOURCE_DIR}/ext/${OPENSSL_PLAT_DIR}/out32dll/libeay32.lib
-		${CMAKE_CURRENT_SOURCE_DIR}/ext/${OPENSSL_PLAT_DIR}/out32dll/ssleay32.lib
+		${OPENSSL_ROOT_DIR}/build/ssl/${CMAKE_BUILD_TYPE/ssl.lib
+		${OPENSSL_ROOT_DIR}/build/crypto/${CMAKE_BUILD_TYPE/crypto.lib
 	)
-endif()
-
-if (UNIX)
-	if (APPLE)
-		set(OPENSSL_LIBS
-		${CMAKE_CURRENT_SOURCE_DIR}/ext/${OPENSSL_PLAT_DIR}/libssl.a
-		${CMAKE_CURRENT_SOURCE_DIR}/ext/${OPENSSL_PLAT_DIR}/libcrypto.a
-		)
-	else()
-		set(OPENSSL_LIBS ssl crypto)
-	endif()
+else()
+	set(OPENSSL_LIBS
+		${OPENSSL_ROOT_DIR}/build/ssl/libssl.a
+		${OPENSSL_ROOT_DIR}/build/crypto/libcrypto.a
+	)
 endif()
 
 add_subdirectory(src)

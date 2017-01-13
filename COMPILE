@@ -1,1 +1,71 @@
-Compiling: https://github.com/symless/synergy/wiki/Compiling
+First you need to configure and build the LibreSSL static libraries:
+
+	cd ext
+	cmake -E tar x libressl-2.4.4.tar.gz
+	cd libressl-2.4.4
+	mkdir build
+	cd build
+
+
+Now decide what build-type you're going to use. Options are:
+	Debug, Release, RelWithDebInfo and MinSizeRel.
+For the instructions we're going to shorten it to <BT>.
+
+Now back to configuring.
+
+	cmake -DCMAKE_BUILD_TYPE=<BT> ..
+
+If you're using Windows and Visual Studio then you'll need a generator too.
+For example I use the following for VS2015 x64 builds:
+
+	cmake -DCMAKE_BUILD_TYPE=<BT> -G"Visual Studio 14 2015 Win64" ..
+
+Removing the "Win64" at the end defaults to x32 builds.
+Other Visual Studio versions that might be supported are:
+"Visual Studio 8 2005", "Visual Studio 9 2008", "Visual Studio 10 2010",
+"Visual Studio 11 2012" and "Visual Studio 12 2013".
+
+TODO: Add mingw stuff here.
+
+
+Finally to building LibreSSL.
+
+	cmake --build .
+
+If your cmake uses `make` internally then you can do this for multi-core builds:
+
+	cmake --build . -- -j5
+
+And if you're Visual Studio then you'll need to do:
+
+	cmake --build . --config <BT>
+
+
+
+Now that LibreSSL is built we can configure and build Synergy.
+
+	cd ../../..
+	mkdir build
+	cd build
+	cmake -DCMAKE_BUILD_TYPE=<BT> ..
+
+Same thing here with Windows and Visual Studio
+
+	cmake -DCMAKE_BUILD_TYPE=<BT> -G"Visual Studio 14 2015 Win64" ..
+
+
+And now build Synergy.
+
+	cmake --build . -- -j5
+
+Or with Visual Studio
+
+	cmake --build . --config <BT>
+
+
+
+
+That's it. Synergy binaries should now be in the "build/bin/<BT>" directory.
+With Windows it'll put it in the "build\bin\<ARCH>\<BT>" directory where
+<ARCH> is either x64 or Win32 for x64 or x32 builds respectively.
+

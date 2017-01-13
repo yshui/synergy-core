@@ -7,11 +7,12 @@ config.h
 \.*.swp
 *.patch
 *build-gui-Desktop_Qt*
-bin
-lib
 build
+Debug
+Release
 CMakeFiles
 /ext/mDNSResponder-765.20.4/
+/ext/libressl-2.4.4/
 Makefile*
 /src/gui/object_script*
 /src/gui/tmp

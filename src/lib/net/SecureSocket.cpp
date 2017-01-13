@@ -812,7 +812,7 @@ SecureSocket::showSecureCipherInfo()
 	#define _TMPVER OPENSSL_VERSION_NUMBER
 #endif
 
-#if _TMPVER >= 0x10100000L
+#if _TMPVER >= 0x10100000L && !defined(LIBRESSL_VERSION_NUMBER)
 	STACK_OF(SSL_CIPHER) * cStack = SSL_get_client_ciphers(m_ssl->m_ssl);
 #else
 	STACK_OF(SSL_CIPHER) * cStack = m_ssl->m_ssl->session->ciphers;
