@@ -35,10 +35,10 @@ endif()
 # we should leave the other libraries compiling to the lib dir,
 # so that the bin dir remains tidy. the path is relative to the
 # build dir (in this case, that's: build\src\lib\platform).
-add_custom_command(
-	TARGET synwinhk
-	POST_BUILD
-	COMMAND xcopy /Y /Q
-		..\\..\\..\\..\\lib\\${CMAKE_VS_PLATFORM_NAME}\\${CMAKE_CFG_INTDIR}\\synwinhk.*
-		..\\..\\..\\..\\bin\\${CMAKE_VS_PLATFORM_NAME}\\${CMAKE_CFG_INTDIR}\\
-)
+#add_custom_command(
+#	TARGET synwinhk
+#	POST_BUILD
+#	COMMAND xcopy /Y /Q
+#		..\\..\\..\\..\\lib\\${CMAKE_VS_PLATFORM_NAME}\\${CMAKE_CFG_INTDIR}\\synwinhk.*
+#		..\\..\\..\\..\\bin\\${CMAKE_VS_PLATFORM_NAME}\\${CMAKE_CFG_INTDIR}\\
+#)
