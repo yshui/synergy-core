@@ -15,26 +15,53 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Version number for Synergy
-set(VERSION_MAJOR 3)
-set(VERSION_MINOR 0)
-set(VERSION_REVISION 1)
+set(VERSION_HIGH   4)
+set(VERSION_MIDDLE 2)
+set(VERSION_LOW    0)
 set(VERSION_STAGE testing)
-set(VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_REVISION}")
+set(VERSION "${VERSION_HIGH}.${VERSION_MIDDLE}.${VERSION_LOW}")
 
-add_definitions(-DVERSION_MAJOR=\\"${VERSION_MAJOR}\\")
-add_definitions(-DVERSION_MINOR=\\"${VERSION_MINOR}\\")
-add_definitions(-DVERSION_REVISION=\\"${VERSION_REVISION}\\")
-add_definitions(-DVERSION_STAGE=\\"${VERSION_STAGE}\\")
 
 cmake_minimum_required(VERSION 3.0)
+
+# First, declare project (important for prerequisite checks).
+project(synergy C CXX)
+
+# We're escaping quotes in the Windows version number, because
+# for some reason CMake won't do it at config version 2.4.7
+# It seems that this restores the newer behaviour where define
+# args are not auto-escaped.
+if (COMMAND cmake_policy)
+	cmake_policy(SET CMP0005 NEW)
+endif()
 
 # CMake complains if we don't have this.
 if (COMMAND cmake_policy)
 	cmake_policy(SET CMP0003 NEW)
 endif()
 
-# First, declare project (important for prerequisite checks).
-project(synergy C CXX)
+
+execute_process(
+	COMMAND git log -1 --format=%h
+	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+	OUTPUT_VARIABLE GIT_REVISION
+	OUTPUT_STRIP_TRAILING_WHITESPACE
+	ERROR_QUIET
+)
+
+if (GIT_REVISION STREQUAL "")
+	add_definitions(-DGIT_REVISION=\"00000000\")
+else()
+	add_definitions(-DGIT_REVISION=\"${GIT_REVISION}\")
+endif()
+
+add_definitions(-DVERSION_HIGH=\"${VERSION_HIGH}\")
+add_definitions(-DVERSION_MIDDLE=\"${VERSION_MIDDLE}\")
+add_definitions(-DVERSION_LOW=\"${VERSION_LOW}\")
+add_definitions(-DVERSION_STAGE=\"${VERSION_STAGE}\")
+add_definitions(-DVERSION=\"${VERSION}\")
+add_definitions(-DGIT_REVISION=\"${GIT_REVISION}\")
+
 
 if (WIN32)
 	# windows automatically creates bin/$BUILD_TYPE
@@ -326,7 +353,6 @@ else() # not-unix
 		/DWIN32
 		/D_WINDOWS
 		/D_CRT_SECURE_NO_WARNINGS
-		/DVERSION=\"${VERSION}\"
 		/D_XKEYCHECK_H
 		/DWINVER=0x0501
 		/D_WIN32_WINNT=0x0501
