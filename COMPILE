@@ -44,7 +44,7 @@ And if you're Visual Studio then you'll need to do:
 
 Now that LibreSSL is built we can configure and build Synergy.
 
-	cd ../../..
+	cd ../../../
 	mkdir build
 	cd build
 	cmake -DCMAKE_BUILD_TYPE=<BT> ..

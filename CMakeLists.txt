@@ -389,8 +389,8 @@ set(OPENSSL_INCLUDE ${OPENSSL_ROOT_DIR}/include)
 
 if (MSVC)
 	set(OPENSSL_LIBS
-		${OPENSSL_ROOT_DIR}/build/ssl/${CMAKE_BUILD_TYPE/ssl.lib
-		${OPENSSL_ROOT_DIR}/build/crypto/${CMAKE_BUILD_TYPE/crypto.lib
+		${OPENSSL_ROOT_DIR}/build/ssl/${CMAKE_BUILD_TYPE}/ssl.lib
+		${OPENSSL_ROOT_DIR}/build/crypto/${CMAKE_BUILD_TYPE}/crypto.lib
 	)
 else()
 	set(OPENSSL_LIBS
