@@ -2,11 +2,11 @@
  * synergy -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
- * 
+ *
  * This package is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * found in the file LICENSE that should have accompanied this file.
- * 
+ *
  * This package is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -61,14 +61,14 @@ XSocketAddress::getWhat() const throw()
 		"XSocketAddressBadPort"
 	};
 	static const char* s_errorMsg[] = {
-		"unknown error for: %{1}:%{2}",
-		"address not found for: %{1}",
-		"no address for: %{1}",
-		"unsupported address for: %{1}",
-		"invalid port"				// m_port may not be set to the bad port
+		"unknown error for: '%{1}:%{2}'",
+		"address not found for: '%{1}'",
+		"no address for: '%{1}'",
+		"unsupported address for: '%{1}'",
+		"invalid port" // m_port may not be set to the bad port
 	};
 	return format(s_errorID[m_error], s_errorMsg[m_error],
-								m_hostname.c_str(), 
+								m_hostname.c_str(),
 								synergy::string::sprintf("%d", m_port).c_str());
 }
 

@@ -63,6 +63,7 @@ static const char synergyConfigName[] = "synergy.conf";
 static const QString synergyConfigFilter(QObject::tr("Synergy Configurations (*.conf);;All files (*.*)"));
 #endif
 
+#if defined(Q_OS_MAC)
 static const char* synergyLightIconFiles[] =
 {
 	":/res/icons/64x64/synergy-light-disconnected.png",
@@ -77,6 +78,7 @@ static const char* synergyDarkIconFiles[] =
 	":/res/icons/64x64/synergy-dark-connected.png",
 	":/res/icons/64x64/synergy-dark-transfering.png"
 };
+#endif
 static const char* synergyDefaultIconFiles[] =
 {
 	":/res/icons/16x16/synergy-disconnected.png",
@@ -279,7 +281,7 @@ void MainWindow::loadSettings()
 	m_pGroupServer->setChecked(settings().value("groupServerChecked", false).toBool());
 	m_pLineEditConfigFile->setText(settings().value("configFile", QDir::homePath() + "/" + synergyConfigName).toString());
 	m_pGroupClient->setChecked(settings().value("groupClientChecked", true).toBool());
-	m_pLineEditHostname->setText(settings().value("serverHostname").toString());
+	m_pLineEditHostname->setText(settings().value("serverHostname").toString().trimmed());
 }
 
 void MainWindow::initConnections()
@@ -300,7 +302,7 @@ void MainWindow::saveSettings()
 	settings().setValue("configFile", m_pLineEditConfigFile->text());
 	settings().setValue("useInternalConfig", m_pRadioInternalConfig->isChecked());
 	settings().setValue("groupClientChecked", m_pGroupClient->isChecked());
-	settings().setValue("serverHostname", m_pLineEditHostname->text());
+	settings().setValue("serverHostname", m_pLineEditHostname->text().trimmed());
 
 	settings().sync();
 }
@@ -661,12 +663,12 @@ bool MainWindow::clientArgs(QStringList& args, QString& app)
 		show();
 		if (!m_SuppressEmptyServerWarning) {
 			QMessageBox::warning(this, tr("Hostname is empty"),
-							 tr("Please fill in a hostname for the synergy client to connect to."));
+				tr("Please fill in a hostname for the synergy client to connect to."));
 		}
 		return false;
 	}
 
-	args << m_pLineEditHostname->text() + ":" + QString::number(appConfig().port());
+	args << m_pLineEditHostname->text().trimmed() + ":" + QString::number(appConfig().port());
 
 	return true;
 }
