@@ -231,7 +231,7 @@ class InternalCommands:
 	this_cmd = 'hm'
 	cmake_cmd = 'cmake'
 	qmake_cmd = 'qmake'
-	make_cmd = 'make'
+	make_cmd = 'make -j5'
 	xcodebuild_cmd = 'xcodebuild'
 	w32_make_cmd = 'nmake'
 	w32_qt_version = '5.6.2'
@@ -390,15 +390,15 @@ class InternalCommands:
 			print('Defaulting target to: ' + self.defaultTarget)
 			target = self.defaultTarget
 
-		os.system('lrelease -silent -compress src/gui/gui.pro')
+		#os.system('lrelease -silent -compress src/gui/gui.pro')
 
 		# allow user to skip core compile
 		if self.enableMakeCore:
 			self.configureCore(target, extraArgs)
 
 		# allow user to skip gui compile
-		if self.enableMakeGui:
-			self.configureGui(target, extraArgs)
+		#if self.enableMakeGui:
+		#	self.configureGui(target, extraArgs)
 
 		self.setConfRun(target)
 
@@ -634,15 +634,15 @@ class InternalCommands:
 		self.loadConfig()
 
 		# this will need to be moved somewhere eventually
-		os.system('lrelease -silent -compress src/gui/gui.pro')
+		#os.system('lrelease -silent -compress src/gui/gui.pro')
 
 		# allow user to skip core compile
 		if self.enableMakeCore:
 			self.makeCore(targets)
 
 		# allow user to skip gui compile
-		if self.enableMakeGui:
-			self.makeGui(targets)
+		#if self.enableMakeGui:
+		#	self.makeGui(targets)
 
 	def loadConfig(self):
 		config = self.getConfig()
@@ -876,8 +876,8 @@ class InternalCommands:
 			self.cleanCore(targets)
 
 		# allow user to skip qui clean
-		if self.enableMakeGui:
-			self.cleanGui(targets)
+		#if self.enableMakeGui:
+		#	self.cleanGui(targets)
 
 	def cleanCore(self, targets):
 		generator = self.getGeneratorFromConfig().cmakeName

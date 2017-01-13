@@ -65,38 +65,18 @@ add_definitions(-DGIT_REVISION=\"${GIT_REVISION}\")
 
 if (WIN32)
 	# windows automatically creates bin/$BUILD_TYPE
-	set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin/${CMAKE_VS_PLATFORM_NAME})
-	set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/${CMAKE_VS_PLATFORM_NAME})
+	set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/build/bin/${CMAKE_VS_PLATFORM_NAME})
+	set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/build/lib/${CMAKE_VS_PLATFORM_NAME})
 else()
-	set (OUR_BUILD_TYPE_HEY_HEY_HEY "release")
-	if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-		set (OUR_BUILD_TYPE_HEY_HEY_HEY "debug")
-	endif()
-
-	set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin/${OUR_BUILD_TYPE_HEY_HEY_HEY})
-	set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/${OUR_BUILD_TYPE_HEY_HEY_HEY})
+	set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/build/bin/${CMAKE_BUILD_TYPE})
+	set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/build/lib/${CMAKE_BUILD_TYPE})
 endif()
 
-# put binaries in a different dir to make them easier to find.
-#set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin/release)
-#set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/release)
-
-# for unix, put debug files in a separate bin "debug" dir.
-# release bin files should stay in the root of the bin dir.
-# i think that's dumb
-#if (CMAKE_GENERATOR STREQUAL "Unix Makefiles")
-#	if (CMAKE_BUILD_TYPE STREQUAL Debug)
-#		set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin/debug)
-#		set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/debug)
-#	endif()
-#endif()
-
 # Set some easy to type variables.
-set(root_dir ${CMAKE_SOURCE_DIR})
-set(cmake_dir ${root_dir}/res)
+set(root_dir ${PROJECT_SOURCE_DIR})
 set(bin_dir ${root_dir}/bin)
 set(doc_dir ${root_dir}/doc)
-set(doc_dir ${root_dir}/doc)
+set(res_dir ${root_dir}/res)
 
 # Declare libs, so we can use list in linker later. There's probably
 # a more elegant way of doing this; with SCons, when you check for the
@@ -409,19 +389,13 @@ if (WIN32)
 	# /MP - use multi cores to compile.
 	# /D _BIND_TO_CURRENT_VCLIBS_VERSION - TODO: explain why.
 	# /D _SECURE_SCL=1 - find bugs with iterators.
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /WX /FR /MP /D _BIND_TO_CURRENT_VCLIBS_VERSION=1 /D _SECURE_SCL=1")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /WX /FR /MP /D_BIND_TO_CURRENT_VCLIBS_VERSION=1 /D_SECURE_SCL=1")
 
 	# /MD - use multi-core libraries.
 	# /O2 - get the fastest code.
 	# /Ob2 - expand inline functions (auto-inlining).
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD /O2 /Ob2")
 
-endif()
-
-if (${CMAKE_SYSTEM_NAME} MATCHES "IRIX")
-	set_target_properties(synergys PROPERTIES LINK_FLAGS "-all -woff 33 -woff 84 -woff 15")
-	set_target_properties(synergyc PROPERTIES LINK_FLAGS "-all -woff 33 -woff 84 -woff 15")
-	set_target_properties(synergyd PROPERTIES LINK_FLAGS "-all -woff 33 -woff 84 -woff 15")
 endif()
 
 if (CONF_CPACK)
@@ -433,7 +407,7 @@ if (CONF_DOXYGEN)
 	set(VERSION, "${VERSION}")
 
 	# For doxygen.cfg, save the results based on a template (doxygen.cfg.in).
-	configure_file(${cmake_dir}/doxygen.cfg.in ${doc_dir}/doxygen.cfg)
+	configure_file(${res_dir}/doxygen.cfg.in ${doc_dir}/doxygen.cfg)
 
 endif()
 

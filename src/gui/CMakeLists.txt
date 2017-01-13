@@ -1,13 +1,26 @@
 cmake_minimum_required (VERSION 3.0)
 
-find_package (Qt5 COMPONENTS Widgets Network REQUIRED)
+find_package (Qt5 COMPONENTS Widgets Network LinguistTools REQUIRED)
 set (CMAKE_AUTOMOC ON)
 set (CMAKE_AUTORCC ON)
 set (CMAKE_AUTOUIC ON)
 set (CMAKE_INCLUDE_CURRENT_DIR ON)
 
+file (GLOB GUI_TRANSLATIONS res/lang/*.ts)
+#qt5_add_translation (TRANSLATIONS ${GUI_TRANSLATIONS})
+
+execute_process(
+	COMMAND lrelease -silent ${GUI_TRANSLATIONS}
+	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+	ERROR_QUIET
+)
+
 file (GLOB LEGACY_GUI_SOURCE_FILES src/*.cpp src/*.h)
 file (GLOB LEGACY_GUI_UI_FILES src/*.ui)
+
+if (APPLE)
+	set (LEGACY_GUI_SOURCE_FILES ${LEGACY_GUI_SOURCE_FILES} src/OSXHelpers.h src/OSXHelpers.mm)
+endif()
 
 add_executable (synergygui WIN32
 	${LEGACY_GUI_SOURCE_FILES}
