@@ -9,10 +9,11 @@ set (CMAKE_INCLUDE_CURRENT_DIR ON)
 file (GLOB LEGACY_GUI_SOURCE_FILES src/*.cpp src/*.h)
 file (GLOB LEGACY_GUI_UI_FILES src/*.ui)
 
-add_executable (synergygui
-    ${LEGACY_GUI_SOURCE_FILES}
-    ${LEGACY_GUI_UI_FILES}
-    res/Synergy.qrc
+add_executable (synergygui WIN32
+	${LEGACY_GUI_SOURCE_FILES}
+	${LEGACY_GUI_UI_FILES}
+	res/win/Synergy.rc
+	res/Synergy.qrc
 )
 
 include_directories (./src)
