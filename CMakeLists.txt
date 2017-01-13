@@ -410,5 +410,3 @@ if (CONF_DOXYGEN)
 	configure_file(${res_dir}/doxygen.cfg.in ${doc_dir}/doxygen.cfg)
 
 endif()
-
-option(BUILD_SERVICE "Build synergyd" ON)
