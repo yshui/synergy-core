@@ -33,6 +33,7 @@ if (UNIX)
 endif()
 
 add_library(net STATIC ${sources})
+add_dependencies(net libressl)
 
 #if (WIN32)
 #	add_custom_command(
@@ -51,6 +52,6 @@ add_library(net STATIC ${sources})
 #	)
 #endif()
 
-if (UNIX)
+#if (UNIX)
 	target_link_libraries(net mt io ${OPENSSL_LIBS})
-endif()
+#endif()

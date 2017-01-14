@@ -24,3 +24,4 @@ src/build-*
 .cproject
 .project
 cmake_install.cmake
+newhm*

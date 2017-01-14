@@ -40,6 +40,31 @@ if (COMMAND cmake_policy)
 	cmake_policy(SET CMP0003 NEW)
 endif()
 
+# Set some easy to type variables.
+set(root_dir ${PROJECT_SOURCE_DIR})
+set(bin_dir ${root_dir}/bin)
+set(doc_dir ${root_dir}/doc)
+set(res_dir ${root_dir}/res)
+
+if (WIN32)
+	set(EXECUTABLE_OUTPUT_PATH ${root_dir}/build/bin/${CMAKE_VS_PLATFORM_NAME})
+	# the CMAKE_RUNTIME_OUTPUT_DIRECTORY is for .dlls like synwinhk.dll
+	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${root_dir}/build/bin/${CMAKE_VS_PLATFORM_NAME})
+	set(LIBRARY_OUTPUT_PATH ${root_dir}/build/lib/${CMAKE_VS_PLATFORM_NAME})
+else()
+	set(EXECUTABLE_OUTPUT_PATH ${root_dir}/build/bin/${CMAKE_BUILD_TYPE})
+	set(LIBRARY_OUTPUT_PATH ${root_dir}/build/lib/${CMAKE_BUILD_TYPE})
+endif()
+
+
+include(ExternalProject)
+set_property(DIRECTORY PROPERTY EP_STEP_TARGETS configure build test)
+ExternalProject_Add(libressl
+	PREFIX libressl
+	SOURCE_DIR ${root_dir}/ext/libressl-2.4.4
+	INSTALL_COMMAND ""
+)
+
 
 execute_process(
 	COMMAND git log -1 --format=%h
@@ -62,22 +87,6 @@ add_definitions(-DVERSION_STAGE=\"${VERSION_STAGE}\")
 add_definitions(-DVERSION=\"${VERSION}\")
 add_definitions(-DGIT_REVISION=\"${GIT_REVISION}\")
 
-
-if (WIN32)
-	set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/build/bin/${CMAKE_VS_PLATFORM_NAME})
-	# the CMAKE_RUNTIME_OUTPUT_DIRECTORY is for .dlls like synwinhk.dll
-	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/build/bin/${CMAKE_VS_PLATFORM_NAME})
-	set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/build/lib/${CMAKE_VS_PLATFORM_NAME})
-else()
-	set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/build/bin/${CMAKE_BUILD_TYPE})
-	set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/build/lib/${CMAKE_BUILD_TYPE})
-endif()
-
-# Set some easy to type variables.
-set(root_dir ${PROJECT_SOURCE_DIR})
-set(bin_dir ${root_dir}/bin)
-set(doc_dir ${root_dir}/doc)
-set(res_dir ${root_dir}/res)
 
 # Declare libs, so we can use list in linker later. There's probably
 # a more elegant way of doing this; with SCons, when you check for the
@@ -384,20 +393,28 @@ endif()
 #	set(OPENSSL_LIBS ssl crypto)
 #endif()
 
-set(OPENSSL_ROOT_DIR ${root_dir}/ext/libressl-2.4.4)
-set(OPENSSL_INCLUDE ${OPENSSL_ROOT_DIR}/include)
+set(OPENSSL_BUILD_DIR ${root_dir}/build/libressl/src/libressl-build)
+set(OPENSSL_INCLUDE ${root_dir}/ext/libressl-2.4.4/include)
 
 if (MSVC)
 	set(OPENSSL_LIBS
-		${OPENSSL_ROOT_DIR}/build/ssl/${CMAKE_BUILD_TYPE}/ssl.lib
-		${OPENSSL_ROOT_DIR}/build/crypto/${CMAKE_BUILD_TYPE}/crypto.lib
+		${OPENSSL_BUILD_DIR}/ssl/${CMAKE_BUILD_TYPE}/ssl.lib
+		${OPENSSL_BUILD_DIR}/crypto/${CMAKE_BUILD_TYPE}/crypto.lib
 	)
+	set(OPENSSL_EXE ${OPENSSL_BUILD_DIR}/apps/openssl/${CMAKE_BUILD_TYPE}/openssl.exe)
 else()
 	set(OPENSSL_LIBS
-		${OPENSSL_ROOT_DIR}/build/ssl/libssl.a
-		${OPENSSL_ROOT_DIR}/build/crypto/libcrypto.a
+		${OPENSSL_BUILD_DIR}/ssl/libssl.a
+		${OPENSSL_BUILD_DIR}/crypto/libcrypto.a
 	)
+	set(OPENSSL_EXE ${OPENSSL_BUILD_DIR}/apps/openssl/openssl${CMAKE_EXECUTABLE_SUFFIX})
 endif()
+
+add_custom_command(TARGET libressl
+	POST_BUILD
+	COMMAND ${CMAKE_COMMAND} -E copy ${OPENSSL_EXE} ${EXECUTABLE_OUTPUT_PATH}/openssl${CMAKE_EXECUTABLE_SUFFIX}
+)
+
 
 add_subdirectory(src)
 
