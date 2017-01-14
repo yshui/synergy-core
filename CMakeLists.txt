@@ -402,17 +402,19 @@ if (MSVC)
 		${OPENSSL_BUILD_DIR}/crypto/${CMAKE_BUILD_TYPE}/crypto.lib
 	)
 	set(OPENSSL_EXE ${OPENSSL_BUILD_DIR}/apps/openssl/${CMAKE_BUILD_TYPE}/openssl.exe)
+	set(OPENSSL_OUT_EXE ${EXECUTABLE_OUTPUT_PATH}/${CMAKE_BUILD_TYPE}/openssl.exe)
 else()
 	set(OPENSSL_LIBS
 		${OPENSSL_BUILD_DIR}/ssl/libssl.a
 		${OPENSSL_BUILD_DIR}/crypto/libcrypto.a
 	)
 	set(OPENSSL_EXE ${OPENSSL_BUILD_DIR}/apps/openssl/openssl${CMAKE_EXECUTABLE_SUFFIX})
+	set(OPENSSL_OUT_EXE ${EXECUTABLE_OUTPUT_PATH}/openssl)
 endif()
 
 add_custom_command(TARGET libressl
 	POST_BUILD
-	COMMAND ${CMAKE_COMMAND} -E copy ${OPENSSL_EXE} ${EXECUTABLE_OUTPUT_PATH}/openssl${CMAKE_EXECUTABLE_SUFFIX}
+	COMMAND ${CMAKE_COMMAND} -E copy ${OPENSSL_EXE} ${OPENSSL_OUT_EXE}
 )
 
 
