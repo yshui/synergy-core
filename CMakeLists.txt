@@ -46,6 +46,8 @@ set(bin_dir ${root_dir}/bin)
 set(doc_dir ${root_dir}/doc)
 set(res_dir ${root_dir}/res)
 
+set(libressl_path ${root_dir}/ext/libressl-2.4.4)
+
 if (WIN32)
 	set(EXECUTABLE_OUTPUT_PATH ${root_dir}/build/bin/${CMAKE_VS_PLATFORM_NAME})
 	# the CMAKE_RUNTIME_OUTPUT_DIRECTORY is for .dlls like synwinhk.dll
@@ -56,6 +58,13 @@ else()
 	set(LIBRARY_OUTPUT_PATH ${root_dir}/build/lib/${CMAKE_BUILD_TYPE})
 endif()
 
+
+if (NOT EXISTS ${libressl_path})
+	execute_process(
+		COMMAND ${CMAKE_COMMAND} -E tar x ${libressl_path}.tar.gz
+		WORKING_DIRECTORY ${root_dir}/ext
+	)
+endif()
 
 include(ExternalProject)
 set_property(DIRECTORY PROPERTY EP_STEP_TARGETS configure build test)
@@ -394,7 +403,7 @@ endif()
 #endif()
 
 set(OPENSSL_BUILD_DIR ${root_dir}/build/libressl/src/libressl-build)
-set(OPENSSL_INCLUDE ${root_dir}/ext/libressl-2.4.4/include)
+set(OPENSSL_INCLUDE ${libressl_path}/include)
 
 if (MSVC)
 	set(OPENSSL_LIBS
