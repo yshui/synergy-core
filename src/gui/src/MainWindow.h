@@ -105,7 +105,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindowBase
 		QString appPath(const QString& name);
 		void open();
 		void clearLog();
-		VersionChecker& versionChecker() { return m_VersionChecker; }
+		//VersionChecker& versionChecker() { return m_VersionChecker; }
 		QString getScreenName();
 		ServerConfig& serverConfig() { return m_ServerConfig; }
 		void showConfigureServer(const QString& message);
@@ -133,7 +133,7 @@ public slots:
 		void stopSynergy();
 		void logOutput();
 		void logError();
-		void updateFound(const QString& version);
+		//void updateFound(const QString& version);
 
 	protected:
 		QSettings& settings() { return m_Settings; }
@@ -180,7 +180,7 @@ public slots:
 		QSystemTrayIcon* m_pTrayIcon;
 		QMenu* m_pTrayIconMenu;
 		bool m_AlreadyHidden;
-		VersionChecker m_VersionChecker;
+		//VersionChecker m_VersionChecker;
 		IpcClient m_IpcClient;
 		QMenuBar* m_pMenuBar;
 		QMenu* m_pMenuFile;

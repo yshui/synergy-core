@@ -30,6 +30,7 @@
 #include "QUtility.h"
 #include "ProcessorArch.h"
 #include "SslCertificate.h"
+#include "configDirectory.h"
 
 #if defined(Q_OS_MAC)
 #include "OSXHelpers.h"
@@ -56,12 +57,16 @@
 #endif
 
 #if defined(Q_OS_WIN)
-static const char synergyConfigName[] = "synergy.sgc";
-static const QString synergyConfigFilter(QObject::tr("Synergy Configurations (*.sgc);;All files (*.*)"));
+#define SYNERGYS_NAME "synergys.exe"
+#define SYNERGYC_NAME "synergyc.exe"
 #else
-static const char synergyConfigName[] = "synergy.conf";
-static const QString synergyConfigFilter(QObject::tr("Synergy Configurations (*.conf);;All files (*.*)"));
+#define SYNERGYS_NAME "synergys"
+#define SYNERGYC_NAME "synergyc"
 #endif
+
+static const char guiConfigName[] = "gui.ini";
+
+static const QString serverConfigFilter(QObject::tr("Synergy Configurations (*.conf);;All files (*.*)"));
 
 #if defined(Q_OS_MAC)
 static const char* synergyLightIconFiles[] =
@@ -114,7 +119,7 @@ MainWindow::MainWindow(QSettings& settings, AppConfig& appConfig) :
 	initConnections();
 
 	m_pWidgetUpdate->hide();
-	m_VersionChecker.setApp(appPath(appConfig.synergycName()));
+	//m_VersionChecker.setApp(appPath(SYNERGYC_NAME));
 	m_pLabelScreenName->setText(getScreenName());
 	m_pLabelIpAddresses->setText(getIPAddresses());
 
@@ -142,12 +147,12 @@ MainWindow::MainWindow(QSettings& settings, AppConfig& appConfig) :
 	connect (m_AppConfig, SIGNAL(sslToggled(bool)),
 			 this, SLOT(sslToggled(bool)), Qt::QueuedConnection);
 
-	QString lastVersion = m_AppConfig->lastVersion();
-	QString currentVersion = m_VersionChecker.getVersion();
-	if (lastVersion != currentVersion) {
-		m_AppConfig->setLastVersion (currentVersion);
-		m_AppConfig->saveSettings();
-	}
+	//QString lastVersion = m_AppConfig->lastVersion();
+	//QString currentVersion = m_VersionChecker.getVersion();
+	//if (lastVersion != currentVersion) {
+	//	m_AppConfig->setLastVersion (currentVersion);
+	//	m_AppConfig->saveSettings();
+	//}
 }
 
 MainWindow::~MainWindow()
@@ -279,7 +284,12 @@ void MainWindow::loadSettings()
 	m_pRadioInternalConfig->setChecked(settings().value("useInternalConfig", true).toBool());
 
 	m_pGroupServer->setChecked(settings().value("groupServerChecked", false).toBool());
-	m_pLineEditConfigFile->setText(settings().value("configFile", QDir::homePath() + "/" + synergyConfigName).toString());
+	m_pLineEditConfigFile->setText(
+		settings().value(
+			"configFile",
+			g_GetConfigDirectory() + guiConfigName
+		).toString()
+	);
 	m_pGroupClient->setChecked(settings().value("groupClientChecked", true).toBool());
 	m_pLineEditHostname->setText(settings().value("serverHostname").toString().trimmed());
 }
@@ -291,7 +301,7 @@ void MainWindow::initConnections()
 	connect(m_pActionStartSynergy, SIGNAL(triggered()), this, SLOT(startSynergy()));
 	connect(m_pActionStopSynergy, SIGNAL(triggered()), this, SLOT(stopSynergy()));
 	connect(m_pActionQuit, SIGNAL(triggered()), qApp, SLOT(quit()));
-	connect(&m_VersionChecker, SIGNAL(updateFound(const QString&)), this, SLOT(updateFound(const QString&)));
+	//connect(&m_VersionChecker, SIGNAL(updateFound(const QString&)), this, SLOT(updateFound(const QString&)));
 }
 
 void MainWindow::saveSettings()
@@ -365,6 +375,7 @@ void MainWindow::logError()
 	}
 }
 
+#if 0
 void MainWindow::updateFound(const QString &version)
 {
 	m_pWidgetUpdate->show();
@@ -374,6 +385,7 @@ void MainWindow::updateFound(const QString &version)
 		   "<a href=\"%2\">download</a>.</p>")
 		.arg(version).arg(DOWNLOAD_URL));
 }
+#endif
 
 void MainWindow::appendLogInfo(const QString& text)
 {
@@ -571,8 +583,8 @@ void MainWindow::startSynergy()
 	// on windows, the profile directory changes depending on the user that
 	// launched the process (e.g. when launched with elevation). setting the
 	// profile dir on launch ensures it uses the same profile dir is used
-	// no matter how its relaunched.
-	args << "--profile-dir" << getProfileRootForArg();
+	// no matter how its relaunched. /profile/config/g
+	//args << "--config-dir" << g_GetConfigDirectory();
 #endif
 
 	if ((synergyType() == synergyClient && !clientArgs(args, app))
@@ -638,7 +650,7 @@ MainWindow::sslToggled (bool enabled)
 
 bool MainWindow::clientArgs(QStringList& args, QString& app)
 {
-	app = appPath(appConfig().synergycName());
+	app = appPath(SYNERGYC_NAME);
 
 	if (!QFile::exists(app))
 	{
@@ -716,12 +728,12 @@ QString MainWindow::address()
 
 QString MainWindow::appPath(const QString& name)
 {
-	return appConfig().synergyProgramDir() + name;
+	return QCoreApplication::applicationDirPath() + QDir::separator() + name;
 }
 
 bool MainWindow::serverArgs(QStringList& args, QString& app)
 {
-	app = appPath(appConfig().synergysName());
+	app = appPath(SYNERGYS_NAME);
 
 	if (!QFile::exists(app))
 	{
@@ -738,7 +750,6 @@ bool MainWindow::serverArgs(QStringList& args, QString& app)
 	if (appConfig().logToFile())
 	{
 		appConfig().persistLogDir();
-
 		args << "--log" << appConfig().logFilenameCmd();
 	}
 
@@ -982,7 +993,7 @@ void MainWindow::on_m_pGroupServer_toggled(bool on)
 
 bool MainWindow::on_m_pButtonBrowseConfigFile_clicked()
 {
-	QString fileName = QFileDialog::getOpenFileName(this, tr("Browse for a synergys config file"), QString(), synergyConfigFilter);
+	QString fileName = QFileDialog::getOpenFileName(this, tr("Browse for a synergys config file"), QString(), serverConfigFilter);
 
 	if (!fileName.isEmpty())
 	{
@@ -1008,7 +1019,7 @@ bool  MainWindow::on_m_pActionSave_triggered()
 
 void MainWindow::on_m_pActionAbout_triggered()
 {
-	AboutDialog dlg(this, appPath(appConfig().synergycName()));
+	AboutDialog dlg(this, appPath(SYNERGYC_NAME));
 	dlg.exec();
 }
 
@@ -1040,38 +1051,4 @@ void MainWindow::on_m_pButtonConfigureServer_clicked()
 void MainWindow::on_m_pButtonApply_clicked()
 {
 	restartSynergy();
-}
-
-#if 0
-int MainWindow::raiseActivationDialog()
-{
-	if (m_ActivationDialogRunning) {
-		return QDialog::Rejected;
-	}
-	ActivationDialog activationDialog (this, appConfig(), licenseManager());
-	m_ActivationDialogRunning = true;
-	connect (&activationDialog, SIGNAL(finished(int)),
-			 this, SLOT(on_activationDialogFinish()), Qt::QueuedConnection);
-	int result = activationDialog.exec();
-	m_ActivationDialogRunning = false;
-	if (result == QDialog::Accepted) {
-		restartSynergy();
-	}
-	return result;
-}
-#endif
-
-QString MainWindow::getProfileRootForArg()
-{
-	CoreInterface coreInterface;
-	QString dir = coreInterface.getProfileDir();
-
-	// HACK: strip our app name since we're returning the root dir.
-#if defined(Q_OS_WIN)
-	dir.replace("\\Synergy", "");
-#else
-	dir.replace("/.synergy", "");
-#endif
-
-	return QString("\"%1\"").arg(dir);
 }

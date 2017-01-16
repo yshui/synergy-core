@@ -18,7 +18,6 @@
 
 #include "SettingsDialog.h"
 
-#include "CoreInterface.h"
 #include "SynergyLocale.h"
 #include "QSynergyApplication.h"
 #include "QUtility.h"

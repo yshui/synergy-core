@@ -17,8 +17,6 @@
 
 #pragma once
 
-#include "CoreInterface.h"
-
 #include <QObject>
 
 class SslCertificate : public QObject
@@ -41,7 +39,6 @@ private:
 	void generateFingerprint(const QString& certificateFilename);
 
 private:
-	QString m_ProfileDir;
+	QString m_ConfigDir;
 	QString m_ToolOutput;
-	CoreInterface m_CoreInterface;
 };

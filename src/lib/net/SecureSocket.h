@@ -1,11 +1,11 @@
 /*
  * synergy -- mouse and keyboard sharing utility
  * Copyright (C) 2015-2016 Symless Ltd.
- * 
+ *
  * This package is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * found in the file LICENSE that should have accompanied this file.
- * 
+ *
  * This package is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -19,6 +19,17 @@
 
 #include "net/TCPSocket.h"
 #include "net/XSocket.h"
+
+
+#if WIN32
+#define SSL_CERT_PATH "SSL\\Synergy.pem"
+#define SSL_FINGERPRINTS_PATH "SSL\\Fingerprints\\"
+#else
+#define SSL_CERT_PATH "SSL/Synergy.pem"
+#define SSL_FINGERPRINTS_PATH "SSL/Fingerprints/"
+#endif
+#define SSL_TRUSTED_SERVERS_PATH (SSL_FINGERPRINTS_PATH "TrustedServers.txt")
+
 
 class IEventQueue;
 class SocketMultiplexer;
@@ -43,7 +54,7 @@ public:
 
 	// IDataSocket overrides
 	virtual void		connect(const NetworkAddress&);
-	
+
 	ISocketMultiplexerJob*
 						newJob();
 	bool				isFatal() const { return m_fatal; }
@@ -85,7 +96,7 @@ private:
 	void				showSecureConnectInfo();
 	void				showSecureLibInfo();
 	void				showSecureCipherInfo();
-	
+
 	void				handleTCPConnected(const Event& event, void*);
 
 private:

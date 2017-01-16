@@ -16,29 +16,32 @@
  */
 
 #include "SslCertificate.h"
-
 #include "Fingerprint.h"
+#include "configDirectory.h"
 
 #include <QProcess>
 #include <QDir>
 #include <QCoreApplication>
 
-static const char kCertificateLifetime[] = "365";
-static const char kCertificateSubjectInfo[] = "/CN=Synergy";
+static const char kCertificateSubjectInfo[] = "/CN=Synergy4rk";
 static const char kCertificateFilename[] = "Synergy.pem";
 static const char kSslDir[] = "SSL";
-static const char kUnixOpenSslCommand[] = "openssl";
 
 #if defined(Q_OS_WIN)
-static const char kWinOpenSslBinary[] = "OpenSSL\\openssl.exe";
-static const char kConfigFile[] = "OpenSSL\\synergy.conf";
+static const char kOpenSslCommand[] = "synopenssl.exe";
+static const char kConfigFile[] = "synopenssl.cnf";
+#else
+static const char kOpenSslCommand[] = "openssl";//"./synopenssl";
+static const char kConfigFile[] = "synopenssl.cnf";
 #endif
+
+
 
 SslCertificate::SslCertificate(QObject *parent) :
 	QObject(parent)
 {
-	m_ProfileDir = m_CoreInterface.getProfileDir();
-	if (m_ProfileDir.isEmpty()) {
+	m_ConfigDir = g_GetConfigDirectory();
+	if (m_ConfigDir.isEmpty()) {
 		emit error(tr("Failed to get profile directory."));
 	}
 }
@@ -48,16 +51,17 @@ bool SslCertificate::runTool(const QStringList& args)
 	QString program;
 #if defined(Q_OS_WIN)
 	program = QCoreApplication::applicationDirPath();
-	program.append("\\").append(kWinOpenSslBinary);
+	program.append('\\').append(kOpenSslCommand);
 #else
-	program = kUnixOpenSslCommand;
+	program = kOpenSslCommand;
 #endif
 
 
 	QStringList environment;
 #if defined(Q_OS_WIN)
-	environment << QString("OPENSSL_CONF=%1\\%2")
+	environment << QString("OPENSSL_CONF=%1%2%3")
 		.arg(QCoreApplication::applicationDirPath())
+		.arg(QDir::separator())
 		.arg(kConfigFile);
 #endif
 
@@ -91,7 +95,7 @@ bool SslCertificate::runTool(const QStringList& args)
 void SslCertificate::generateCertificate()
 {
 	QString sslDirPath = QString("%1%2%3")
-		.arg(m_ProfileDir)
+		.arg(m_ConfigDir)
 		.arg(QDir::separator())
 		.arg(kSslDir);
 
@@ -111,7 +115,7 @@ void SslCertificate::generateCertificate()
 
 		// valide duration
 		arguments.append("-days");
-		arguments.append(kCertificateLifetime);
+		arguments.append("365");
 
 		// subject information
 		arguments.append("-subj");
@@ -121,7 +125,7 @@ void SslCertificate::generateCertificate()
 
 		// private key
 		arguments.append("-newkey");
-		arguments.append("rsa:1024");
+		arguments.append("rsa:4096");
 
 		QDir sslDir(sslDirPath);
 		if (!sslDir.exists()) {

@@ -1,11 +1,11 @@
 /*
  * synergy -- mouse and keyboard sharing utility
  * Copyright (C) 2015-2016 Symless Ltd.
- * 
+ *
  * This package is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * found in the file LICENSE that should have accompanied this file.
- * 
+ *
  * This package is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,9 +22,6 @@
 #include "net/SocketMultiplexer.h"
 #include "net/TSocketMultiplexerMethodJob.h"
 #include "arch/XArch.h"
-
-static const char s_certificateDir[] = { "SSL" };
-static const char s_certificateFilename[] = { "Synergy.pem" };
 
 //
 // SecureListenSocket
@@ -61,10 +58,8 @@ SecureListenSocket::accept()
 			setListeningJob();
 		}
 
-		String certificateFilename = synergy::string::sprintf("%s/%s/%s",
-										ARCH->getProfileDirectory().c_str(),
-										s_certificateDir,
-										s_certificateFilename);
+		String certificateFilename =
+			ARCH->getConfigDirectory() + SSL_CERT_PATH;
 
 		bool loaded = socket->loadCertificates(certificateFilename);
 		if (!loaded) {

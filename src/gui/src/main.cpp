@@ -17,12 +17,13 @@
  */
 
 #define TRAY_RETRY_COUNT 10
-#define TRAY_RETRY_WAIT 2000
+#define TRAY_RETRY_WAIT 5000
 
 #include "QSynergyApplication.h"
 #include "MainWindow.h"
 #include "AppConfig.h"
 #include "SetupWizard.h"
+#include "configDirectory.h"
 
 #include <QtCore>
 #include <QtGui>
@@ -81,7 +82,7 @@ int main(int argc, char* argv[])
 	QApplication::setQuitOnLastWindowClosed(false);
 #endif
 
-	QSettings settings;
+	QSettings settings(g_GetConfigDirectory() + "gui.ini", QSettings::IniFormat);
 	AppConfig appConfig (&settings);
 
 	app.switchTranslator(appConfig.language());

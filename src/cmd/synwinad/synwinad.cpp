@@ -15,17 +15,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#include <iostream>
 
+#include "arch/Arch.h"
+#include "base/Log.h"
 #include "base/String.h"
+#include "platform/MSWindowsSession.h"
 
-class ToolArgs {
-public:
-	ToolArgs();
+int main(int argc, char** argv)
+{
+#if SYSAPI_WIN32
+	// record window instance for tray icon, etc
+	// or maybe
+	// win32 instance needed for threading, etc.
+	ArchMiscWindows::setInstanceWin32(GetModuleHandle(NULL));
+#endif
 
-public:
-	bool				m_printActiveDesktopName;
-	bool				m_getInstalledDir;
-	bool				m_getProfileDir;
-	bool				m_getArch;
-};
+	MSWindowsSession session;
+	String name = session.getActiveDesktopName();
+	if (name.empty()) {
+		LOG((CLOG_CRIT "failed to get active desktop name"));
+		return 1;
+	}
+	else {
+		String output = synergy::string::sprintf("activeDesktop:%s", name.c_str());
+		LOG((CLOG_INFO "%s", output.c_str()));
+	}
+
+	return 0;
+}

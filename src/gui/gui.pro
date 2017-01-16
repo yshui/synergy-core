@@ -90,9 +90,9 @@ SOURCES += src/main.cpp \
     src/SynergyLocale.cpp \
     src/QUtility.cpp \
     src/CommandProcess.cpp \
-    src/CoreInterface.cpp \
     src/Fingerprint.cpp \
-    src/SslCertificate.cpp
+    src/SslCertificate.cpp \
+    src/configDirectory.cpp
 HEADERS += src/MainWindow.h \
     src/AboutDialog.h \
     src/ServerConfig.h \
@@ -122,10 +122,10 @@ HEADERS += src/MainWindow.h \
     src/QUtility.h \
     src/CommandProcess.h \
     src/ProcessorArch.h \
-    src/CoreInterface.h \
     src/Fingerprint.h \
     src/SslCertificate.h \
-    src/ElevateMode.h
+    src/ElevateMode.h \
+    src/configDirectory.h
 RESOURCES += res/Synergy.qrc
 RC_FILE = res/win/Synergy.rc
 

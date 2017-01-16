@@ -74,16 +74,18 @@ ExternalProject_Add(libressl
 	INSTALL_COMMAND ""
 )
 
+option(DISABLE_GIT_REVISION "DISABLE_GIT_REVISION" 0)
+if (NOT DISABLE_GIT_REVISION)
+	execute_process(
+		COMMAND git log -1 --format=%h
+		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+		OUTPUT_VARIABLE GIT_REVISION
+		OUTPUT_STRIP_TRAILING_WHITESPACE
+		ERROR_QUIET
+	)
+endif()
 
-execute_process(
-	COMMAND git log -1 --format=%h
-	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-	OUTPUT_VARIABLE GIT_REVISION
-	OUTPUT_STRIP_TRAILING_WHITESPACE
-	ERROR_QUIET
-)
-
-if (GIT_REVISION STREQUAL "")
+if ("${GIT_REVISION}" STREQUAL "")
 	add_definitions(-DGIT_REVISION=\"00000000\")
 else()
 	add_definitions(-DGIT_REVISION=\"${GIT_REVISION}\")
@@ -94,7 +96,30 @@ add_definitions(-DVERSION_MIDDLE=\"${VERSION_MIDDLE}\")
 add_definitions(-DVERSION_LOW=\"${VERSION_LOW}\")
 add_definitions(-DVERSION_STAGE=\"${VERSION_STAGE}\")
 add_definitions(-DVERSION=\"${VERSION}\")
-add_definitions(-DGIT_REVISION=\"${GIT_REVISION}\")
+
+
+option(DISABLE_TESTS "DISABLE_TESTS" 1)
+
+
+# Allow this to be customizable. Some Linux distros may want this.
+# Windows XP will use 'C:\All Users\Synergy\'.
+# Windows Vista and higher will use 'C:\ProgramData\Synergy\'.
+if (UNIX)
+	if (APPLE)
+		set(SYNCONF_DIR "/Library/Application Support/Synergy/" CACHE STRING "Config dir")
+		#option(SYNCONF_DIR "SYNCONF_DIR" "~/Library/something/fuck/")
+	else()
+		set(SYNCONF_DIR "/etc/Synergy/" CACHE STRING "Config dir")
+		#option(SYNCONF_DIR "SYNCONF_DIR" "/etc/Synergy/")
+	endif()
+
+	# folder perm needs exec bit
+	# (perm&(~exec_bit)) should be passed down to folder tree
+	#option(SYNCONF_DIR_OCTAL_PERM "SYNCONF_DIR_OCTAL_PERM" 0777)
+
+	add_definitions(-DSYNCONF_DIR=\"${SYNCONF_DIR}\")
+	#add_definitions(-DSYNCONF_DIR_OCTAL_PERM=${SYNCONF_DIR_OCTAL_PERM})
+endif()
 
 
 # Declare libs, so we can use list in linker later. There's probably
@@ -237,6 +262,8 @@ if (UNIX)
 			${lib_Carbon}
 		)
 
+		add_definitions(-DWINAPI_CARBON=1 -D_THREAD_SAFE)
+
 	else() # not-apple
 
 		# add include dir for bsd (posix uses /usr/include/)
@@ -315,6 +342,8 @@ if (UNIX)
 			list(APPEND libs Xi)
 		endif()
 
+		add_definitions(-DWINAPI_XWINDOWS=1)
+
 	endif()
 
 	# For config.h, set some static values; it may be a good idea to make
@@ -337,12 +366,6 @@ if (UNIX)
 	configure_file(res/config.h.in ${root_dir}/build/config.h)
 
 	add_definitions(-DSYSAPI_UNIX=1 -DHAVE_CONFIG_H)
-
-	if (APPLE)
-		add_definitions(-DWINAPI_CARBON=1 -D_THREAD_SAFE)
-	else (APPLE)
-		add_definitions(-DWINAPI_XWINDOWS=1)
-	endif()
 
 else() # not-unix
 
@@ -411,20 +434,22 @@ if (MSVC)
 		${OPENSSL_BUILD_DIR}/crypto/${CMAKE_BUILD_TYPE}/crypto.lib
 	)
 	set(OPENSSL_EXE ${OPENSSL_BUILD_DIR}/apps/openssl/${CMAKE_BUILD_TYPE}/openssl.exe)
-	set(OPENSSL_OUT_EXE ${EXECUTABLE_OUTPUT_PATH}/${CMAKE_BUILD_TYPE}/openssl.exe)
+	set(OPENSSL_OUT_EXE ${EXECUTABLE_OUTPUT_PATH}/${CMAKE_BUILD_TYPE}/synopenssl.exe)
 else()
 	set(OPENSSL_LIBS
 		${OPENSSL_BUILD_DIR}/ssl/libssl.a
 		${OPENSSL_BUILD_DIR}/crypto/libcrypto.a
 	)
-	set(OPENSSL_EXE ${OPENSSL_BUILD_DIR}/apps/openssl/openssl${CMAKE_EXECUTABLE_SUFFIX})
-	set(OPENSSL_OUT_EXE ${EXECUTABLE_OUTPUT_PATH}/openssl)
+	set(OPENSSL_EXE ${OPENSSL_BUILD_DIR}/apps/openssl/openssl)
+	set(OPENSSL_OUT_EXE ${EXECUTABLE_OUTPUT_PATH}/synopenssl)
 endif()
 
 add_custom_command(TARGET libressl
 	POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy ${OPENSSL_EXE} ${OPENSSL_OUT_EXE}
 )
+
+configure_file(${root_dir}/res/synopenssl.cnf ${EXECUTABLE_OUTPUT_PATH}/synopenssl.cnf)
 
 
 add_subdirectory(src)

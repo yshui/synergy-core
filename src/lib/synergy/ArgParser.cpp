@@ -21,7 +21,6 @@
 #include "synergy/App.h"
 #include "synergy/ServerArgs.h"
 #include "synergy/ClientArgs.h"
-#include "synergy/ToolArgs.h"
 #include "synergy/ArgsBase.h"
 #include "base/Log.h"
 #include "base/String.h"
@@ -48,9 +47,6 @@ ArgParser::parseServerArgs(ServerArgs& args, int argc, const char* const* argv)
 			continue;
 		}
 		else if (parseGenericArgs(argc, argv, i)) {
-			continue;
-		}
-		else if (parseDeprecatedArgs(argc, argv, i)) {
 			continue;
 		}
 		else if (isArg(i, argc, argv, "-a", "--address", 1)) {
@@ -87,15 +83,6 @@ ArgParser::parseClientArgs(ClientArgs& args, int argc, const char* const* argv)
 		}
 		else if (parseGenericArgs(argc, argv, i)) {
 			continue;
-		}
-		else if (parseDeprecatedArgs(argc, argv, i)) {
-			continue;
-		}
-		else if (isArg(i, argc, argv, NULL, "--camp")) {
-			// ignore -- included for backwards compatibility
-		}
-		else if (isArg(i, argc, argv, NULL, "--no-camp")) {
-			// ignore -- included for backwards compatibility
 		}
 		else if (isArg(i, argc, argv, NULL, "--yscroll", 1)) {
 			// define scroll
@@ -151,11 +138,9 @@ ArgParser::parsePlatformArg(ArgsBase& argsBase, const int& argc, const char* con
 		// use alternative display
 		argsBase.m_display = argv[++i];
 	}
-
 	else if (isArg(i, argc, argv, NULL, "--no-xinitthreads")) {
 		argsBase.m_disableXInitThreads = true;
 	}
-
 	else {
 		// option not supported here
 		return false;
@@ -166,34 +151,6 @@ ArgParser::parsePlatformArg(ArgsBase& argsBase, const int& argc, const char* con
 	// no options for carbon
 	return false;
 #endif
-}
-
-bool
-ArgParser::parseToolArgs(ToolArgs& args, int argc, const char* const* argv)
-{
-	for (int i = 1; i < argc; ++i) {
-		if (isArg(i, argc, argv, NULL, "--get-active-desktop", 0)) {
-			args.m_printActiveDesktopName = true;
-			return true;
-		}
-		else if (isArg(i, argc, argv, NULL, "--get-installed-dir", 0)) {
-			args.m_getInstalledDir = true;
-			return true;
-		}
-		else if (isArg(i, argc, argv, NULL, "--get-profile-dir", 0)) {
-			args.m_getProfileDir = true;
-			return true;
-		}
-		else if (isArg(i, argc, argv, NULL, "--get-arch", 0)) {
-			args.m_getArch = true;
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-
-	return false;
 }
 
 bool
@@ -260,14 +217,11 @@ ArgParser::parseGenericArgs(int argc, const char* const* argv, int& i)
 		bool useDragDrop = true;
 
 #ifdef WINAPI_XWINDOWS
-
 		useDragDrop = false;
 		LOG((CLOG_INFO "ignoring --enable-drag-drop, not supported on linux."));
-
 #endif
 
 #ifdef WINAPI_MSWINDOWS
-
 		if (!IsWindowsVistaOrGreater()) {
 			useDragDrop = false;
 			LOG((CLOG_INFO "ignoring --enable-drag-drop, not supported below vista."));
@@ -281,50 +235,15 @@ ArgParser::parseGenericArgs(int argc, const char* const* argv, int& i)
 	else if (isArg(i, argc, argv, NULL, "--enable-crypto")) {
 		argsBase().m_enableCrypto = true;
 	}
-	else if (isArg(i, argc, argv, NULL, "--profile-dir", 1)) {
-		argsBase().m_profileDirectory = argv[++i];
-	}
-	else if (isArg(i, argc, argv, NULL, "--plugin-dir", 1)) {
-		argsBase().m_pluginDirectory = argv[++i];
-	}
+	//else if (isArg(i, argc, argv, NULL, "--config-dir", 1)) {
+	//	argsBase().m_configDirectory = argv[++i];
+	//}
 	else {
 		// option not supported here
 		return false;
 	}
 
 	return true;
-}
-
-bool
-ArgParser::parseDeprecatedArgs(int argc, const char* const* argv, int& i)
-{
-	if (isArg(i, argc, argv, NULL, "--crypto-pass")) {
-		LOG((CLOG_NOTE "--crypto-pass is deprecated"));
-		i++;
-		return true;
-	}
-	else if (isArg(i, argc, argv, NULL, "--res-w")) {
-		LOG((CLOG_NOTE "--res-w is deprecated"));
-		i++;
-		return true;
-	}
-	else if (isArg(i, argc, argv, NULL, "--res-h")) {
-		LOG((CLOG_NOTE "--res-h is deprecated"));
-		i++;
-		return true;
-	}
-	else if (isArg(i, argc, argv, NULL, "--prm-wc")) {
-		LOG((CLOG_NOTE "--prm-wc is deprecated"));
-		i++;
-		return true;
-	}
-	else if (isArg(i, argc, argv, NULL, "--prm-hc")) {
-		LOG((CLOG_NOTE "--prm-hc is deprecated"));
-		i++;
-		return true;
-	}
-
-	return false;
 }
 
 bool

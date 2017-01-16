@@ -2,11 +2,11 @@
  * synergy -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
- * 
+ *
  * This package is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * found in the file LICENSE that should have accompanied this file.
- * 
+ *
  * This package is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -457,7 +457,7 @@ ClientApp::mainLoop()
 
 	// start client, etc
 	appUtil().startNode();
-	
+
 	// init ipc client after node start, since create a new screen wipes out
 	// the event queue (the screen ctors call adoptBuffer).
 	if (argsBase().m_enableIpc) {
@@ -468,24 +468,24 @@ ClientApp::mainLoop()
 	// later.  the timer installed by startClient() will take care of
 	// that.
 	DAEMON_RUNNING(true);
-	
+
 #if defined(MAC_OS_X_VERSION_10_7)
-	
+
 	Thread thread(
 		new TMethodJob<ClientApp>(
 			this, &ClientApp::runEventsLoop,
 			NULL));
-	
+
 	// wait until carbon loop is ready
 	OSXScreen* screen = dynamic_cast<OSXScreen*>(
 		m_clientScreen->getPlatformScreen());
 	screen->waitForCarbonLoop();
-	
+
 	runCocoaApp();
 #else
 	m_events->loop();
 #endif
-	
+
 	DAEMON_RUNNING(false);
 
 	// close down
@@ -527,7 +527,7 @@ ClientApp::runInner(int argc, char** argv, ILogOutputter* outputter, StartupFunc
 {
 	// general initialization
 	m_serverAddress = new NetworkAddress;
-	args().m_pname         = ARCH->getBasename(argv[0]);
+	args().m_pname = ARCH->getBasename(argv[0]);
 
 	// install caller's output filter
 	if (outputter != NULL) {
@@ -556,7 +556,7 @@ ClientApp::runInner(int argc, char** argv, ILogOutputter* outputter, StartupFunc
 	return result;
 }
 
-void 
+void
 ClientApp::startNode()
 {
 	// start the client.  if this return false then we've failed and

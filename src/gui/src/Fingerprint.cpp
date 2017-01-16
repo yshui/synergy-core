@@ -16,8 +16,7 @@
  */
 
 #include "Fingerprint.h"
-
-#include "CoreInterface.h"
+#include "configDirectory.h"
 
 #include <QDir>
 #include <QTextStream>
@@ -55,13 +54,7 @@ void Fingerprint::trust(const QString& fingerprintText, bool append)
 
 bool Fingerprint::fileExists() const
 {
-	QString dirName = Fingerprint::directoryPath();
-	if (!QDir(dirName).exists()) {
-		return false;
-	}
-
-	QFile file(filePath());
-	return file.exists();
+	return QFile::exists(filePath());
 }
 
 bool Fingerprint::isTrusted(const QString& fingerprintText)
@@ -111,8 +104,9 @@ QString Fingerprint::readFirst()
 
 QString Fingerprint::filePath() const
 {
-	QString dir = Fingerprint::directoryPath();
-	return QString("%1/%2").arg(dir).arg(m_Filename);
+	QString file = Fingerprint::directoryPath();
+	file.append(QDir::separator()).append(m_Filename);
+	return file;
 }
 
 void Fingerprint::persistDirectory()
@@ -125,12 +119,9 @@ void Fingerprint::persistDirectory()
 
 QString Fingerprint::directoryPath()
 {
-	CoreInterface coreInterface;
-	QString profileDir = coreInterface.getProfileDir();
-
-	return QString("%1/%2")
-	  .arg(profileDir)
-	  .arg(kDirName);
+	QString dir = g_GetConfigDirectory();
+	dir.append(QDir::separator()).append(kDirName);
+	return dir;
 }
 
 Fingerprint Fingerprint::local()

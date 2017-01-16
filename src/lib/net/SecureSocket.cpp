@@ -43,11 +43,6 @@ enum {
 	kMsgSize = 128
 };
 
-static const char kFingerprintDirName[] = "SSL/Fingerprints";
-//static const char kFingerprintLocalFilename[] = "Local.txt";
-static const char kFingerprintTrustedServersFilename[] = "TrustedServers.txt";
-//static const char kFingerprintTrustedClientsFilename[] = "TrustedClients.txt";
-
 struct Ssl {
 	SSL_CTX*	m_context;
 	SSL*		m_ssl;
@@ -687,17 +682,10 @@ SecureSocket::verifyCertFingerprint()
 	formatFingerprint(fingerprint);
 	LOG((CLOG_NOTE "server fingerprint: %s", fingerprint.c_str()));
 
-	String trustedServersFilename;
-	trustedServersFilename = synergy::string::sprintf(
-		"%s/%s/%s",
-		ARCH->getProfileDirectory().c_str(),
-		kFingerprintDirName,
-		kFingerprintTrustedServersFilename);
-
 	// check if this fingerprint exist
 	String fileLine;
 	std::ifstream file;
-	file.open(trustedServersFilename.c_str());
+	file.open(SSL_TRUSTED_SERVERS_PATH);
 
 	bool isValid = false;
 	while (!file.eof() && file.is_open()) {

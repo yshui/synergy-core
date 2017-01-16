@@ -17,9 +17,9 @@
 add_subdirectory(synergyc)
 add_subdirectory(synergys)
 #add_subdirectory(usynergy)
-add_subdirectory(syntool)
 add_subdirectory(synergyd)
 
-#if (WIN32)
+if (WIN32)
 #  add_subdirectory(synergyp)
-#endif()
+	add_subdirectory(synwinad)
+endif()

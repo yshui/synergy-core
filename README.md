@@ -35,11 +35,12 @@ Changes in this fork
 --------------------
 There's a few things not listed here. Go through the commits.
 + Removed activation requirement for features.
-+ Removed Python requirement.
++ Switch from using `hm` as helper script catchall to using purely CMake.
++ Removed Python requirement (by deprecation of `hm`).
 + Linking with a locally built LibreSSL (version 2.4.4 at time of writing).
-+ Auto-generating translations.
++ Auto-generating translations (through CMake).
 + Building on Windows should now put binaries in arch specific folders.
-+ Printscreen doesn't send Alt+Printscreen to Windows anymore.
++ Printscreen doesn't send Alt+Printscreen to Windows clients anymore.
 + Some new icons for OSX? (TODO recheck this)
 + EXTREMELY EXTREMELY BUGGY AND BAD MEMORY LEAK FIX FOR LINUX SERVER.
 + Building tests now uses a googletest submodule instead of including zip files.
@@ -48,7 +49,7 @@ There's a few things not listed here. Go through the commits.
 
 Building
 --------
-There's not a complete building guide yet so read through the [`COMPILE`](https://github.com/yupi2/synergy/blob/master/COMPILE) file. It has roughly all the build requirements but you'll likely need to fall back to viewing the [wiki entry for building](https://github.com/symless/synergy/wiki/Compiling) in the [symless/synergy](https://github.com/symless/synergy) repository.
+There's not a complete building guide yet so read through the [`COMPILE.md`](https://github.com/yupi2/synergy/blob/master/COMPILE.md) file. It has roughly all the build requirements but you'll likely need to fall back to viewing the [wiki entry for building](https://github.com/symless/synergy/wiki/Compiling) in the [symless/synergy](https://github.com/symless/synergy) repository.
 
 Here's how I build on Linux:
 ```
@@ -71,8 +72,9 @@ TODO
 ----
 + Unicode support layer for Windows.
 + Setup a build server maybe (probably not).
-+ Clean any CMAKE things that can be cleaned.
++ Clean any CMake things that can be cleaned.
 + Correct the media-toggle button on Windows (it might be broken).
-+ Wayland support (I probably won't write this myself).
++ Wayland support (requires support from the compositor: GNOME, KWin, etc).
 + Fix bugs.
 + Verify MinGW(-64) builds work.
++

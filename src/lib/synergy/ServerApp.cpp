@@ -2,11 +2,11 @@
  * synergy -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
- * 
+ *
  * This package is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * found in the file LICENSE that should have accompanied this file.
- * 
+ *
  * This package is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -92,7 +92,7 @@ ServerApp::parseArgs(int argc, const char* const* argv)
 	else {
 		if (!args().m_synergyAddress.empty()) {
 			try {
-				*m_synergyAddress = NetworkAddress(args().m_synergyAddress, 
+				*m_synergyAddress = NetworkAddress(args().m_synergyAddress,
 					kDefaultPort);
 				m_synergyAddress->resolve();
 			}
@@ -148,11 +148,9 @@ ServerApp::help()
 		"\n"
 		"If no configuration file pathname is provided then the first of the\n"
 		"following to load successfully sets the configuration:\n"
-		"  %s\n"
 		"  %s\n",
 		args().m_pname, kDefaultPort,
-		ARCH->concatPath(ARCH->getUserDirectory(), USR_CONFIG_NAME).c_str(),
-		ARCH->concatPath(ARCH->getSystemDirectory(), SYS_CONFIG_NAME).c_str()
+		ARCH->getConfigDirectory()
 	);
 
 	LOG((CLOG_PRINT "%s", buffer));
@@ -186,32 +184,12 @@ ServerApp::loadConfig()
 	// load the config file, if specified
 	if (!args().m_configFile.empty()) {
 		loaded = loadConfig(args().m_configFile);
-	}
-
-	// load the default configuration if no explicit file given
-	else {
-		// get the user's home directory
-		String path = ARCH->getUserDirectory();
-		if (!path.empty()) {
-			// complete path
-			path = ARCH->concatPath(path, USR_CONFIG_NAME);
-
-			// now try loading the user's configuration
-			if (loadConfig(path)) {
-				loaded            = true;
-				args().m_configFile = path;
-			}
-		}
-		if (!loaded) {
-			// try the system-wide config file
-			path = ARCH->getSystemDirectory();
-			if (!path.empty()) {
-				path = ARCH->concatPath(path, SYS_CONFIG_NAME);
-				if (loadConfig(path)) {
-					loaded            = true;
-					args().m_configFile = path;
-				}
-			}
+	} else {
+		// grab from the default path
+		std::string path = ARCH->getConfigFilePath();
+		if (loadConfig(path)) {
+			loaded = true;
+			args().m_configFile = path;
 		}
 	}
 
@@ -248,7 +226,7 @@ ServerApp::loadConfig(const String& pathname)
 	return false;
 }
 
-void 
+void
 ServerApp::forceReconnect(const Event&, void*)
 {
 	if (m_server != NULL) {
@@ -256,7 +234,7 @@ ServerApp::forceReconnect(const Event&, void*)
 	}
 }
 
-void 
+void
 ServerApp::handleClientConnected(const Event&, void* vlistener)
 {
 	ClientListener* listener = static_cast<ClientListener*>(vlistener);
@@ -290,7 +268,7 @@ ServerApp::closeServer(Server* server)
 		new TMethodEventJob<ServerApp>(this, &ServerApp::handleClientsDisconnected));
 	m_events->adoptHandler(m_events->forServer().disconnected(), server,
 		new TMethodEventJob<ServerApp>(this, &ServerApp::handleClientsDisconnected));
-	
+
 	m_events->loop();
 
 	m_events->removeHandler(Event::kTimer, timer);
@@ -301,7 +279,7 @@ ServerApp::closeServer(Server* server)
 	delete server;
 }
 
-void 
+void
 ServerApp::stopRetryTimer()
 {
 	if (m_timer != NULL) {
@@ -325,7 +303,7 @@ void ServerApp::updateStatus(const String& msg)
 	}
 }
 
-void 
+void
 ServerApp::closeClientListener(ClientListener* listen)
 {
 	if (listen != NULL) {
@@ -334,7 +312,7 @@ ServerApp::closeClientListener(ClientListener* listen)
 	}
 }
 
-void 
+void
 ServerApp::stopServer()
 {
 	if (m_serverState == kStarted) {
@@ -358,7 +336,7 @@ ServerApp::closePrimaryClient(PrimaryClient* primaryClient)
 	delete primaryClient;
 }
 
-void 
+void
 ServerApp::closeServerScreen(synergy::Screen* screen)
 {
 	if (screen != NULL) {
@@ -515,7 +493,7 @@ ServerApp::openServerScreen()
 	return screen;
 }
 
-bool 
+bool
 ServerApp::startServer()
 {
 	// skip if already started or starting
@@ -578,7 +556,7 @@ ServerApp::startServer()
 	}
 }
 
-synergy::Screen* 
+synergy::Screen*
 ServerApp::createScreen()
 {
 #if WINAPI_MSWINDOWS
@@ -592,7 +570,7 @@ ServerApp::createScreen()
 #endif
 }
 
-PrimaryClient* 
+PrimaryClient*
 ServerApp::openPrimaryClient(const String& name, synergy::Screen* screen)
 {
 	LOG((CLOG_DEBUG1 "creating primary screen"));
@@ -607,7 +585,7 @@ ServerApp::handleScreenError(const Event&, void*)
 	m_events->addEvent(Event(Event::kQuit));
 }
 
-void 
+void
 ServerApp::handleSuspend(const Event&, void*)
 {
 	if (!m_suspended) {
@@ -617,7 +595,7 @@ ServerApp::handleSuspend(const Event&, void*)
 	}
 }
 
-void 
+void
 ServerApp::handleResume(const Event&, void*)
 {
 	if (m_suspended) {
@@ -635,16 +613,16 @@ ServerApp::openClientListener(const NetworkAddress& address)
 		new TCPSocketFactory(m_events, getSocketMultiplexer()),
 		m_events,
 		args().m_enableCrypto);
-	
+
 	m_events->adoptHandler(
 		m_events->forClientListener().connected(), listen,
 		new TMethodEventJob<ServerApp>(
 			this, &ServerApp::handleClientConnected, listen));
-	
+
 	return listen;
 }
 
-Server* 
+Server*
 ServerApp::openServer(Config& config, PrimaryClient* primaryClient)
 {
 	Server* server = new Server(config, primaryClient, m_serverScreen, m_events, args());
@@ -709,7 +687,7 @@ ServerApp::mainLoop()
 
 	// start server, etc
 	appUtil().startNode();
-	
+
 	// init ipc client after node start, since create a new screen wipes out
 	// the event queue (the screen ctors call adoptBuffer).
 	if (argsBase().m_enableIpc) {
@@ -738,24 +716,24 @@ ServerApp::mainLoop()
 	// later.  the timer installed by startServer() will take care of
 	// that.
 	DAEMON_RUNNING(true);
-	
+
 #if defined(MAC_OS_X_VERSION_10_7)
-	
+
 	Thread thread(
 		new TMethodJob<ServerApp>(
 			this, &ServerApp::runEventsLoop,
 			NULL));
-	
+
 	// wait until carbon loop is ready
 	OSXScreen* screen = dynamic_cast<OSXScreen*>(
 		m_serverScreen->getPlatformScreen());
 	screen->waitForCarbonLoop();
-	
+
 	runCocoaApp();
 #else
 	m_events->loop();
 #endif
-	
+
 	DAEMON_RUNNING(false);
 
 	// close down
@@ -783,13 +761,13 @@ void ServerApp::resetServer(const Event&, void*)
 	startServer();
 }
 
-int 
+int
 ServerApp::runInner(int argc, char** argv, ILogOutputter* outputter, StartupFunc startup)
 {
 	// general initialization
 	m_synergyAddress = new NetworkAddress;
-	args().m_config         = new Config(m_events);
-	args().m_pname          = ARCH->getBasename(argv[0]);
+	args().m_config = new Config(m_events);
+	args().m_pname = ARCH->getBasename(argv[0]);
 
 	// install caller's output filter
 	if (outputter != NULL) {
@@ -814,7 +792,7 @@ int daemonMainLoopStatic(int argc, const char** argv) {
 	return ServerApp::instance().daemonMainLoop(argc, argv);
 }
 
-int 
+int
 ServerApp::standardStartup(int argc, char** argv)
 {
 	initApp(argc, argv);
@@ -828,7 +806,7 @@ ServerApp::standardStartup(int argc, char** argv)
 	}
 }
 
-int 
+int
 ServerApp::foregroundStartup(int argc, char** argv)
 {
 	initApp(argc, argv);
@@ -837,7 +815,7 @@ ServerApp::foregroundStartup(int argc, char** argv)
 	return mainLoop();
 }
 
-const char* 
+const char*
 ServerApp::daemonName() const
 {
 #if SYSAPI_WIN32
@@ -847,7 +825,7 @@ ServerApp::daemonName() const
 #endif
 }
 
-const char* 
+const char*
 ServerApp::daemonInfo() const
 {
 #if SYSAPI_WIN32

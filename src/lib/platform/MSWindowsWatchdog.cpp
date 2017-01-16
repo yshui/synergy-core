@@ -6,7 +6,7 @@
  * This package is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * found in the file LICENSE that should have accompanied this file.
- * 
+ *
  * This package is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -80,7 +80,7 @@ MSWindowsWatchdog::~MSWindowsWatchdog()
 	}
 }
 
-void 
+void
 MSWindowsWatchdog::startAsync()
 {
 	m_thread = new Thread(new TMethodJob<MSWindowsWatchdog>(
@@ -94,7 +94,7 @@ void
 MSWindowsWatchdog::stop()
 {
 	m_monitoring = false;
-	
+
 	m_thread->wait(5);
 	delete m_thread;
 
@@ -116,7 +116,7 @@ MSWindowsWatchdog::duplicateProcessToken(HANDLE process, LPSECURITY_ATTRIBUTES s
 		LOG((CLOG_ERR "could not open token, process handle: %d", process));
 		throw XArch(new XArchEvalWindows());
 	}
-	
+
 	LOG((CLOG_DEBUG "got token %i, duplicating", sourceToken));
 
 	HANDLE newToken;
@@ -128,25 +128,25 @@ MSWindowsWatchdog::duplicateProcessToken(HANDLE process, LPSECURITY_ATTRIBUTES s
 		LOG((CLOG_ERR "could not duplicate token %i", sourceToken));
 		throw XArch(new XArchEvalWindows());
 	}
-	
+
 	LOG((CLOG_DEBUG "duplicated, new token: %i", newToken));
 	return newToken;
 }
 
-HANDLE 
+HANDLE
 MSWindowsWatchdog::getUserToken(LPSECURITY_ATTRIBUTES security)
 {
-	// always elevate if we are at the vista/7 login screen. we could also 
+	// always elevate if we are at the vista/7 login screen. we could also
 	// elevate for the uac dialog (consent.exe) but this would be pointless,
 	// since synergy would re-launch as non-elevated after the desk switch,
 	// and so would be unusable with the new elevated process taking focus.
 	if (m_elevateProcess
 		|| m_autoElevated
 		|| m_session.isProcessInSession("logonui.exe", NULL)) {
-		
+
 		LOG((CLOG_DEBUG "getting elevated token, %s",
 			(m_elevateProcess ? "elevation required" : "at login screen")));
-		
+
 		HANDLE process;
 		if (!m_session.isProcessInSession("winlogon.exe", &process)) {
 			throw XMSWindowsWatchdogError("cannot get user token without winlogon.exe");
@@ -172,10 +172,10 @@ MSWindowsWatchdog::mainLoop(void*)
 		sendSasFunc = (SendSas)GetProcAddress(sasLib, "SendSAS");
 	}
 
-	SECURITY_ATTRIBUTES saAttr; 
-	saAttr.nLength = sizeof(SECURITY_ATTRIBUTES); 
-	saAttr.bInheritHandle = TRUE; 
-	saAttr.lpSecurityDescriptor = NULL; 
+	SECURITY_ATTRIBUTES saAttr;
+	saAttr.nLength = sizeof(SECURITY_ATTRIBUTES);
+	saAttr.bInheritHandle = TRUE;
+	saAttr.lpSecurityDescriptor = NULL;
 
 	if (!CreatePipe(&m_stdOutRead, &m_stdOutWrite, &saAttr, 0)) {
 		throw XArch(new XArchEvalWindows());
@@ -199,7 +199,7 @@ MSWindowsWatchdog::mainLoop(void*)
 				LOG((CLOG_INFO "backing off, wait=%ds, failures=%d", timeout, m_processFailures));
 				ARCH->sleep(timeout);
 			}
-		
+
 			if (!getCommand().empty() && ((m_processFailures != 0) || m_session.hasChanged() || m_commandChanged)) {
 				startProcess();
 			}
@@ -208,7 +208,7 @@ MSWindowsWatchdog::mainLoop(void*)
 
 				m_processFailures++;
 				m_processRunning = false;
-			
+
 				LOG((CLOG_WARN "detected application not running, pid=%d",
 					m_processInfo.dwProcessId));
 			}
@@ -231,7 +231,7 @@ MSWindowsWatchdog::mainLoop(void*)
 
 			// if the sas event failed, wait by sleeping.
 			ARCH->sleep(1);
-		
+
 		}
 		catch (std::exception& e) {
 			LOG((CLOG_ERR "failed to launch, error: %s", e.what()));
@@ -251,7 +251,7 @@ MSWindowsWatchdog::mainLoop(void*)
 		LOG((CLOG_DEBUG "terminated running process on exit"));
 		shutdownProcess(m_processInfo.hProcess, m_processInfo.dwProcessId, 20);
 	}
-	
+
 	LOG((CLOG_DEBUG "watchdog main thread finished"));
 }
 
@@ -263,7 +263,7 @@ MSWindowsWatchdog::isProcessActive()
 	return exitCode == STILL_ACTIVE;
 }
 
-void 
+void
 MSWindowsWatchdog::setFileLogOutputter(FileLogOutputter* outputter)
 {
 	m_fileLogOutputter = outputter;
@@ -289,7 +289,7 @@ MSWindowsWatchdog::startProcess()
 	SECURITY_ATTRIBUTES sa;
 	ZeroMemory(&sa, sizeof(SECURITY_ATTRIBUTES));
 
-	getActiveDesktop(&sa);
+	//getActiveDesktop(&sa);
 
 	ZeroMemory(&sa, sizeof(SECURITY_ATTRIBUTES));
 	HANDLE userToken = getUserToken(&sa);
@@ -349,7 +349,7 @@ MSWindowsWatchdog::doStartProcess(String& command, HANDLE userToken, LPSECURITY_
 		throw XArch(new XArchEvalWindows);
 	}
 
-	DWORD creationFlags = 
+	DWORD creationFlags =
 		NORMAL_PRIORITY_CLASS |
 		CREATE_NO_WINDOW |
 		CREATE_UNICODE_ENVIRONMENT;
@@ -410,7 +410,7 @@ MSWindowsWatchdog::outputLoop(void*)
 	CHAR buffer[kOutputBufferSize + 1];
 
 	while (m_monitoring) {
-		
+
 		DWORD bytesRead;
 		BOOL success = ReadFile(m_stdOutRead, buffer, kOutputBufferSize, &bytesRead, NULL);
 
@@ -429,7 +429,7 @@ MSWindowsWatchdog::outputLoop(void*)
 			if (m_fileLogOutputter != NULL) {
 				m_fileLogOutputter->write(kINFO, buffer);
 			}
-		}	
+		}
 	}
 }
 
@@ -456,7 +456,7 @@ MSWindowsWatchdog::shutdownProcess(HANDLE handle, DWORD pid, int timeout)
 			break;
 		}
 		else {
-			
+
 			double elapsed = (ARCH->time() - start);
 			if (elapsed > timeout) {
 				// if timeout reached, kill forcefully.
@@ -486,7 +486,7 @@ MSWindowsWatchdog::shutdownExistingProcesses()
 	PROCESSENTRY32 entry;
 	entry.dwSize = sizeof(PROCESSENTRY32);
 
-	// get the first process, and if we can't do that then it's 
+	// get the first process, and if we can't do that then it's
 	// unlikely we can go any further
 	BOOL gotEntry = Process32First(snapshot, &entry);
 	if (!gotEntry) {
@@ -503,7 +503,7 @@ MSWindowsWatchdog::shutdownExistingProcesses()
 
 			if (_stricmp(entry.szExeFile, "synergyc.exe") == 0 ||
 				_stricmp(entry.szExeFile, "synergys.exe") == 0) {
-				
+
 				HANDLE handle = OpenProcess(PROCESS_ALL_ACCESS, FALSE, entry.th32ProcessID);
 				shutdownProcess(handle, entry.th32ProcessID, 10);
 			}
@@ -532,9 +532,9 @@ MSWindowsWatchdog::getActiveDesktop(LPSECURITY_ATTRIBUTES security)
 {
 	String installedDir = ARCH->getInstalledDirectory();
 	if (!installedDir.empty()) {
-		String syntoolCommand;
-		syntoolCommand.append("\"").append(installedDir).append("\\").append("syntool").append("\"");
-		syntoolCommand.append(" --get-active-desktop");
+		String synwinadCommand;
+		synwinadCommand.append("\"").append(installedDir).append("\\")
+			.append("synwinad").append("\"");
 
 		m_session.updateActiveSession();
 		bool elevateProcess = m_elevateProcess;
@@ -542,14 +542,14 @@ MSWindowsWatchdog::getActiveDesktop(LPSECURITY_ATTRIBUTES security)
 		HANDLE userToken = getUserToken(security);
 		m_elevateProcess = elevateProcess;
 
-		BOOL createRet = doStartProcess(syntoolCommand, userToken, security);
+		BOOL createRet = doStartProcess(synwinadCommand, userToken, security);
 
 		if (!createRet) {
 			DWORD rc = GetLastError();
 			RevertToSelf();
 		}
 		else {
-			LOG((CLOG_DEBUG "launched syntool to check active desktop"));
+			LOG((CLOG_DEBUG "launched synwinad to check active desktop"));
 		}
 
 		ARCH->lockMutex(m_mutex);
@@ -565,7 +565,7 @@ MSWindowsWatchdog::getActiveDesktop(LPSECURITY_ATTRIBUTES security)
 		m_ready = false;
 		ARCH->unlockMutex(m_mutex);
 	}
-} 
+}
 
 void
 MSWindowsWatchdog::testOutput(String buffer)

@@ -21,29 +21,5 @@ include_directories(
 	../../lib/
 )
 
-if (UNIX)
-	include_directories(
-		../../..
-	)
-endif()
-
-add_executable(syntool ${sources})
-target_link_libraries(syntool
-	synergy arch base client common io ipc mt net platform server ${libs} ${OPENSSL_LIBS})
-
-if (WIN32)
-	#add_custom_command(
-	#	TARGET syntool
-	#	POST_BUILD
-	#	COMMAND xcopy /Y /Q
-	#		..\\..\\..\\..\\bin\\${CMAKE_CFG_INTDIR}\\syntool.*
-	#		..\\..\\..\\..\\bin\\${CMAKE_CFG_INTDIR}\\
-	#)
-else ()
-	if (CONF_CPACK)
-		install(TARGETS
-			syntool
-			COMPONENT core
-			DESTINATION bin)
-	endif()
-endif()
+add_executable(synwinad ${sources})
+target_link_libraries(syntool arch base platform ${libs})

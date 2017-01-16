@@ -18,19 +18,14 @@
 
 #include "AppConfig.h"
 #include "QUtility.h"
+#include "configDirectory.h"
 
 #include <QtCore>
 #include <QtNetwork>
 
 #if defined(Q_OS_WIN)
-const char AppConfig::m_SynergysName[] = "synergys.exe";
-const char AppConfig::m_SynergycName[] = "synergyc.exe";
-const char AppConfig::m_SynergyLogDir[] = "log/";
 #define DEFAULT_PROCESS_MODE Service
 #else
-const char AppConfig::m_SynergysName[] = "synergys";
-const char AppConfig::m_SynergycName[] = "synergyc";
-const char AppConfig::m_SynergyLogDir[] = "/var/log/";
 #define DEFAULT_PROCESS_MODE Desktop
 #endif
 
@@ -84,18 +79,11 @@ const QString &AppConfig::logFilename() const { return m_LogFilename; }
 QString AppConfig::synergyLogDir() const
 {
 #if defined(Q_OS_WIN)
-	// on windows, we want to log to program files
-	return synergyProgramDir() + "log/";
+	return g_GetConfigDirectory() + "log\\";
 #else
 	// on unix, we'll log to the standard log dir
 	return "/var/log/";
 #endif
-}
-
-QString AppConfig::synergyProgramDir() const
-{
-	// synergy binaries should be in the same dir.
-	return QCoreApplication::applicationDirPath() + "/";
 }
 
 void AppConfig::persistLogDir()
@@ -104,9 +92,7 @@ void AppConfig::persistLogDir()
 
 	// persist the log directory
 	if (!dir.exists())
-	{
 		dir.mkpath(dir.path());
-	}
 }
 
 const QString AppConfig::logFilenameCmd() const
@@ -151,7 +137,7 @@ void AppConfig::loadSettings()
 	m_ElevateMode = static_cast<ElevateMode>(elevateMode.toInt());
 	m_CryptoEnabled = settings().value("cryptoEnabled", true).toBool();
 	m_AutoHide = settings().value("autoHide", false).toBool();
-	m_lastVersion = settings().value("lastVersion", "Unknown").toString();
+	//m_lastVersion = settings().value("lastVersion", "Unknown").toString();
 }
 
 void AppConfig::saveSettings()
@@ -171,18 +157,19 @@ void AppConfig::saveSettings()
 	settings().setValue("elevateModeEnum", static_cast<int>(m_ElevateMode));
 	settings().setValue("cryptoEnabled", m_CryptoEnabled);
 	settings().setValue("autoHide", m_AutoHide);
-	settings().setValue("lastVersion", m_lastVersion);
+	//settings().setValue("lastVersion", m_lastVersion);
 	settings().sync();
 }
 
+#if 0
 QString AppConfig::lastVersion() const
 {
 	return m_lastVersion;
 }
-
 void AppConfig::setLastVersion(QString version) {
 	m_lastVersion = version;
 }
+#endif
 
 QSettings &AppConfig::settings() { return *m_pSettings; }
 
@@ -205,10 +192,6 @@ void AppConfig::setLanguage(const QString language) { m_Language = language; }
 void AppConfig::setStartedBefore(bool b) { m_StartedBefore = b; }
 
 void AppConfig::setElevateMode(ElevateMode em) { m_ElevateMode = em; }
-
-QString AppConfig::synergysName() const { return m_SynergysName; }
-
-QString AppConfig::synergycName() const { return m_SynergycName; }
 
 ElevateMode AppConfig::elevateMode()
 {

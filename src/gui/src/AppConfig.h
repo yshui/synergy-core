@@ -75,13 +75,10 @@ class AppConfig: public QObject
 		const QString& language() const;
 		bool startedBefore() const;
 
-		QString synergysName() const;
-		QString synergycName() const;
-		QString synergyProgramDir() const;
 		QString synergyLogDir() const;
 
-		bool detectPath(const QString& name, QString& path);
 		void persistLogDir();
+		bool detectPath(const QString& name, QString& path);
 		ElevateMode elevateMode();
 
 		void setCryptoEnabled(bool e);
@@ -90,10 +87,10 @@ class AppConfig: public QObject
 		void setAutoHide(bool b);
 		bool getAutoHide();
 
-		QString lastVersion() const;
-
 		void saveSettings();
-		void setLastVersion(QString version);
+
+		//QString lastVersion() const;
+		//void setLastVersion(QString version);
 
 protected:
 		QSettings& settings();
@@ -126,10 +123,6 @@ protected:
 		bool m_CryptoEnabled;
 		bool m_AutoHide;
 		QString m_lastVersion;
-
-		static const char m_SynergysName[];
-		static const char m_SynergycName[];
-		static const char m_SynergyLogDir[];
 
 	signals:
 		void sslToggled(bool enabled);
