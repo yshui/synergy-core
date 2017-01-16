@@ -449,8 +449,17 @@ add_custom_command(TARGET libressl
 	COMMAND ${CMAKE_COMMAND} -E copy ${OPENSSL_EXE} ${OPENSSL_OUT_EXE}
 )
 
-configure_file(${root_dir}/res/synopenssl.cnf ${EXECUTABLE_OUTPUT_PATH}/synopenssl.cnf)
-
+if (WIN32)
+	configure_file(
+		${root_dir}/res/synopenssl.cnf
+		${EXECUTABLE_OUTPUT_PATH}/${CMAKE_BUILD_TYPE}/synopenssl.cnf
+	)
+else()
+	configure_file(
+		${root_dir}/res/synopenssl.cnf
+		${EXECUTABLE_OUTPUT_PATH}/synopenssl.cnf
+	)
+endif()
 
 add_subdirectory(src)
 
