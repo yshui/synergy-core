@@ -150,7 +150,7 @@ ServerApp::help()
 		"following to load successfully sets the configuration:\n"
 		"  %s\n",
 		args().m_pname, kDefaultPort,
-		ARCH->getConfigDirectory()
+		ARCH->getConfigDirectory().c_str()
 	);
 
 	LOG((CLOG_PRINT "%s", buffer));
