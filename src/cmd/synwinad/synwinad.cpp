@@ -31,6 +31,11 @@ int main(int argc, char** argv)
 	ArchMiscWindows::setInstanceWin32(GetModuleHandle(NULL));
 #endif
 
+	Arch arch;
+	arch.init();
+
+	Log log;
+
 	MSWindowsSession session;
 	String name = session.getActiveDesktopName();
 	if (name.empty()) {
