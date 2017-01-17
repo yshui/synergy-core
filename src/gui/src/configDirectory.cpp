@@ -28,7 +28,7 @@ QString g_GetConfigDirectory()
 #endif
 
 	if (!QDir(dir).mkpath("."))
-		qFatal("failed to open/access directory %s", dir.toLatin1());
+		qFatal("failed to open/access directory %s", dir.toUtf8().constData());
 
 	return dir;
 }

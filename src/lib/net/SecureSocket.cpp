@@ -685,7 +685,7 @@ SecureSocket::verifyCertFingerprint()
 	// check if this fingerprint exist
 	String fileLine;
 	std::ifstream file;
-	file.open(ARCH->getConfigDirectory() + SSL_TRUSTED_SERVERS_PATH);
+	file.open((ARCH->getConfigDirectory() + SSL_TRUSTED_SERVERS_PATH).c_str());
 
 	bool isValid = false;
 	while (!file.eof() && file.is_open()) {
