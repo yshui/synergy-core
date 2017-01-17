@@ -2,11 +2,11 @@
  * synergy -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2012 Nick Bolton
- * 
+ *
  * This package is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * found in the file LICENSE that should have accompanied this file.
- * 
+ *
  * This package is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -104,7 +104,7 @@ DaemonApp::run(int argc, char** argv)
 	// win32 instance needed for threading, etc.
 	ArchMiscWindows::setInstanceWin32(GetModuleHandle(NULL));
 #endif
-	
+
 	Arch arch;
 	arch.init();
 
@@ -197,7 +197,7 @@ DaemonApp::mainLoop(bool logToFile)
 	try
 	{
 		DAEMON_RUNNING(true);
-		
+
 		if (logToFile) {
 			m_fileLogOutputter = new FileLogOutputter(logFilename().c_str());
 			CLOG->insert(m_fileLogOutputter);
@@ -213,23 +213,23 @@ DaemonApp::mainLoop(bool logToFile)
 		// send logging to gui via ipc, log system adopts outputter.
 		m_ipcLogOutputter = new IpcLogOutputter(*m_ipcServer, kIpcClientGui, true);
 		CLOG->insert(m_ipcLogOutputter);
-		
+
 #if SYSAPI_WIN32
 		m_watchdog = new MSWindowsWatchdog(false, *m_ipcServer, *m_ipcLogOutputter);
 		m_watchdog->setFileLogOutputter(m_fileLogOutputter);
 #endif
-		
+
 		m_events->adoptHandler(
 			m_events->forIpcServer().messageReceived(), m_ipcServer,
 			new TMethodEventJob<DaemonApp>(this, &DaemonApp::handleIpcMessage));
 
 		m_ipcServer->listen();
-		
+
 #if SYSAPI_WIN32
 
 		// install the platform event queue to handle service stop events.
 		m_events->adoptBuffer(new MSWindowsEventQueueBuffer(m_events));
-		
+
 		String command = ARCH->setting("Command");
 		bool elevate = ARCH->setting("Elevate") == "1";
 		if (command != "") {
@@ -248,11 +248,11 @@ DaemonApp::mainLoop(bool logToFile)
 
 		m_events->removeHandler(
 			m_events->forIpcServer().messageReceived(), m_ipcServer);
-		
+
 		CLOG->remove(m_ipcLogOutputter);
 		delete m_ipcLogOutputter;
 		delete m_ipcServer;
-		
+
 		DAEMON_RUNNING(false);
 	}
 	catch (std::exception& e) {
@@ -280,7 +280,7 @@ DaemonApp::logFilename()
 	logFilename = ARCH->setting("LogFilename");
 	if (logFilename.empty()) {
 		logFilename = ARCH->getLogDirectory();
-		logFilename.append("/");
+		//logFilename.append("/");
 		logFilename.append(LOG_FILENAME);
 	}
 
@@ -324,7 +324,7 @@ DaemonApp::handleIpcMessage(const Event& e, void*)
 				}
 
 				delete[] argv;
-				
+
 				String logLevel(argBase->m_logFilter);
 				if (!logLevel.empty()) {
 					try {
