@@ -226,7 +226,6 @@ DaemonApp::mainLoop(bool logToFile)
 		m_ipcServer->listen();
 
 #if SYSAPI_WIN32
-
 		// install the platform event queue to handle service stop events.
 		m_events->adoptBuffer(new MSWindowsEventQueueBuffer(m_events));
 
@@ -239,6 +238,7 @@ DaemonApp::mainLoop(bool logToFile)
 
 		m_watchdog->startAsync();
 #endif
+
 		m_events->loop();
 
 #if SYSAPI_WIN32

@@ -289,7 +289,10 @@ MSWindowsWatchdog::startProcess()
 	SECURITY_ATTRIBUTES sa;
 	ZeroMemory(&sa, sizeof(SECURITY_ATTRIBUTES));
 
-	//getActiveDesktop(&sa);
+	// This starts synwinad.exe and then keeps it's process handle forever(?).
+	// Not exactly sure why this was done.
+	// This is needed to auto-start the client from ARCH->setting("Command");
+	getActiveDesktop(&sa);
 
 	ZeroMemory(&sa, sizeof(SECURITY_ATTRIBUTES));
 	HANDLE userToken = getUserToken(&sa);

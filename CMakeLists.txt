@@ -186,7 +186,6 @@ if (UNIX)
 	# the inet_aton on some pure Unix platforms (e.g. sunos5). So we
 	# need to do a more detailed check and also include some extra libs.
 	if (NOT HAVE_INET_ATON)
-
 		set(CMAKE_REQUIRED_LIBRARIES nsl)
 		check_c_source_compiles(
 			"#include <arpa/inet.h>\n int main() { inet_aton(0, 0); }"
@@ -194,7 +193,6 @@ if (UNIX)
 		set(CMAKE_REQUIRED_LIBRARIES)
 
 		if (HAVE_INET_ATON_ADV)
-
 			# Override the previous fail.
 			set(HAVE_INET_ATON 1)
 
@@ -202,9 +200,7 @@ if (UNIX)
 			# it seems safe to add socket on the back of nsl,
 			# since socket only ever needed when nsl is needed.
 			list(APPEND libs nsl socket)
-
 		endif()
-
 	endif()
 
 	check_type_size(char SIZEOF_CHAR)
@@ -300,23 +296,17 @@ if (UNIX)
 		check_library_exists("Xrandr" XRRQueryExtension "" HAVE_Xrandr)
 
 		if (HAVE_ICE)
-
 			# Assume we have SM if we have ICE.
 			set(HAVE_SM 1)
 			list(APPEND libs SM ICE)
-
 		endif()
 
 		if (HAVE_Xtst)
-
 			# Xtxt depends on X11.
 			set(HAVE_X11)
 			list(APPEND libs Xtst X11)
-
 		else()
-
 			message(FATAL_ERROR "Missing library: Xtst")
-
 		endif()
 
 		if (HAVE_Xext)
@@ -389,38 +379,6 @@ else() # not-unix
 
 endif()
 
-#if (WIN32)
-#	if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-#		set(OPENSSL_PLAT_DIR openssl-win64)
-#	else()
-#		set(OPENSSL_PLAT_DIR openssl-win32)
-#	endif()
-#	set(OPENSSL_INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/ext/${OPENSSL_PLAT_DIR}/inc32)
-#endif()
-
-#if (APPLE)
-#	set(OPENSSL_PLAT_DIR openssl-osx)
-#	set(OPENSSL_INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/ext/${OPENSSL_PLAT_DIR}/include)
-#endif()
-
-#if (WIN32)
-#	set(OPENSSL_LIBS
-#		${CMAKE_CURRENT_SOURCE_DIR}/ext/${OPENSSL_PLAT_DIR}/out32dll/libeay32.lib
-#		${CMAKE_CURRENT_SOURCE_DIR}/ext/${OPENSSL_PLAT_DIR}/out32dll/ssleay32.lib
-#	)
-#endif()
-
-#if (UNIX)
-#	if (APPLE)
-#		set(OPENSSL_LIBS
-#		${CMAKE_CURRENT_SOURCE_DIR}/ext/${OPENSSL_PLAT_DIR}/libssl.a
-#		${CMAKE_CURRENT_SOURCE_DIR}/ext/${OPENSSL_PLAT_DIR}/libcrypto.a
-#		)
-#	else()
-#		set(OPENSSL_LIBS ssl crypto)
-#	endif()
-#endif()
-
 #if ((not APPLE) and UNIX)
 #	set(OPENSSL_LIBS ssl crypto)
 #endif()
@@ -436,12 +394,14 @@ if (MSVC)
 	set(OPENSSL_EXE ${OPENSSL_BUILD_DIR}/apps/openssl/${CMAKE_BUILD_TYPE}/openssl.exe)
 	set(OPENSSL_OUT_EXE ${EXECUTABLE_OUTPUT_PATH}/${CMAKE_BUILD_TYPE}/synopenssl.exe)
 else()
+	# todo: fix up the lib suffix for mingw here too
 	set(OPENSSL_LIBS
 		${OPENSSL_BUILD_DIR}/ssl/libssl.a
 		${OPENSSL_BUILD_DIR}/crypto/libcrypto.a
 	)
-	set(OPENSSL_EXE ${OPENSSL_BUILD_DIR}/apps/openssl/openssl)
-	set(OPENSSL_OUT_EXE ${EXECUTABLE_OUTPUT_PATH}/synopenssl)
+	# keep ${CMAKE_EXECUTABLE_SUFFIX} because mingw might use it
+	set(OPENSSL_EXE ${OPENSSL_BUILD_DIR}/apps/openssl/openssl${CMAKE_EXECUTABLE_SUFFIX})
+	set(OPENSSL_OUT_EXE ${EXECUTABLE_OUTPUT_PATH}/synopenssl${CMAKE_EXECUTABLE_SUFFIX})
 endif()
 
 add_custom_command(TARGET libressl
@@ -449,7 +409,7 @@ add_custom_command(TARGET libressl
 	COMMAND ${CMAKE_COMMAND} -E copy ${OPENSSL_EXE} ${OPENSSL_OUT_EXE}
 )
 
-if (WIN32)
+if (MSVC)
 	configure_file(
 		${root_dir}/res/synopenssl.cnf
 		${EXECUTABLE_OUTPUT_PATH}/${CMAKE_BUILD_TYPE}/synopenssl.cnf
@@ -463,7 +423,7 @@ endif()
 
 add_subdirectory(src)
 
-if (WIN32)
+if (MSVC)
 	# TODO:	consider using /analyze to uncover potential bugs in the source code.
 
 	# /WX - warnings as errors (we have a problem with people checking in code with warnings).
@@ -477,7 +437,6 @@ if (WIN32)
 	# /O2 - get the fastest code.
 	# /Ob2 - expand inline functions (auto-inlining).
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD /O2 /Ob2")
-
 endif()
 
 if (CONF_CPACK)
