@@ -35,9 +35,16 @@ Changes in this fork
 --------------------
 There's a few things not listed here. Go through the commits.
 + Removed activation requirement for features.
++ Moved configuration files location.
+  + Windows uses `C:\ProgramData\Synergy\`.
+    + Though the daemon still uses a few registry values that I haven't scraped out yet.
+  + macOS uses something. Consult the `COMPILE.md` for more lacking info on this.
+  + Linux/everything-else uses `~/.config/Synergy/`.
 + Switch from using `hm` as helper script catchall to using purely CMake.
 + Removed Python requirement (by deprecation of `hm`).
 + Linking with a locally built LibreSSL (version 2.4.4 at time of writing).
+  + OpenSSL could probably be used on Linux/everything-else instead but that can be done again in the future.
+  + Generating certificates now uses 4096 bits for RSA instead of 1024 but it doesn't really matter.
 + Auto-generating translations (through CMake).
 + Building on Windows should now put binaries in arch specific folders.
 + Printscreen doesn't send Alt+Printscreen to Windows clients anymore.
@@ -49,7 +56,7 @@ There's a few things not listed here. Go through the commits.
 
 Building
 --------
-There's not a complete building guide yet so read through the [`COMPILE.md`](https://github.com/yupi2/synergy/blob/master/COMPILE.md) file. It has roughly all the build requirements but you'll likely need to fall back to viewing the [wiki entry for building](https://github.com/symless/synergy/wiki/Compiling) in the [symless/synergy](https://github.com/symless/synergy) repository.
+Read through the [`COMPILE.md`](https://github.com/yupi2/synergy/blob/master/COMPILE.md) file. **READ THE ENTIRE THING OR YOU WILL MISS SOMETHING IMPORTANT**. Here's a link to [symless/synergy]()'s compiling guide on their wiki. It's highly outdated and differs greatly along with it's use of the now deprecated `hm` catch-all Python build script. There may be missing information in the `COMPILE.md` file so open an issue if needed.
 
 Here's how I build on Linux:
 ```
@@ -76,5 +83,4 @@ TODO
 + Correct the media-toggle button on Windows (it might be broken).
 + Wayland support (requires support from the compositor: GNOME, KWin, etc).
 + Fix bugs.
-+ Verify MinGW(-64) builds work.
-+
++ Verify MinGW(-64) builds work (they certainly don't).
