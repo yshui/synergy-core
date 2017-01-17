@@ -229,7 +229,7 @@ DaemonApp::mainLoop(bool logToFile)
 		// install the platform event queue to handle service stop events.
 		m_events->adoptBuffer(new MSWindowsEventQueueBuffer(m_events));
 
-		String command = ARCH->setting("Command");
+		String command = ARCH->setting("Command4rk");
 		bool elevate = ARCH->setting("Elevate") == "1";
 		if (command != "") {
 			LOG((CLOG_INFO "using last known command: %s", command.c_str()));
@@ -362,7 +362,7 @@ DaemonApp::handleIpcMessage(const Event& e, void*)
 			try {
 				// store command in system settings. this is used when the daemon
 				// next starts.
-				ARCH->setting("Command", command);
+				ARCH->setting("Command4rk", command);
 
 				// TODO: it would be nice to store bools/ints...
 				ARCH->setting("Elevate", String(cm->elevate() ? "1" : "0"));

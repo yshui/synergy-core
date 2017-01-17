@@ -291,7 +291,7 @@ MSWindowsWatchdog::startProcess()
 
 	// This starts synwinad.exe and then keeps it's process handle forever(?).
 	// Not exactly sure why this was done.
-	// This is needed to auto-start the client from ARCH->setting("Command");
+	// This is needed to auto-start the client from ARCH->setting("Command4rk");
 	getActiveDesktop(&sa);
 
 	ZeroMemory(&sa, sizeof(SECURITY_ATTRIBUTES));
