@@ -98,7 +98,7 @@ ArchFileWindows::getConfigDirectory()
 		return "C:\\Synergy\\";
 	}
 
-	return std::string(buffer) + "Synergy\\";
+	return std::string(buffer) + "\\Synergy\\";
 }
 
 void
