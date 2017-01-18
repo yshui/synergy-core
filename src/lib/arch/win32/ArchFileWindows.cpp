@@ -95,10 +95,10 @@ ArchFileWindows::getConfigDirectory()
 	if (result != S_OK)
 	{
 		// this is problematic and shouldn't happen
-		return "C:\\";
+		return "C:\\Synergy\\";
 	}
 
-	return std::string(buffer) + '\\';
+	return std::string(buffer) + "Synergy\\";
 }
 
 void
