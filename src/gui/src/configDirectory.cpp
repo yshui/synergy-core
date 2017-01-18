@@ -9,26 +9,12 @@
 
 QString g_GetConfigDirectory()
 {
-	QString dir;
-
-	// NOTE: AppConfigLocation does .config/Synergy/Synergy on unixes.
-	// That's why GenericConfigLocation is used.
-	//dir =
-	//	QStandardPaths::standardLocations(QStandardPaths::GenericConfigLocation)[0]
-	//	.append(QDir::separator())
-	//	.append("Synergy");
-
-#if WIN32
-	if (IsWindowsVistaOrGreater())
-		dir = "C:\\ProgramData\\Synergy\\";
-	else
-		dir = "C:\\All Users\\Synergy\\";
-#else
-	dir = SYNCONF_DIR;
-#endif
+	QString dir =
+		QStandardPaths::standardLocations(QStandardPaths::GenericConfigLocation)[0]
+		+ QDir::separator() + "Synergy" + QDir::separator();
 
 	if (!QDir(dir).mkpath("."))
-		qFatal("failed to open/access directory %s", dir.toUtf8().constData());
+		qFatal("failed to create/access directory %s", dir.toUtf8().constData());
 
 	return dir;
 }

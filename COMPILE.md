@@ -62,10 +62,6 @@ Other Visual Studio versions that might be supported are:
 Some other flags you can include for the above CMake step are:
 + `-DDISABLE_TESTS=0` # to enable building tests
 + `-DDISABLE_GIT_REVISION=1` # to disable calling git for a revision number (uses 00000000)
-+ `-DSYNCONF_DIR="/some/path/to/config/dir/for/Synergy/"` # Useful for package distributors.
-  + **IMPORTANT:** MUST END WITH A `/`
-  + Not used by Windows. By default it is `<something>` on macOS and `~/.config/Synergy/` on Linux (and everything else).
-    + Will probably use it on Windows eventually.
 
 <**TODO**: Add MinGW stuff here.>
 

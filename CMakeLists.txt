@@ -101,27 +101,6 @@ add_definitions(-DVERSION=\"${VERSION}\")
 option(DISABLE_TESTS "DISABLE_TESTS" 1)
 
 
-# Allow this to be customizable. Some Linux distros may want this.
-# Windows XP will use 'C:\All Users\Synergy\'.
-# Windows Vista and higher will use 'C:\ProgramData\Synergy\'.
-if (UNIX)
-	if (APPLE)
-		set(SYNCONF_DIR "/Library/Application Support/Synergy/" CACHE STRING "Config dir")
-		#option(SYNCONF_DIR "SYNCONF_DIR" "~/Library/something/fuck/")
-	else()
-		set(SYNCONF_DIR "/etc/Synergy/" CACHE STRING "Config dir")
-		#option(SYNCONF_DIR "SYNCONF_DIR" "/etc/Synergy/")
-	endif()
-
-	# folder perm needs exec bit
-	# (perm&(~exec_bit)) should be passed down to folder tree
-	#option(SYNCONF_DIR_OCTAL_PERM "SYNCONF_DIR_OCTAL_PERM" 0777)
-
-	add_definitions(-DSYNCONF_DIR=\"${SYNCONF_DIR}\")
-	#add_definitions(-DSYNCONF_DIR_OCTAL_PERM=${SYNCONF_DIR_OCTAL_PERM})
-endif()
-
-
 # Declare libs, so we can use list in linker later. There's probably
 # a more elegant way of doing this; with SCons, when you check for the
 # lib, it is automatically passed to the linker.

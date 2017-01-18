@@ -30,6 +30,7 @@ public:
 
 	// IArchFile overrides
 	virtual const char*	getBasename(const char* pathname);
+	std::string getUserDirectory();
 	virtual std::string	getInstalledDirectory();
 	virtual std::string	getLogDirectory();
 	virtual std::string	getConfigDirectory();

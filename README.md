@@ -35,11 +35,10 @@ Changes in this fork
 --------------------
 There's a few things not listed here. Go through the commits.
 + Removed activation requirement for features.
-+ Moved configuration files location.
-  + Windows uses `C:\ProgramData\Synergy\`.
-    + Though the daemon still uses a few registry values that I haven't scraped out yet.
-  + macOS uses something. Consult the `COMPILE.md` for more lacking info on this.
-  + Linux/everything-else uses `~/.config/Synergy/`.
++ Moved configuration files location for no good reason.
+  + Windows uses `%localappdata%\Synergy\`
+  + macOS uses `~/Library/Preferences/Synergy/`
+  + Linux/everything-else uses `~/.config/Synergy/`
 + Switch from using `hm` as helper script catchall to using purely CMake.
 + Removed Python requirement (by deprecation of `hm`).
 + Linking with a locally built LibreSSL (version 2.4.4 at time of writing).

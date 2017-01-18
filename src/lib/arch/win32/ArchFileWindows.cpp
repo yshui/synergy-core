@@ -88,10 +88,17 @@ ArchFileWindows::getConfigDirectory()
 	if (!m_configDirectory.empty())
 		return m_configDirectory;
 
-	if (IsWindowsVistaOrGreater())
-		return "C:\\ProgramData\\Synergy\\";
-	else
-		return "C:\\All Users\\Synergy\\";
+	char buffer[MAX_PATH];
+	HRESULT result = SHGetFolderPathA(NULL, CSIDL_LOCAL_APPDATA, NULL,
+		SHGFP_TYPE_CURRENT, buffer);
+
+	if (result != S_OK)
+	{
+		// this is problematic and shouldn't happen
+		return "C:\\";
+	}
+
+	return std::string(buffer) + '\\';
 }
 
 void
