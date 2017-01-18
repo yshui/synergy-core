@@ -584,7 +584,7 @@ void MainWindow::startSynergy()
 	// launched the process (e.g. when launched with elevation). setting the
 	// profile dir on launch ensures it uses the same profile dir is used
 	// no matter how its relaunched. /profile/config/g
-	//args << "--config-dir" << g_GetConfigDirectory();
+	args << "--config-dir" << g_GetConfigDirectory();
 #endif
 
 	if ((synergyType() == synergyClient && !clientArgs(args, app))

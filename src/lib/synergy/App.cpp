@@ -173,7 +173,7 @@ App::initApp(int argc, const char** argv)
 	// parse command line
 	parseArgs(argc, argv);
 
-	//ARCH->setConfigDirectory(argsBase().m_configDirectory);
+	ARCH->setConfigDirectory(argsBase().m_configDirectory);
 
 	// set log filter
 	if (!CLOG->setFilter(argsBase().m_logFilter)) {

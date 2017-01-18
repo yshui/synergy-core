@@ -235,9 +235,9 @@ ArgParser::parseGenericArgs(int argc, const char* const* argv, int& i)
 	else if (isArg(i, argc, argv, NULL, "--enable-crypto")) {
 		argsBase().m_enableCrypto = true;
 	}
-	//else if (isArg(i, argc, argv, NULL, "--config-dir", 1)) {
-	//	argsBase().m_configDirectory = argv[++i];
-	//}
+	else if (isArg(i, argc, argv, NULL, "--config-dir", 1)) {
+		argsBase().m_configDirectory = argv[++i];
+	}
 	else {
 		// option not supported here
 		return false;

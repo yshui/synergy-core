@@ -49,5 +49,5 @@ public:
 	bool				m_shouldExit;
 	String				m_synergyAddress;
 	bool				m_enableCrypto;
-	//String				m_configDirectory;
+	String				m_configDirectory;
 };
