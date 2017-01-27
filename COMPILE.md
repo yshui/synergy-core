@@ -15,17 +15,16 @@ Some notes
 Requirements
 ============
 + WinXP or higher, macOS, or Linux. (Other operating systems are not officially supported)
-+ [CMake 3.0 or higher.](https://cmake.org/)
++ [CMake 3.0 or higher.](https://cmake.org/download/)
 + A C++11 environment:
   + (macOS) Xcode
-  + (Windows) Visual Studio (only VS2015 is tested to work but VS2013 should work too)
-    + MinGW might work but the CMakeLists.txt will need to be modified a bit. Plus I haven't tested MinGW
+  + (Windows) Visual Studio 2013, 2015, and 2017 whenever that arrives and Qt supports it.
+    + MinGW should work but CMakeLists.txt will probably need to be changed for some paths.
   + (everything else) Just install your distribution's dev package that includes everything
     + You'll need to install the X11/Xorg dev packages too. Also something to do with this `libXtst-devel`
-+ Qt 5.6 or higher. (Suggested downloads for Windows and macOS: [Visual Studio 2015 x64](https://download.qt.io/official_releases/qt/5.7/5.7.1/qt-opensource-windows-x86-msvc2015_64-5.7.1.exe.mirrorlist), [Visual Studio 2015 x32](https://download.qt.io/official_releases/qt/5.7/5.7.1/qt-opensource-windows-x86-msvc2015-5.7.1.exe.mirrorlist), and [macOS](https://download.qt.io/official_releases/qt/5.7/5.7.1/qt-opensource-mac-x64-clang-5.7.1.dmg.mirrorlist))
-  + Note for Windows: MinGW is not tested so sorry for forcing Visual Studio 2015 on you.
-  + Another note for Windows: Install both x32 and x64 Qt installers if you want to build for multiple Windows architectures.
-  + Another note for Windows: You'll need to add the installed Qt bin folder into your `%Path%` environment variable. For example since I use VS2015 x64 I have this in my path `C:\Qt\Qt5.7.1\5.7\msvc2015_64\bin`. You can do this if you want a temporary change `set "Path=%Path%;C:\Qt\Qt5.7.1\5.7\msvc2015_64\bin"`
++ Qt 5.6, 5.7, or 5.8. You can grab the online installer from [here](https://www.qt.io/download-open-source/) if you're on Windows or macOS. You'll need to check-mark the items you'll need like x32/x64 VS2015/VS2013 or for x32 MinGW. And obviously you'll need to check the relevant ticks for macOS. None of the sub-options need to be installed under a Qt version (stuff from `Qt Charts` through to the bottom like `Qt Scripts (Derecated)`)
+  + Note for Windows: I only test x64 VS2015.
+  + Another note for Windows: You'll need to add the installed Qt bin folder into your `%Path%` environment variable. For example since I use x64 VS2015 I have this in my %Path% `C:\Qt\5.8\msvc2015_64\bin`. You can do this if you want a temporary change `set "Path=%Path%;C:\Qt\5.8\msvc2015_64\bin"`
   + Note for Linux: you'll need download the Qt5 Linguist Tools from your package manager.
     + Should be `qttools5-dev-tools` on Ubuntus and maybe Debian.
     + Might be `qt5-tools` on Arch Linux.
