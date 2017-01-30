@@ -46,9 +46,9 @@ extern "C" {
 	#error "Can't define both USYNERGY_LITTLE_ENDIAN and USYNERGY_BIG_ENDIAN"
 #elif !defined(USYNERGY_LITTLE_ENDIAN) && !defined(USYNERGY_BIG_ENDIAN)
 	/* Attempt to auto detect */
-	#if defined(__LITTLE_ENDIAN__) || defined(LITTLE_ENDIAN) || (_BYTE_ORDER == _LITTLE_ENDIAN)
+	#if __LITTLE_ENDIAN__ || LITTLE_ENDIAN
 		#define USYNERGY_LITTLE_ENDIAN
-	#elif defined(__BIG_ENDIAN__) || defined(BIG_ENDIAN) || (_BYTE_ORDER == _BIG_ENDIAN)
+	#elif __BIG_ENDIAN__ || BIG_ENDIAN
 		#define USYNERGY_BIG_ENDIAN
 	#else
 		#error "Can't detect endian-nes, please defined either USYNERGY_LITTLE_ENDIAN or USYNERGY_BIG_ENDIAN";
