@@ -1077,7 +1077,7 @@ MSWindowsKeyState::getKeyMap(synergy::KeyMap& keyMap)
 		}
 
 		// set virtual key to button table
-		if (GetKeyboardLayout(0) == m_groups[g]) {
+		if (activeLayout == m_groups[g]) {
 			for (KeyButton i = 0; i < 512; ++i) {
 				if (m_buttonToVK[i] != 0) {
 					if (m_virtualKeyToButton[m_buttonToVK[i]] == 0) {
@@ -1251,18 +1251,18 @@ MSWindowsKeyState::fakeKey(const Keystroke& keystroke)
 
 		if (keystroke.m_data.m_button.m_press == false)
 			flags |= KEYEVENTF_KEYUP;
-		
+
 		// special handling of VK_SNAPSHOT
 		if (vk == VK_SNAPSHOT)
 			scanCode = (getActiveModifiers() & KeyModifierAlt) ? 0x54 : 0x137;
-		
+
 		if (scanCode & 0x100)
 			flags |= KEYEVENTF_EXTENDEDKEY;
 
 		//vk,sc,flags,keystroke.m_data.m_button.m_repeat
-		
+
 		m_desks->fakeKeyEvent(vk, scanCode, flags, keystroke.m_data.m_button.m_repeat);
-		
+
 		// synthesize event
 		//m_desks->fakeKeyEvent(button, vk,
 		//						keystroke.m_data.m_button.m_press,
