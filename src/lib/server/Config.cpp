@@ -2,11 +2,11 @@
  * synergy -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
- * 
+ *
  * This package is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * found in the file LICENSE that should have accompanied this file.
- * 
+ *
  * This package is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -1808,7 +1808,7 @@ operator<<(std::ostream& s, const Config& config)
 
 		for (Config::link_const_iterator
 				link = config.beginNeighbor(*screen),
-				nend = config.endNeighbor(*screen); link != nend; ++link) {			
+				nend = config.endNeighbor(*screen); link != nend; ++link) {
 			s << "\t\t" << Config::dirName(link->first.getSide()) <<
 				Config::formatInterval(link->first.getInterval()) <<
 				" = " << link->second.getName().c_str() <<
@@ -2096,11 +2096,11 @@ ConfigReadContext::parseInterval(const ArgList& args) const
 	}
 
 	char* end;
-	long startValue = strtol(args[0].c_str(), &end, 10);
+	double startValue = strtod(args[0].c_str(), &end);
 	if (end[0] != '\0') {
 		throw XConfigRead(*this, "invalid interval \"%{1}\"", concatArgs(args));
 	}
-	long endValue = strtol(args[1].c_str(), &end, 10);
+	double endValue = strtod(args[1].c_str(), &end);
 	if (end[0] != '\0') {
 		throw XConfigRead(*this, "invalid interval \"%{1}\"", concatArgs(args));
 	}
@@ -2111,7 +2111,7 @@ ConfigReadContext::parseInterval(const ArgList& args) const
 		throw XConfigRead(*this, "invalid interval \"%{1}\"", concatArgs(args));
 	}
 
-	return Config::Interval(startValue / 100.0f, endValue / 100.0f);
+	return Config::Interval(startValue / 100.0, endValue / 100.0);
 }
 
 void
