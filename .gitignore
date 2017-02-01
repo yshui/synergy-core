@@ -11,7 +11,7 @@ build*
 Debug
 Release
 CMakeFiles
-/ext/libressl-2.4.4/
+ext/libressl*/
 Makefile*
 src/gui/gui.pro.user*
 src/gui/.qmake.stash
@@ -19,4 +19,3 @@ src/setup/win32/synergy.suo
 .cproject
 .project
 cmake_install.cmake
-newhm*

@@ -41,7 +41,7 @@ There's a few things not listed here. Go through the commits.
   + Linux/everything-else uses `~/.config/Synergy/`
 + Switch from using `hm` as helper script catchall to using purely CMake.
 + Removed Python requirement (by deprecation of `hm`).
-+ Linking with a locally built LibreSSL (version 2.4.4 at time of writing).
++ OpenSSL replaced with LibreSSL tarball (building as an external CMake project is easy).
   + OpenSSL could probably be used on Linux/everything-else instead but that can be done again in the future.
   + Generating certificates now uses 4096 bits for RSA instead of 1024 but it doesn't really matter.
 + Auto-generating translations (through CMake).

@@ -46,7 +46,7 @@ set(bin_dir ${root_dir}/bin)
 set(doc_dir ${root_dir}/doc)
 set(res_dir ${root_dir}/res)
 
-set(libressl_path ${root_dir}/ext/libressl-2.4.4)
+set(libressl_path ${root_dir}/ext/libressl-2.5.1)
 
 if (WIN32)
 	set(EXECUTABLE_OUTPUT_PATH ${root_dir}/build/bin/${CMAKE_VS_PLATFORM_NAME})
@@ -70,7 +70,7 @@ include(ExternalProject)
 set_property(DIRECTORY PROPERTY EP_STEP_TARGETS configure build test)
 ExternalProject_Add(libressl
 	PREFIX libressl
-	SOURCE_DIR ${root_dir}/ext/libressl-2.4.4
+	SOURCE_DIR ${libressl_path}
 	INSTALL_COMMAND ""
 )
 
