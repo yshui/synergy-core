@@ -55,7 +55,7 @@ There's a few things not listed here. Go through the commits.
 
 Building
 --------
-Read through the [`COMPILE.md`](https://github.com/yupi2/synergy/blob/master/COMPILE.md) file. **READ THE ENTIRE THING OR YOU WILL MISS SOMETHING IMPORTANT**. Here's a link to [symless/synergy]()'s compiling guide on their wiki. It's highly outdated and differs greatly along with its use of the now deprecated `hm` catch-all Python build script. There may be missing information in the `COMPILE.md` file so open an issue if needed.
+Read through the [`COMPILE.md`](https://github.com/yupi2/synergy/blob/master/COMPILE.md) file. **READ THE ENTIRE THING OR YOU WILL MISS SOMETHING IMPORTANT**. Here's a link to [symless/synergy's compiling guide on their wiki](https://github.com/symless/synergy/wiki/Compiling) but it doesn't really have much relevancy. It's highly outdated and differs greatly along with its use of the now deprecated `hm` catch-all Python build script. There may be missing information in the `COMPILE.md` file so open an issue if needed.
 
 Here's how I build on Linux:
 ```
