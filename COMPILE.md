@@ -5,17 +5,21 @@ Some notes
 + Windows
   + You'll need a Service to run `synergyd.exe` nicely. Here's something to put into an elevated (admin) command prompt to create a Service (you'll need to correct the path to your build location):
     + `sc create Synergy type= own start= auto error= ignore obj= LocalSystem DisplayName= "Synergy Daemon" binPath= "C:\code\synergy\build\bin\x64\Debug\synergyd.exe"`
-      + It doesn't start after creation so you'll need to do `sc start Synergy`. It will auto-start on boot though.
+      + It might not start after creation so you'll need to do `sc start Synergy`. It will auto-start on boot though.
     + Also when `synergyd.exe` crashes you can restart the Service with `sc stop Synergy` then `sc start Synergy`
 + Apple macOS
   + Completely untested and likely inaccurate. Feel free to update.
 + Linux / everything else
   + I forgot what I had for this
 
-Requirements
-============
-+ WinXP or higher, macOS, or Linux. (Other operating systems are not officially supported)
-+ [CMake 3.0 or higher.](https://cmake.org/download/)
+General Requirements
+====================
+This isn't the time to download everything. You should skip to the compiling
++ One of:
+  + Windows OS with support for XP or newer (sorry Win2k users)
+  + Apple macOS (TODO)
+  + Linux (and maybe some POSIX systems)
++ [CMake 3.0 or newer](https://cmake.org/)
 + A C++11 environment:
   + (macOS) Xcode
   + (Windows) Visual Studio 2013, 2015, and 2017 whenever that arrives and Qt supports it.
@@ -30,10 +34,23 @@ Requirements
     + Might be `qt5-tools` on Arch Linux.
 + Any recent version of Git
   + For Windows you should check [this](https://git-scm.com/downloads) or [this](https://git-for-windows.github.io/) out.
-    + [Also Windows XP does not appear to be support anymore](https://github.com/git-for-windows/git/wiki/FAQ#which-versions-of-windows-are-supported)
+    + [Also Windows XP does not appear to be supported anymore](https://github.com/git-for-windows/git/wiki/FAQ#which-versions-of-windows-are-supported)
 
-How to configure and compile Synergy 101 !!
-===========================================
+(Windows) Compiling with Microsoft's Visual C++ environment
+===========================================================
+
+(Windows) Compiling with MSYS2 & MinGW
+======================================
+
+(Linux / POSIX) Generic Compiling
+=================================
+
+(Apple macOS) Generic Compiling
+===============================
+TODO
+
+How to configure and compile Synergy 101
+========================================
 Navigate to your `synergy` folder in a terminal/command-prompt
 ```
 mkdir build
@@ -42,7 +59,7 @@ cd build
 
 Now decide what build-type you're going to use. Options are:
 `Debug`, `Release`, `RelWithDebInfo` and `MinSizeRel`.
-What you choose will be referred to as `<BR>` from herein.
+What you choose will be referred to as `<BT>` from herein.
 
 Now back to configuring. You should be in the 'build' directory here.
 ```

@@ -1,14 +1,13 @@
 Synergy
 =======
 Share one buggy mouse and one buggy keyboard between multiple computers.
+---
 
-This is fork whose main goal is to remove licensing and paid features. And maybe improve it by fixing bugs.
+This is fork whose main goal is to remove licensing and paid features (it's open-source so why not), fix a few bugs, and to make building a little better.
 
-**IMPORTANT:** The `master` branch of this repo will considered the "stable" branch. Since I use this repo as a way to share commits between computers I end up pushing commits that have not been able to be tested on multiple environments yet. This does not mean the `master` will be "stable" from bugs and building errors though. See the `activey` branch for more active changes and for more buggy behavior.
+The `master` branch will be considered the "stable" branch. I use the `activey` branch to test and share commits between computers.
 
-**IMPORTANT:** This is repo is not in a stable state! **Please please please file issues if you have problems or questions.** Backwards compatibility not is something I value very much. Expect failing builds, incorrect OSX behavior as I don't have an OSX environment, and changing of settings/config paths.
-
-**IMPORTANT:** Linux is probably the only completely supported platform at the moment. Using this on Windows cleanly requires a Synergy service to startup the synergyd.exe which is currently not created automatically. Feel free to create an auto-starting service for Synergy if you're on Windows.
+**IMPORTANT:** I don't have an evironment setup to test Apple macOS so expect building to fail completely. Feel free to contribute.
 
 This repository uses a submodule for [a testing framework](https://github.com/google/googletest) so to clone do this:
 ```
@@ -20,13 +19,13 @@ git submodule update --init
 ```
 
 
-License and stuff
------------------
-Synergy and it's components are, unless otherwise specified, licensed under the terms of the GNU General Public License, Version 2 (GPLv2). There's an additional exemption so compiling, linking, and/or using OpenSSL is allowed.
+Licenses and stuff
+------------------
+Synergy and it's components are licensed under the terms of the GNU General Public License Version 2 (GPLv2) with an additional exemption so compiling, linking, and/or using OpenSSL is allowed.
 
-More information regarding file licensing should be obtainable by looking for a copyright notice as the header of a file.
+uSynergy (micro Synergy) is a seperate project that falls under the zlib License. It is unused but is kept in the repo for "historical value".
 
-A tar-gz archive is included for LibreSSL which includes software developed by Eric Young (eay@cryptsoft.com) and software developed by the OpenSSL Project for use in the OpenSSL Toolkit (http://www.openssl.org) along with work contributed from many other sources including the OpenBSD project and associates. More license information can be obtained by looking through the files in the tar-gz archive.
+A tar-gz archive is included for [LibreSSL](https://www.libressl.org/) which includes software developed by Eric Young (eay@cryptsoft.com) and software developed by the OpenSSL Project for use in the OpenSSL Toolkit (http://www.openssl.org) along with work contributed from many other sources including the OpenBSD project and associates. More license information can be obtained by looking through the files in the tar-gz archive.
 
 The archive was retrieved from [here](https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/)
 
@@ -39,7 +38,7 @@ There's a few things not listed here. Go through the commits.
   + Windows uses `%localappdata%\Synergy\`
   + macOS uses `~/Library/Preferences/Synergy/`
   + Linux/everything-else uses `~/.config/Synergy/`
-+ Switch from using `hm` as helper script catchall to using purely CMake.
++ Switch from using `hm` as helper script catchall to purely CMake.
 + Removed Python requirement (by deprecation of `hm`).
 + OpenSSL replaced with LibreSSL tarball (building as an external CMake project is easy).
   + OpenSSL could probably be used on Linux/everything-else instead but that can be done again in the future.
@@ -55,14 +54,31 @@ There's a few things not listed here. Go through the commits.
 
 Building
 --------
-Read through the [`COMPILE.md`](https://github.com/yupi2/synergy/blob/master/COMPILE.md) file. **READ THE ENTIRE THING OR YOU WILL MISS SOMETHING IMPORTANT**. Here's a link to [symless/synergy's compiling guide on their wiki](https://github.com/symless/synergy/wiki/Compiling) but it doesn't really have much relevancy. It's highly outdated and differs greatly along with its use of the now deprecated `hm` catch-all Python build script. There may be missing information in the `COMPILE.md` file so open an issue if needed.
+**You should really really really not downloading anything to build just yet. This is just a little run-down on requirements to build with more detailed instructions lower down.**
+
++ Operating system:
+  + Windows OS with support for XP or newer APIs
+  + Apple macOS (TODO)
+  + Linux (and maybe some POSIX systems)
++ [CMake 3.0 or newer](https://cmake.org/)
++ A C++11 environment
++ Qt 5.6, 5.7 or 5.8
++ Any recent version of Git
 
 Here's how I build on Linux:
 ```
 mkdir build
 cd build
 cmake -DCMAKE_BUILD_TYPE=Debug ../
-cmake --build . -- -j5
+cmake --build ./ -- -j4
+```
+
+On 64-bit Windows with MSYS2/MinGW-x86_64
+```
+mkdir build
+cd build
+cmake -DCMAKE_BUILD_TYPE=Debug ../
+cmake --build ./ -- -j4
 ```
 
 On 64-bit Windows with Visual Studio 2015 (the Community edition is free):
@@ -70,16 +86,48 @@ On 64-bit Windows with Visual Studio 2015 (the Community edition is free):
 mkdir build
 cd build
 cmake -DCMAKE_BUILD_TYPE=Debug -G"Visual Studio 14 2015 Win64" ../
-cmake --build . --config Debug
+cmake --build ./ --config Debug
 ```
 
 
+(Windows) Compiling with MSYS2 & MinGW
+======================================
+Requirements:
++ [MSYS2](http://www.msys2.org/)
+  + HTTPS downloads on sourceforge for [32bit](https://sourceforge.net/projects/msys2/files/Base/i686/) and [64bit](https://sourceforge.net/projects/msys2/files/Base/x86_64/)
+
+1.  Run MSYS2 installer and finish with `Run MSYS2 XXbit now`.
+2.  Run `pacman -Syu`, type `y` and press `Enter` to upgrade packages.
+3.  It will ask you to close your terminal now which you can do by clicking the window's close button and then OK.
+4.  Start Menu -> `MSYS2 XXbit` -> `MSYS2 MinGW XX-bit`
+5.  Run `pacman -Syu` again.
+6.  Run `pacman -S git mingw-w64-?????-cmake mingw-w64-?????-toolchain mingw-w64-?????-qt5-static`
+--* Replace `?????` with either `i686` or `x86_64`
+7.  Find something to do for a few minutes while everything installs.
+8.  Reopen your `MSYS2 MinGW XX-bit` terminal
+8.  Find a directory that you want to clone this repo to
+--* For example I'll use `/c/code/test/synergy` which is equivalent to `C:\code\test\synergy`
+9.  Run `cd /c/code/test`
+10. Run `git clone --recursive https://github.com/yupi2/synergy.git`
+11. Run `cd synergy ; mkdir build ; cd build`
+13. Run `cmake -G"Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug ../`
+
+(Windows) Compiling with Microsoft's Visual C++ environment
+===========================================================
+Requirements:
++ Visual C++ Build Tools (2013 or 2015)
+  + Visual Studio 2013 and 2015 will provide this if installed with `C++ Tools` selected
+  + There's a standalone download for the 2015 build tools [here](http://landinghub.visualstudio.com/visual-cpp-build-tools)
++ [CMake](https://cmake.org/download/)
++ [Qt 5.6, 5.7 or 5.8](https://www.qt.io/download-open-source/)
+  + [Here's what I select since I plan to only have x64 builds with Visual Studio 2015](https://imgur.com/YP6v8rE)
+
+
+
+
+(Linux / POSIX) Compiling
+=========================
+
+(Apple macOS) Compiling
+=======================
 TODO
-----
-+ Unicode support layer for Windows.
-+ Setup a build server maybe (probably not).
-+ Clean any CMake things that can be cleaned.
-+ Correct the media-toggle button on Windows (it might be broken).
-+ Wayland support (requires support from the compositor: GNOME, KWin, etc).
-+ Fix bugs.
-+ Make builds build for MinGW.

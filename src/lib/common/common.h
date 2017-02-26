@@ -20,6 +20,8 @@
 
 // this file should be included, directly or indirectly by every other.
 
+#include <stdint.h>
+
 #if HAVE_CONFIG_H
 #	include "../../../build/config.h"
 
@@ -79,10 +81,10 @@
 #		define SELECT_TYPE_ARG1 int
 #		define SELECT_TYPE_ARG234 (fd_set *)
 #		define SELECT_TYPE_ARG5 (struct timeval *)
-#		define SIZEOF_CHAR 1
-#		define SIZEOF_INT 4
-#		define SIZEOF_LONG 4
-#		define SIZEOF_SHORT 2
+//#		define SIZEOF_CHAR 1
+//#		define SIZEOF_INT 4
+//#		define SIZEOF_LONG 4
+//#		define SIZEOF_SHORT 2
 #		define STDC_HEADERS 1
 #		define TIME_WITH_SYS_TIME 1
 #		define X_DISPLAY_MISSING 1
@@ -90,7 +92,8 @@
 #endif
 
 // VC++ specific
-#if (_MSC_VER >= 1200)
+// this is on the purge list ; next we test
+#if 0 && (_MSC_VER >= 1200)
 	// work around for statement scoping bug
 #	define for if (false) { } else for
 
@@ -112,17 +115,22 @@
 #	endif
 #endif // (_MSC_VER >= 1200)
 
-// VC++ has built-in sized types
-#if defined(_MSC_VER)
+#if defined(_WIN32)
 #	include <wchar.h>
-#	define TYPE_OF_SIZE_1 __int8
-#	define TYPE_OF_SIZE_2 __int16
-#	define TYPE_OF_SIZE_4 __int32
-#else
-#	define SIZE_OF_CHAR		1
-#	define SIZE_OF_SHORT	2
-#	define SIZE_OF_INT		4
-#	define SIZE_OF_LONG		4
+#endif
+
+// Added this because it doesn't compile on OS X 10.6 because they are already defined in Carbon
+#if !defined(__MACTYPES__)
+#	if defined(__APPLE__)
+#		include <CoreServices/CoreServices.h>
+#	else
+		typedef int8_t   SInt8;
+		typedef int16_t  SInt16;
+		typedef int32_t  SInt32;
+		typedef uint8_t  UInt8;
+		typedef uint16_t UInt16;
+		typedef uint32_t UInt32;
+#	endif
 #endif
 
 // FIXME -- including fp.h from Carbon.h causes a undefined symbol error
@@ -135,11 +143,6 @@
 
 // define NULL
 #include <stddef.h>
-
-// if not c++0x, future proof code by allowing use of nullptr
-#ifndef nullptr
-#	define nullptr NULL
-#endif
 
 // make assert available since we use it a lot
 #include <assert.h>
