@@ -21,7 +21,7 @@
 #include "net/XSocket.h"
 
 
-#if WIN32
+#if _WIN32
 #define SSL_CERT_PATH "SSL\\Synergy.pem"
 #define SSL_FINGERPRINTS_PATH "SSL\\Fingerprints\\"
 #else

@@ -101,7 +101,7 @@ Requirements:
 3.  It will ask you to close your terminal now which you can do by clicking the window's close button and then OK.
 4.  Start Menu -> `MSYS2 XXbit` -> `MSYS2 MinGW XX-bit`
 5.  Run `pacman -Syu` again.
-6.  Run `pacman -S git mingw-w64-?????-cmake mingw-w64-?????-toolchain mingw-w64-?????-qt5-static`
+6.  Run `pacman -S git mingw-w64-?????-cmake mingw-w64-?????-toolchain mingw-w64-?????-qt5
 --* Replace `?????` with either `i686` or `x86_64`
 7.  Find something to do for a few minutes while everything installs.
 8.  Reopen your `MSYS2 MinGW XX-bit` terminal

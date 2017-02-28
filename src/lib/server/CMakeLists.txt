@@ -27,16 +27,10 @@ include_directories(
 	../../../ext/googletest/googletest/include
 )
 
-if (UNIX)
-	include_directories(
-		../../..
-	)
-endif()
-
 add_library(server STATIC ${sources})
 
 target_link_libraries(server)
 
-if (UNIX)
+if (NOT MSVC)
 	target_link_libraries(server synergy)
 endif()

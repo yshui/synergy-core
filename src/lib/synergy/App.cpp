@@ -19,7 +19,6 @@
 #include "synergy/App.h"
 
 #include "base/Log.h"
-#include "common/Version.h"
 #include "synergy/protocol_types.h"
 #include "arch/Arch.h"
 #include "base/XBase.h"
@@ -84,10 +83,12 @@ App::version()
 		buffer,
 		"%s %s, protocol version %d.%d\n%s",
 		argsBase().m_pname,
-		kVersion,
+		SYN_VERSION,
 		kProtocolMajorVersion,
 		kProtocolMinorVersion,
-		kCopyright
+		"Copyright (C) 2012-2016 Symless Ltd.\n"
+		"Copyright (C) 2008-2014 Nick Bolton\n"
+		"Copyright (C) 2002-2014 Chris Schoeneman"
 		);
 
 	std::cout << buffer << std::endl;

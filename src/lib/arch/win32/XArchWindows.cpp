@@ -2,11 +2,11 @@
  * synergy -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
- * 
+ *
  * This package is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * found in the file LICENSE that should have accompanied this file.
- * 
+ *
  * This package is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -25,7 +25,10 @@
 //
 
 std::string
-XArchEvalWindows::eval() const throw()
+XArchEvalWindows::eval() const
+#if 0
+throw()
+#endif
 {
 	char* cmsg;
 	if (FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER |
@@ -51,7 +54,10 @@ XArchEvalWindows::eval() const throw()
 //
 
 std::string
-XArchEvalWinsock::eval() const throw()
+XArchEvalWinsock::eval() const
+#if 0
+throw()
+#endif
 {
 	// built-in windows function for looking up error message strings
 	// may not look up network error messages correctly.  we'll have

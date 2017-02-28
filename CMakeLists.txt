@@ -15,11 +15,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Version number for Synergy
-set(VERSION_HIGH   4)
-set(VERSION_MIDDLE 2)
-set(VERSION_LOW    0)
-set(VERSION_STAGE testing)
-set(VERSION "${VERSION_HIGH}.${VERSION_MIDDLE}.${VERSION_LOW}")
+set(SYN_VERSION_HIGH   4)
+set(SYN_VERSION_MIDDLE 2)
+set(SYN_VERSION_LOW    0)
+set(SYN_VERSION_STAGE testing)
+set(SYN_VERSION "${SYN_VERSION_HIGH}.${SYN_VERSION_MIDDLE}.${SYN_VERSION_LOW}")
+set(SYN_APPVERSION "Synergy ${SYN_VERSION}")
 
 
 cmake_minimum_required(VERSION 3.0)
@@ -91,11 +92,12 @@ else()
 	add_definitions(-DGIT_REVISION=\"${GIT_REVISION}\")
 endif()
 
-add_definitions(-DVERSION_HIGH=\"${VERSION_HIGH}\")
-add_definitions(-DVERSION_MIDDLE=\"${VERSION_MIDDLE}\")
-add_definitions(-DVERSION_LOW=\"${VERSION_LOW}\")
-add_definitions(-DVERSION_STAGE=\"${VERSION_STAGE}\")
-add_definitions(-DVERSION=\"${VERSION}\")
+add_definitions(-DSYN_VERSION_HIGH=\"${SYN_VERSION_HIGH}\")
+add_definitions(-DSYN_VERSION_MIDDLE=\"${SYN_VERSION_MIDDLE}\")
+add_definitions(-DSYN_VERSION_LOW=\"${SYN_VERSION_LOW}\")
+add_definitions(-DSYN_VERSION_STAGE=\"${SYN_VERSION_STAGE}\")
+add_definitions(-DSYN_VERSION=\"${SYN_VERSION}\")
+add_definitions(-DSYN_APPVERSION=\"${SYN_APPVERSION}\")
 
 
 option(DISABLE_TESTS "DISABLE_TESTS" 1)
@@ -338,7 +340,10 @@ if (UNIX)
 
 else() # not-unix
 
-	list(APPEND libs Wtsapi32 Userenv Wininet comsuppw Shlwapi Ws2_32)
+	list(APPEND libs Wtsapi32 Userenv Wininet Shlwapi Ws2_32)
+	if (MSVC)
+		list(APPEND libs comsuppw)
+	endif()
 
 	add_definitions(
 		/DWIN32

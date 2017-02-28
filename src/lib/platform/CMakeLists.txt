@@ -34,12 +34,6 @@ include_directories(
 	../../../ext/googletest/googletest/include
 )
 
-if (UNIX)
-	include_directories(
-		../../..
-	)
-endif()
-
 if (APPLE)
 	list(APPEND inc
 		/System/Library/Frameworks
@@ -50,7 +44,7 @@ include_directories(${inc})
 add_library(platform STATIC ${sources})
 target_link_libraries(platform client ${libs})
 
-if (UNIX)
+if (NOT MSVC)
 	target_link_libraries(platform io net ipc synergy client ${libs})
 endif()
 

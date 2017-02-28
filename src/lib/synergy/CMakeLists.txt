@@ -39,14 +39,8 @@ include_directories(
 	../../../ext/googletest/googletest/include
 )
 
-if (UNIX)
-	include_directories(
-		../../..
-	)
-endif()
-
 add_library(synergy STATIC ${sources})
 
-if (UNIX)
+if (NOT MSVC)
 	target_link_libraries(synergy arch client ipc net base platform mt server)
 endif()

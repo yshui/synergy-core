@@ -21,7 +21,6 @@
 #include "base/Log.h"
 #include "base/String.h"
 #include "base/log_outputters.h"
-#include "common/Version.h"
 
 #include <cstdio>
 #include <cstring>
@@ -222,7 +221,7 @@ Log::insert(ILogOutputter* outputter, bool alwaysAtHead)
 		m_outputters.push_front(outputter);
 	}
 
-	outputter->open(kAppVersion);
+	outputter->open(SYN_APPVERSION);
 
 	// Issue 41
 	// don't show log unless user requests it, as some users find this

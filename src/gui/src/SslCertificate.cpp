@@ -27,7 +27,7 @@ static const char kCertificateSubjectInfo[] = "/CN=Synergy4rk";
 static const char kCertificateFilename[] = "Synergy.pem";
 static const char kSslDir[] = "SSL";
 
-#if defined(Q_OS_WIN)
+#if 1 || defined(Q_OS_WIN)
 static const char kOpenSslCommand[] = "synopenssl.exe";
 static const char kConfigFile[] = "synopenssl.cnf";
 #else
@@ -49,7 +49,7 @@ SslCertificate::SslCertificate(QObject *parent) :
 bool SslCertificate::runTool(const QStringList& args)
 {
 	QString program;
-#if defined(Q_OS_WIN)
+#if 1 || defined(Q_OS_WIN)
 	program = QCoreApplication::applicationDirPath();
 	program.append('\\').append(kOpenSslCommand);
 #else
@@ -58,7 +58,7 @@ bool SslCertificate::runTool(const QStringList& args)
 
 
 	QStringList environment;
-#if defined(Q_OS_WIN)
+#if 1 || defined(Q_OS_WIN)
 	environment << QString("OPENSSL_CONF=%1%2%3")
 		.arg(QCoreApplication::applicationDirPath())
 		.arg(QDir::separator())

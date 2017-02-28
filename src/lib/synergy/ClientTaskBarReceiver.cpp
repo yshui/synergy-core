@@ -2,11 +2,11 @@
  * synergy -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2003 Chris Schoeneman
- * 
+ *
  * This package is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * found in the file LICENSE that should have accompanied this file.
- * 
+ *
  * This package is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,6 @@
 #include "base/String.h"
 #include "base/IEventQueue.h"
 #include "arch/Arch.h"
-#include "common/Version.h"
 
 //
 // ClientTaskBarReceiver
@@ -117,23 +116,21 @@ ClientTaskBarReceiver::getToolTip() const
 {
 	switch (m_state) {
 	case kNotRunning:
-		return synergy::string::sprintf("%s:  Not running", kAppVersion);
+		return (SYN_APPVERSION ": Not running");
 
 	case kNotWorking:
-		return synergy::string::sprintf("%s:  %s",
-								kAppVersion, m_errorMessage.c_str());
+		return (std::string(SYN_APPVERSION ": ") + m_errorMessage);
 
 	case kNotConnected:
-		return synergy::string::sprintf("%s:  Not connected:  %s",
-								kAppVersion, m_errorMessage.c_str());
+		return (std::string(SYN_APPVERSION ": Not connected: ") +
+			m_errorMessage);
 
 	case kConnecting:
-		return synergy::string::sprintf("%s:  Connecting to %s...",
-								kAppVersion, m_server.c_str());
+		return (std::string(SYN_APPVERSION ": Connecting to ") +
+			m_server + "...");
 
 	case kConnected:
-		return synergy::string::sprintf("%s:  Connected to %s",
-								kAppVersion, m_server.c_str());
+		return (std::string(SYN_APPVERSION ": Connected to ") + m_server);
 
 	default:
 		return "";

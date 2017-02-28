@@ -50,12 +50,6 @@ include_directories(
 	../../lib/
 )
 
-if (UNIX)
-	include_directories(
-		../../..
-	)
-endif()
-
 if (WIN32)
 	add_executable(synergyp WIN32 ${sources})
 else()
@@ -64,20 +58,3 @@ endif()
 
 target_link_libraries(synergyp
 	arch base client common io mt net ipc platform server synergy client ${libs} ${OPENSSL_LIBS})
-
-if (WIN32)
-	#add_custom_command(
-	#	TARGET synergyp
-	#	POST_BUILD
-	#	COMMAND xcopy /Y /Q
-	#		..\\..\\..\\..\\bin\\${CMAKE_CFG_INTDIR}\\synergyp.*
-	#		..\\..\\..\\..\\bin\\${CMAKE_CFG_INTDIR}\\
-	#)
-else ()
-	if (CONF_CPACK)
-		install(TARGETS
-			synergyp
-			COMPONENT core
-			DESTINATION bin)
-	endif()
-endif()

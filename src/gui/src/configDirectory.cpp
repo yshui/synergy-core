@@ -19,11 +19,6 @@
 #include <QDir>
 #include <QStandardPaths>
 
-#if WIN32
-#include <Windows.h>
-#include <VersionHelpers.h>
-#endif
-
 QString g_GetConfigDirectory()
 {
 	QString dir =

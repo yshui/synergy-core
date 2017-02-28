@@ -18,7 +18,6 @@
 #include "arch/win32/ArchInternetWindows.h"
 #include "arch/win32/XArchWindows.h"
 #include "arch/Arch.h"
-#include "common/Version.h"
 
 #include <sstream>
 #include <Wininet.h>
@@ -123,12 +122,12 @@ WinINetRequest::send()
 	openSession();
 	connect();
 	openRequest();
-	
+
 	String headers("Content-Type: text/html");
-	if (!HttpSendRequest(m_request, headers.c_str(), (DWORD)headers.length(), NULL, NULL)) {
+	if (!HttpSendRequestA(m_request, headers.c_str(), (DWORD)headers.length(), NULL, 0)) {
 		throw XArch(new XArchEvalWindows());
 	}
-	
+
 	std::stringstream result;
 	CHAR buffer[1025];
     DWORD read = 0;
@@ -145,16 +144,12 @@ WinINetRequest::send()
 void
 WinINetRequest::openSession()
 {
-	std::stringstream userAgent;
-	userAgent << "Synergy ";
-	userAgent << kVersion;
-
-    m_session = InternetOpen(
-		userAgent.str().c_str(),
+    m_session = InternetOpenA(
+		SYN_APPVERSION,
 		INTERNET_OPEN_TYPE_PRECONFIG,
 		NULL,
 		NULL,
-		NULL);
+		0);
 
 	if (m_session == NULL) {
 		throw XArch(new XArchEvalWindows());
@@ -164,16 +159,16 @@ WinINetRequest::openSession()
 void
 WinINetRequest::connect()
 {
-	m_connect = InternetConnect(
+	m_connect = InternetConnectA(
 		m_session,
 		m_url.m_host.c_str(),
 		m_url.m_port,
 		NULL,
 		NULL,
 		INTERNET_SERVICE_HTTP,
-		NULL,
+		0,
 		NULL);
-	
+
 	if (m_connect == NULL) {
 		throw XArch(new XArchEvalWindows());
 	}
@@ -182,7 +177,7 @@ WinINetRequest::connect()
 void
 WinINetRequest::openRequest()
 {
-	m_request = HttpOpenRequest(
+	m_request = HttpOpenRequestA(
 		m_connect,
 		"GET",
 		m_url.m_path.c_str(),
@@ -190,7 +185,7 @@ WinINetRequest::openRequest()
 		NULL,
 		NULL,
 		m_url.m_flags,
-		NULL);
+		(DWORD_PTR)NULL);
 
 	if (m_request == NULL) {
 		throw XArch(new XArchEvalWindows());

@@ -2,11 +2,11 @@
  * synergy -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2003 Chris Schoeneman
- * 
+ *
  * This package is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * found in the file LICENSE that should have accompanied this file.
- * 
+ *
  * This package is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -21,7 +21,6 @@
 #include "base/String.h"
 #include "base/IEventQueue.h"
 #include "arch/Arch.h"
-#include "common/Version.h"
 
 //
 // PortableTaskBarReceiver
@@ -106,14 +105,14 @@ PortableTaskBarReceiver::getToolTip() const
 {
 	switch (m_state) {
 	case kNotRunning:
-		return synergy::string::sprintf("%s:  Not running", kAppVersion);
+		return (SYN_APPVERSION ": Not running");
+		return synergy::string::sprintf("%s:  Not running", SYN_APPVERSION);
 
 	case kNotWorking:
-		return synergy::string::sprintf("%s:  %s",
-								kAppVersion, m_errorMessage.c_str());
-						
+		return (std::string(SYN_APPVERSION ": ") + m_errorMessage);
+
 	case kNotConnected:
-		return synergy::string::sprintf("%s:  Unknown", kAppVersion);
+		return (SYN_APPVERSION ": Unknown");
 
 	default:
 		return "";

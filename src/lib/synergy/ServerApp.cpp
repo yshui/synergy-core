@@ -38,7 +38,6 @@
 #include "base/IEventQueue.h"
 #include "base/Log.h"
 #include "base/TMethodEventJob.h"
-#include "common/Version.h"
 
 #if SYSAPI_WIN32
 #include "arch/win32/ArchMiscWindows.h"

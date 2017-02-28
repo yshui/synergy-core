@@ -18,7 +18,6 @@
 #include "arch/unix/ArchInternetUnix.h"
 
 #include "arch/XArch.h"
-#include "common/Version.h"
 #include "base/Log.h"
 
 #include <sstream>
@@ -93,20 +92,17 @@ CurlFacade::get(const String& url)
 	curl_easy_setopt(m_curl, CURLOPT_URL, url.c_str());
 	curl_easy_setopt(m_curl, CURLOPT_WRITEFUNCTION, curlWriteCallback);
 
-	std::stringstream userAgent;
-	userAgent << "Synergy ";
-	userAgent << kVersion;
-	curl_easy_setopt(m_curl, CURLOPT_USERAGENT, userAgent.str().c_str());
-	
+	curl_easy_setopt(m_curl, CURLOPT_USERAGENT, SYN_APPVERSION);
+
 	std::string result;
 	curl_easy_setopt(m_curl, CURLOPT_WRITEDATA, &result);
-			
+
 	CURLcode code = curl_easy_perform(m_curl);
 	if (code != CURLE_OK) {
 		LOG((CLOG_ERR "curl perform error: %s", curl_easy_strerror(code)));
 		throw XArch("CURL perform failed.");
 	}
-	
+
     return result;
 }
 
@@ -118,7 +114,7 @@ CurlFacade::urlEncode(const String& url)
 	if (resultCStr == NULL) {
 		throw XArch("CURL escape failed.");
 	}
-	
+
 	std::string result(resultCStr);
 	curl_free(resultCStr);
 
