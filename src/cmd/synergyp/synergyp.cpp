@@ -1,11 +1,11 @@
 /*
  * synergy -- mouse and keyboard sharing utility
  * Copyright (C) 2013-2016 Symless Ltd.
- * 
+ *
  * This package is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * found in the file LICENSE that should have accompanied this file.
- * 
+ *
  * This package is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -31,7 +31,6 @@
 #error Platform not supported.
 #endif
 
-#define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 
 INT WINAPI
@@ -41,7 +40,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine, INT nCmdSh
 	// record window instance for tray icon, etc
 	ArchMiscWindows::setInstanceWin32(GetModuleHandle(NULL));
 #endif
-	
+
 	Arch arch;
 	arch.init();
 
@@ -69,7 +68,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine, INT nCmdSh
 			"Server or client?", MB_OK);
         return 1;
 	}
-	
+
 	if (argc <= 2) {
 		MessageBox(NULL,
 			"No additional arguments were provided. Append the --help argument for help.\n\n"
@@ -77,7 +76,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine, INT nCmdSh
 			"No additional arguments", MB_OK);
         return 1;
 	}
-	
+
 	if (server) {
 		ServerApp app(&events, createTaskBarReceiver);
 		return app.run(argc, argv);

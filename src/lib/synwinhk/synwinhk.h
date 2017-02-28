@@ -2,11 +2,11 @@
  * synergy -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
- * 
+ *
  * This package is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * found in the file LICENSE that should have accompanied this file.
- * 
+ *
  * This package is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -18,17 +18,8 @@
 
 #pragma once
 
-// hack: vs2005 doesn't declare _WIN32_WINNT, so we need to hard code it.
-// however, some say that this should be hard coded since it defines the
-// target system, but since this is suposed to compile on pre-XP, maybe
-// we should just leave it like this.
-#if _MSC_VER == 1400
-#define _WIN32_WINNT 0x0400
-#endif
-
 #include "base/EventTypes.h"
 
-#define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 
 #if defined(synwinhk_EXPORTS)

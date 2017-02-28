@@ -29,7 +29,6 @@ freely, subject to the following restrictions:
 #include <stdlib.h>
 #include <stdio.h>
 
-#define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 
 uSynergyBool connect(uSynergyCookie cookie);
@@ -66,7 +65,7 @@ int main(char* argv, int argc)
 	context.m_keyboardCallback = &keyboard;
 	context.m_joystickCallback = &joystick;
 	context.m_clipboardCallback = &clipboard;
-	
+
 	for(;;) {
 		uSynergyUpdate(&context);
 	}
