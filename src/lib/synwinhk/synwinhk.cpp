@@ -2,11 +2,11 @@
  * synergy -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
- * 
+ *
  * This package is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * found in the file LICENSE that should have accompanied this file.
- * 
+ *
  * This package is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
 
 #include <zmouse.h>
 #include <tchar.h>
- 
+
 #if _MSC_VER >= 1400
 // VS2005 hack - we don't use assert here because we don't want to link with the CRT.
 #undef assert
@@ -164,7 +164,7 @@ keyboardGetState(BYTE keys[256], DWORD vkCode, bool kf_up)
 	key = GetAsyncKeyState(vkCode);
 
 	if (key & 0x80) {
-		// The only time we know for sure that GetAsyncKeyState() is working 
+		// The only time we know for sure that GetAsyncKeyState() is working
 		// is when it tells us that the current key is down.
 		// In this case, update g_keyState to reflect what GetAsyncKeyState()
 		// is telling us, just in case we have gotten out of sync
@@ -295,14 +295,14 @@ doKeyboardHookHandler(WPARAM wParam, LPARAM lParam)
 			// internal dead key state.
 			ToAscii((UINT)g_deadVirtKey, (g_deadLParam & 0x10ff0000u) >> 16,
 					g_deadKeyState, &c, flags);
-			
+
 			// We need to keep track of this because g_deadVirtKey will be
 			// cleared later on; this would cause the dead key release to
 			// incorrectly restore the dead key state.
 			g_deadRelease = g_deadVirtKey;
 		}
 	}
-	
+
 	UINT scanCode = ((lParam & 0x10ff0000u) >> 16);
 	int n         = ToAscii((UINT)wParam, scanCode, keys, &c, flags);
 
@@ -892,7 +892,12 @@ init(DWORD threadID)
 
 		// clean up after old process.  the system should've already
 		// removed the hooks so we just need to reset our state.
-		g_hinstance       = GetModuleHandle(_T("synwinhk"));
+#ifdef _MSC_VER
+		g_hinstance       = GetModuleHandleA("synwinhk");
+#else
+		// probably mingw
+		g_hinstance       = GetModuleHandleA("libsynwinhk");
+#endif
 		g_processID       = GetCurrentProcessId();
 		g_wheelSupport    = kWheelNone;
 		g_threadID        = 0;

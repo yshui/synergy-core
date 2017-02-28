@@ -21,7 +21,12 @@
 #include "synergy/XScreen.h"
 #include "base/Log.h"
 
+#ifdef _MSC_VER
 static const char* g_name = "synwinhk";
+#else
+// probably mingw
+static const char* g_name = "libsynwinhk";
+#endif
 
 MSWindowsHook::MSWindowsHook() :
 	m_initFunc(NULL),

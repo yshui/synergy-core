@@ -2,11 +2,11 @@
  * synergy -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2003 Chris Schoeneman
- * 
+ *
  * This package is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * found in the file LICENSE that should have accompanied this file.
- * 
+ *
  * This package is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -20,10 +20,9 @@
 
 #include "arch/IArchTaskBar.h"
 #include "arch/IArchMultithread.h"
-#include "common/stdmap.h"
-#include "common/stdvector.h"
+#include <map>
+#include <vector>
 
-#define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 
 #define ARCH_TASKBAR ArchTaskBarWindows
@@ -36,7 +35,7 @@ public:
 
 	virtual void init();
 
-	//! Add a dialog window 
+	//! Add a dialog window
 	/*!
 	Tell the task bar event loop about a dialog.  Win32 annoyingly
 	requires messages destined for modeless dialog boxes to be

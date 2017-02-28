@@ -27,6 +27,6 @@ include_directories(
 
 add_library(base STATIC ${sources})
 
-if (NOT MSVC)
-	target_link_libraries(base common)
-endif()
+#if (NOT MSVC)
+#	target_link_libraries(base common)
+#endif()

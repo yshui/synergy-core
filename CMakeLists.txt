@@ -49,7 +49,7 @@ set(res_dir ${root_dir}/res)
 
 set(libressl_path ${root_dir}/ext/libressl-2.5.1)
 
-if (WIN32)
+if (MSVC)
 	set(EXECUTABLE_OUTPUT_PATH ${root_dir}/build/bin/${CMAKE_VS_PLATFORM_NAME})
 	# the CMAKE_RUNTIME_OUTPUT_DIRECTORY is for .dlls like synwinhk.dll
 	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${root_dir}/build/bin/${CMAKE_VS_PLATFORM_NAME})
@@ -346,7 +346,7 @@ else() # not-unix
 	endif()
 
 	add_definitions(
-		/DWIN32
+		/DWIN32_LEAN_AND_MEAN
 		/D_WINDOWS
 		/D_CRT_SECURE_NO_WARNINGS
 		/D_XKEYCHECK_H

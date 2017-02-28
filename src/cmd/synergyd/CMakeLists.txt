@@ -29,4 +29,4 @@ else()
 endif()
 
 target_link_libraries(synergyd
-	arch base common io ipc mt net platform synergy ${libs} ${OPENSSL_LIBS})
+	arch base io ipc mt net platform synergy ${libs} ${OPENSSL_LIBS})

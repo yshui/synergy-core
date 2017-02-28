@@ -52,4 +52,4 @@ include_directories(
 
 add_executable(synergyc ${sources})
 target_link_libraries(synergyc
-	arch base client common io mt net ipc platform server synergy ${libs} ${OPENSSL_LIBS})
+	arch base client io mt net ipc platform server synergy ${libs} ${OPENSSL_LIBS})

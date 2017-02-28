@@ -27,7 +27,7 @@
 #include "arch/XArch.h"
 #include "base/Log.h"
 #include "base/TMethodJob.h"
-#include "common/stdvector.h"
+#include <vector>
 
 //
 // SocketMultiplexer

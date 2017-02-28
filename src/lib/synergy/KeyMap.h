@@ -20,9 +20,9 @@
 
 #include "synergy/key_types.h"
 #include "base/String.h"
-#include "common/stdmap.h"
-#include "common/stdset.h"
-#include "common/stdvector.h"
+#include <map>
+#include <set>
+#include <vector>
 
 #include <gtest/gtest_prod.h>
 

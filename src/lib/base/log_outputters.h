@@ -22,7 +22,7 @@
 #include "base/ILogOutputter.h"
 #include "base/String.h"
 #include "common/common.h"
-#include "common/stddeque.h"
+#include <deque>
 
 #include <list>
 #include <fstream>

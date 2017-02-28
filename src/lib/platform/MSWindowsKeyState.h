@@ -20,9 +20,7 @@
 
 #include "synergy/KeyState.h"
 #include "base/String.h"
-#include "common/stdvector.h"
-
-#define WIN32_LEAN_AND_MEAN
+#include <vector>
 #include <Windows.h>
 
 class Event;

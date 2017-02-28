@@ -23,7 +23,6 @@ endif()
 
 include_directories(
 	../
-	../../../ext
 	../../../ext/googletest/googletest/include
 )
 
