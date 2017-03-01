@@ -32,7 +32,7 @@
 #include "AppConfig.h"
 #include "VersionChecker.h"
 #include "IpcClient.h"
-#include "Ipc.h"
+#include "ipc/Ipc.h"
 
 #include <QMutex>
 
@@ -152,7 +152,7 @@ public slots:
 		bool clientArgs(QStringList& args, QString& app);
 		bool serverArgs(QStringList& args, QString& app);
 		void setStatus(const QString& status);
-		void sendIpcMessage(qIpcMessageType type, const char* buffer, bool showErrors);
+		void sendIpcMessage(EIpcMessageType type, const char* buffer, bool showErrors);
 		void onModeChanged(bool startDesktop, bool applyService);
 		void updateFromLogLine(const QString& line);
 		QString getIPAddresses();

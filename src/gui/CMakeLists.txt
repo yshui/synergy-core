@@ -15,7 +15,7 @@ execute_process(
 	ERROR_QUIET
 )
 
-file (GLOB LEGACY_GUI_SOURCE_FILES src/*.cpp src/*.h)
+file (GLOB LEGACY_GUI_SOURCE_FILES src/*.cpp src/*.h ../lib/ipc/Ipc.h)
 file (GLOB LEGACY_GUI_UI_FILES src/*.ui)
 
 if (APPLE)
@@ -29,7 +29,10 @@ add_executable (synergygui WIN32
 	res/Synergy.qrc
 )
 
-include_directories (./src)
+include_directories (
+	./src
+	../lib
+)
 
 qt5_use_modules (synergygui Widgets Network)
 

@@ -86,7 +86,6 @@ SOURCES += src/main.cpp \
     src/SetupWizard.cpp \
     src/IpcClient.cpp \
     src/IpcReader.cpp \
-    src/Ipc.cpp \
     src/SynergyLocale.cpp \
     src/QUtility.cpp \
     src/CommandProcess.cpp \
@@ -117,7 +116,7 @@ HEADERS += src/MainWindow.h \
     src/SetupWizard.h \
     src/IpcClient.h \
     src/IpcReader.h \
-    src/Ipc.h \
+    ../lib/ipc/Ipc.h \
     src/SynergyLocale.h \
     src/QUtility.h \
     src/CommandProcess.h \

@@ -22,7 +22,7 @@
 #include <iostream>
 #include <QTimer>
 #include "IpcReader.h"
-#include "Ipc.h"
+#include "ipc/Ipc.h"
 #include <QDataStream>
 
 IpcClient::IpcClient() :
