@@ -90,8 +90,29 @@ cmake --build ./ --config Debug
 ```
 
 
-(Windows) Compiling with MSYS2 & MinGW
+(Windows) Compiling with Microsoft's Visual C++ environment
+===========================================================
+Requirements:
++ Visual C++ Build Tools (2013 or 2015)
+  + Visual Studio 2013 and 2015 will provide this if installed with `C++ Tools` selected
+  + There's a standalone download for the 2015 build tools [here](http://landinghub.visualstudio.com/visual-cpp-build-tools)
++ [CMake](https://cmake.org/download/)
++ [Qt 5.6, 5.7 or 5.8](https://www.qt.io/download-open-source/)
+  + [Here's what I select since I plan to only have x64 builds with Visual Studio 2015](https://imgur.com/YP6v8rE)
+
+
+
+
+(Linux / POSIX) Compiling
+=========================
+Requirements:
++ Compiler!
++ CMake!
++ Qt!
+
+(Windows) (**DOESN'T WORK**) Compiling with MSYS2 & MinGW
 ======================================
+**The `synergyd.exe` binary doesn't build (I really wanted it to but CMake and linker errors are numerous) so this is basically useless.** It had a lot of nice things going for it like one place to grab Git, CMake, Qt and a compiler.
 Requirements:
 + [MSYS2](http://www.msys2.org/)
   + HTTPS downloads on sourceforge for [32bit](https://sourceforge.net/projects/msys2/files/Base/i686/) and [64bit](https://sourceforge.net/projects/msys2/files/Base/x86_64/)
@@ -111,22 +132,7 @@ Requirements:
 10. Run `git clone --recursive https://github.com/yupi2/synergy.git`
 11. Run `cd synergy ; mkdir build ; cd build`
 13. Run `cmake -G"Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug ../`
-
-(Windows) Compiling with Microsoft's Visual C++ environment
-===========================================================
-Requirements:
-+ Visual C++ Build Tools (2013 or 2015)
-  + Visual Studio 2013 and 2015 will provide this if installed with `C++ Tools` selected
-  + There's a standalone download for the 2015 build tools [here](http://landinghub.visualstudio.com/visual-cpp-build-tools)
-+ [CMake](https://cmake.org/download/)
-+ [Qt 5.6, 5.7 or 5.8](https://www.qt.io/download-open-source/)
-  + [Here's what I select since I plan to only have x64 builds with Visual Studio 2015](https://imgur.com/YP6v8rE)
-
-
-
-
-(Linux / POSIX) Compiling
-=========================
+14. Run `cmake --build ./ -- -j4
 
 (Apple macOS) Compiling
 =======================
