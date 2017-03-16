@@ -47,7 +47,8 @@ There's a few things not listed here. Go through the commits.
 + Building on Windows should now put binaries in arch specific folders.
 + Printscreen doesn't send Alt+Printscreen to Windows clients anymore.
 + Some new icons for OSX? (TODO recheck this)
-+ EXTREMELY EXTREMELY BUGGY AND BAD MEMORY LEAK FIX FOR LINUX SERVER.
++ EXTREMELY EXTREMELY BUGGY AND BAD MEMORY LEAK FIX FOR LINUX SERVERS.
+  + Add `-D_EXP_LEAK_FIX=ON` to the CMake configuration command.
 + Building tests now uses a googletest submodule instead of including zip files.
 + Some misc pull-requests from the symless/synergy repo.
 
@@ -63,9 +64,10 @@ Building
 + [CMake 3.0 or newer](https://cmake.org/)
 + A C++11 environment
 + Qt 5.6, 5.7 or 5.8
-+ Any recent version of Git
++ Any recent version of Git in your command path
 
-Here's how I build on Linux:
+Here's how I build on Linux:<br/>
+The `-D_EXP_LEAK_FIX=ON` part might not be desired ([#2](https://github.com/yupi2/synergy/issues/2))
 ```
 mkdir build
 cd build
@@ -92,7 +94,8 @@ Requirements:
 + [Qt 5.6, 5.7 or 5.8](https://www.qt.io/download-open-source/)
   + [Here's what I select since I plan to only have x64 builds with Visual Studio 2015](https://imgur.com/YP6v8rE)
 
-
+1. Open a `Command Prompt`
+2. something
 
 
 (Linux / POSIX) Compiling
@@ -102,29 +105,6 @@ Requirements:
 + CMake!
 + Qt!
 
-(Windows) (**DOESN'T WORK**) Compiling with MSYS2 & MinGW
-======================================
-**The `synergyd.exe` binary doesn't build (I really wanted it to but CMake and linker errors are numerous) so this is basically useless.** It had a lot of nice things going for it like one place to grab Git, CMake, Qt and a compiler.
-Requirements:
-+ [MSYS2](http://www.msys2.org/)
-  + HTTPS downloads on sourceforge for [32bit](https://sourceforge.net/projects/msys2/files/Base/i686/) and [64bit](https://sourceforge.net/projects/msys2/files/Base/x86_64/)
-
-1.  Run MSYS2 installer and finish with `Run MSYS2 XXbit now`.
-2.  Run `pacman -Syu`, type `y` and press `Enter` to upgrade packages.
-3.  It will ask you to close your terminal now which you can do by clicking the window's close button and then OK.
-4.  Start Menu -> `MSYS2 XXbit` -> `MSYS2 MinGW XX-bit`
-5.  Run `pacman -Syu` again.
-6.  Run `pacman -S git mingw-w64-?????-cmake mingw-w64-?????-toolchain mingw-w64-?????-qt5
---* Replace `?????` with either `i686` or `x86_64`
-7.  Find something to do for a few minutes while everything installs.
-8.  Reopen your `MSYS2 MinGW XX-bit` terminal
-8.  Find a directory that you want to clone this repo to
---* For example I'll use `/c/code/test/synergy` which is equivalent to `C:\code\test\synergy`
-9.  Run `cd /c/code/test`
-10. Run `git clone --recursive https://github.com/yupi2/synergy.git`
-11. Run `cd synergy ; mkdir build ; cd build`
-13. Run `cmake -G"Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug ../`
-14. Run `cmake --build ./ -- -j$(nproc)
 
 (Apple macOS) Compiling
 =======================
