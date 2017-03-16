@@ -19,6 +19,6 @@ add_subdirectory(cmd)
 #add_subdirectory(micro)
 add_subdirectory(gui)
 
-if (NOT ${DISABLE_TESTS})
+if (BUILD_TESTS)
 	add_subdirectory(test)
 endif()

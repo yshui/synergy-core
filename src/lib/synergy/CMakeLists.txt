@@ -14,7 +14,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-file(GLOB headers "*.h")
 file(GLOB sources "*.cpp")
 
 # arch
@@ -26,11 +25,10 @@ elseif (UNIX)
 	file(GLOB arch_sources "unix/*.cpp")
 endif()
 
-list(APPEND sources ${arch_sources})
-list(APPEND headers ${arch_headers})
-
 if (SYNERGY_ADD_HEADERS)
+	file(GLOB headers "*.h")
 	list(APPEND sources ${headers})
+	list(APPEND sources ${arch_headers})
 endif()
 
 include_directories(
@@ -39,7 +37,7 @@ include_directories(
 	../../../ext/googletest/googletest/include
 )
 
-add_library(synergy STATIC ${sources})
+add_library(synergy STATIC ${sources} ${arch_sources})
 
 if (NOT MSVC)
 	target_link_libraries(synergy arch client ipc net base platform mt server)

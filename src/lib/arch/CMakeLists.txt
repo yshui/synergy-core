@@ -14,34 +14,28 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-file(GLOB headers "*.h")
 file(GLOB sources "*.cpp")
 
-if (SYNERGY_ADD_HEADERS)
-	list(APPEND sources ${headers})
-endif()
-
-# arch
 if (WIN32)
-	file(GLOB arch_headers "win32/*.h")
-	file(GLOB arch_sources "win32/*.cpp")
+	set(archey "win32")
 elseif (UNIX)
-	file(GLOB arch_headers "unix/*.h")
-	file(GLOB arch_sources "unix/*.cpp")
+	set(archey "unix")
 endif()
 
-list(APPEND sources ${arch_sources})
-list(APPEND headers ${arch_headers})
+file(GLOB arch_sources "${archey}/*.cpp")
 
 if (SYNERGY_ADD_HEADERS)
+	file(GLOB headers "*.h")
 	list(APPEND sources ${headers})
+	file(GLOB arch_headers "${archey}/*.h")
+	list(APPEND sources ${arch_headers})
 endif()
 
 include_directories(
 	../
 )
 
-add_library(arch STATIC ${sources})
+add_library(arch STATIC ${sources} ${arch_sources})
 
 
 if (NOT MSVC)

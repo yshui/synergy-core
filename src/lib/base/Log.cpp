@@ -221,7 +221,7 @@ Log::insert(ILogOutputter* outputter, bool alwaysAtHead)
 		m_outputters.push_front(outputter);
 	}
 
-	outputter->open(SYN_APPVERSION);
+	outputter->open(_SYN_APPVERSION);
 
 	// Issue 41
 	// don't show log unless user requests it, as some users find this

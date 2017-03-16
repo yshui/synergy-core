@@ -69,16 +69,8 @@ Here's how I build on Linux:
 ```
 mkdir build
 cd build
-cmake -DCMAKE_BUILD_TYPE=Debug ../
-cmake --build ./ -- -j4
-```
-
-On 64-bit Windows with MSYS2/MinGW-x86_64
-```
-mkdir build
-cd build
-cmake -DCMAKE_BUILD_TYPE=Debug ../
-cmake --build ./ -- -j4
+cmake -DCMAKE_BUILD_TYPE=Debug -D_EXP_LEAK_FIX=ON ../
+cmake --build ./ -- -j$(nproc)
 ```
 
 On 64-bit Windows with Visual Studio 2015 (the Community edition is free):
@@ -132,7 +124,7 @@ Requirements:
 10. Run `git clone --recursive https://github.com/yupi2/synergy.git`
 11. Run `cd synergy ; mkdir build ; cd build`
 13. Run `cmake -G"Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug ../`
-14. Run `cmake --build ./ -- -j4
+14. Run `cmake --build ./ -- -j$(nproc)
 
 (Apple macOS) Compiling
 =======================

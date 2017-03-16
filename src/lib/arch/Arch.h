@@ -2,11 +2,11 @@
  * synergy -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
- * 
+ *
  * This package is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * found in the file LICENSE that should have accompanied this file.
- * 
+ *
  * This package is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -50,7 +50,6 @@
 #	include "arch/win32/ArchSystemWindows.h"
 #	include "arch/win32/ArchTaskBarWindows.h"
 #	include "arch/win32/ArchTimeWindows.h"
-#	include "arch/win32/ArchInternetWindows.h"
 #elif SYSAPI_UNIX
 #	include "arch/unix/ArchConsoleUnix.h"
 #	include "arch/unix/ArchDaemonUnix.h"
@@ -65,7 +64,6 @@
 #	include "arch/unix/ArchSystemUnix.h"
 #	include "arch/unix/ArchTaskBarXWindows.h"
 #	include "arch/unix/ArchTimeUnix.h"
-#	include "arch/unix/ArchInternetUnix.h"
 #endif
 
 /*!
@@ -120,11 +118,8 @@ public:
 
 	static void			setInstance(Arch* s) { s_instance = s; }
 
-	ARCH_INTERNET&		internet() const { return (ARCH_INTERNET&)m_internet; }
-
 private:
 	static Arch*		s_instance;
-	ARCH_INTERNET		m_internet;
 };
 
 //! Convenience object to lock/unlock an arch mutex

@@ -38,11 +38,8 @@ elseif (UNIX)
 	file(GLOB arch_sources "XWindows*.cpp")
 endif()
 
-list(APPEND sources ${arch_sources})
-list(APPEND headers ${arch_headers})
-
 if (SYNERGY_ADD_HEADERS)
-	list(APPEND sources ${headers})
+	list(APPEND sources ${arch_headers})
 endif()
 
 include_directories(
@@ -50,6 +47,6 @@ include_directories(
 	../../lib/
 )
 
-add_executable(synergys ${sources})
+add_executable(synergys ${sources} ${arch_sources})
 target_link_libraries(synergys
 	arch base client io mt net ipc platform server synergy ${libs} ${OPENSSL_LIBS})

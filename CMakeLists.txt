@@ -15,12 +15,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Version number for Synergy
-set(SYN_VERSION_HIGH   4)
-set(SYN_VERSION_MIDDLE 2)
-set(SYN_VERSION_LOW    0)
-set(SYN_VERSION_STAGE testing)
-set(SYN_VERSION "${SYN_VERSION_HIGH}.${SYN_VERSION_MIDDLE}.${SYN_VERSION_LOW}")
-set(SYN_APPVERSION "Synergy ${SYN_VERSION}")
+set(_SYN_VERSION_HIGH   4)
+set(_SYN_VERSION_MIDDLE 2)
+set(_SYN_VERSION_LOW    0)
+set(_SYN_VERSION_STAGE testing)
+set(_SYN_VERSION "${_SYN_VERSION_HIGH}.${_SYN_VERSION_MIDDLE}.${_SYN_VERSION_LOW}")
+set(_SYN_APPVERSION "Synergy ${_SYN_VERSION}")
 
 
 cmake_minimum_required(VERSION 3.0)
@@ -75,32 +75,37 @@ ExternalProject_Add(libressl
 	INSTALL_COMMAND ""
 )
 
-option(DISABLE_GIT_REVISION "DISABLE_GIT_REVISION" 0)
-if (NOT DISABLE_GIT_REVISION)
+option(_DISABLE_GIT_REVISION "disable embedding a git revision" 0)
+if (NOT _DISABLE_GIT_REVISION)
 	execute_process(
 		COMMAND git log -1 --format=%h
 		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-		OUTPUT_VARIABLE GIT_REVISION
+		OUTPUT_VARIABLE _GIT_REVISION
 		OUTPUT_STRIP_TRAILING_WHITESPACE
 		ERROR_QUIET
 	)
 endif()
 
-if ("${GIT_REVISION}" STREQUAL "")
-	add_definitions(-DGIT_REVISION=\"00000000\")
-else()
-	add_definitions(-DGIT_REVISION=\"${GIT_REVISION}\")
+option(_EXP_LEAK_FIX "a buggy/experimental memory leak fix" OFF)
+if (_EXP_LEAK_FIX)
+	add_definitions(-D_EXP_LEAK_FIX)
 endif()
 
-add_definitions(-DSYN_VERSION_HIGH=\"${SYN_VERSION_HIGH}\")
-add_definitions(-DSYN_VERSION_MIDDLE=\"${SYN_VERSION_MIDDLE}\")
-add_definitions(-DSYN_VERSION_LOW=\"${SYN_VERSION_LOW}\")
-add_definitions(-DSYN_VERSION_STAGE=\"${SYN_VERSION_STAGE}\")
-add_definitions(-DSYN_VERSION=\"${SYN_VERSION}\")
-add_definitions(-DSYN_APPVERSION=\"${SYN_APPVERSION}\")
+if ("${_GIT_REVISION}" STREQUAL "")
+	add_definitions(-D_GIT_REVISION=\"00000000\")
+else()
+	add_definitions(-D_GIT_REVISION=\"${_GIT_REVISION}\")
+endif()
+
+add_definitions(-D_SYN_VERSION_HIGH=\"${_SYN_VERSION_HIGH}\")
+add_definitions(-D_SYN_VERSION_MIDDLE=\"${_SYN_VERSION_MIDDLE}\")
+add_definitions(-D_SYN_VERSION_LOW=\"${_SYN_VERSION_LOW}\")
+add_definitions(-D_SYN_VERSION_STAGE=\"${_SYN_VERSION_STAGE}\")
+add_definitions(-D_SYN_VERSION=\"${_SYN_VERSION}\")
+add_definitions(-D_SYN_APPVERSION=\"${_SYN_APPVERSION}\")
 
 
-option(DISABLE_TESTS "DISABLE_TESTS" 1)
+option(BUILD_TESTS "should we build those damn tests" OFF)
 
 
 # Declare libs, so we can use list in linker later. There's probably
@@ -195,14 +200,6 @@ if (UNIX)
 		list(APPEND libs pthread)
 	else()
 		message(FATAL_ERROR "Missing library: pthread")
-	endif()
-
-	# curl is used on both Linux and Mac
-	find_package(CURL)
-	if (CURL_FOUND)
-		list(APPEND libs curl)
-	else()
-		message(FATAL_ERROR "Missing library: curl")
 	endif()
 
 	if (APPLE)
@@ -421,10 +418,6 @@ if (MSVC)
 	# /O2 - get the fastest code.
 	# /Ob2 - expand inline functions (auto-inlining).
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD /O2 /Ob2")
-endif()
-
-if (CONF_CPACK)
-	message(FATAL_ERROR "CPack support has been removed.")
 endif()
 
 if (CONF_DOXYGEN)

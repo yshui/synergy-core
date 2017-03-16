@@ -38,11 +38,8 @@ elseif (UNIX)
 	file(GLOB arch_sources "XWindows*.cpp")
 endif()
 
-list(APPEND sources ${arch_sources})
-list(APPEND headers ${arch_headers})
-
 if (SYNERGY_ADD_HEADERS)
-	list(APPEND sources ${headers})
+	list(APPEND sources ${arch_headers})
 endif()
 
 include_directories(
@@ -51,9 +48,9 @@ include_directories(
 )
 
 if (WIN32)
-	add_executable(synergyp WIN32 ${sources})
+	add_executable(synergyp WIN32 ${sources} ${arch_sources})
 else()
-	add_executable(synergyp ${sources})
+	add_executable(synergyp ${sources} ${arch_sources})
 endif()
 
 target_link_libraries(synergyp

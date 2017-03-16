@@ -119,16 +119,16 @@ ServerTaskBarReceiver::getToolTip() const
 {
 	switch (m_state) {
 	case kNotRunning:
-		return (SYN_APPVERSION ": Not running");
+		return (_SYN_APPVERSION ": Not running");
 
 	case kNotWorking:
-		return (std::string(SYN_APPVERSION ": ") + m_errorMessage);
+		return (std::string(_SYN_APPVERSION ": ") + m_errorMessage);
 
 	case kNotConnected:
-		return (SYN_APPVERSION ": Waiting for clients");
+		return (_SYN_APPVERSION ": Waiting for clients");
 
 	case kConnected:
-		return (SYN_APPVERSION ": Connected");
+		return (_SYN_APPVERSION ": Connected");
 
 	default:
 		return "";

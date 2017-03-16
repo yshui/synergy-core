@@ -144,6 +144,10 @@
 // define NULL
 #include <stddef.h>
 
+#ifndef nullptr
+#	define nullptr NULL
+#endif
+
 // make assert available since we use it a lot
 #include <assert.h>
 #include <stdlib.h>

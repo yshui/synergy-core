@@ -83,7 +83,7 @@ App::version()
 		buffer,
 		"%s %s, protocol version %d.%d\n%s",
 		argsBase().m_pname,
-		SYN_VERSION,
+		_SYN_VERSION,
 		kProtocolMajorVersion,
 		kProtocolMinorVersion,
 		"Copyright (C) 2012-2016 Symless Ltd.\n"

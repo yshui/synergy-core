@@ -145,14 +145,14 @@ SocketMultiplexer::removeSocket(ISocket* socket)
 void
 SocketMultiplexer::serviceThread(void*)
 {
-#ifdef SYSAPI_WIN32
+#if !defined(_EXP_LEAK_FIX)
 	std::vector<IArchNetwork::PollEntry> pfds;
 #endif
 	IArchNetwork::PollEntry pfd;
 
 	// service the connections
 	for (;;) {
-#ifdef SYSAPI_UNIX
+#if defined(_EXP_LEAK_FIX)
 		std::vector<IArchNetwork::PollEntry> pfds;
 #endif
 		Thread::testCancel();
