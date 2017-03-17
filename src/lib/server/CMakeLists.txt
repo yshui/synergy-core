@@ -31,5 +31,5 @@ add_library(server STATIC ${sources})
 target_link_libraries(server)
 
 if (NOT MSVC)
-	target_link_libraries(server synergy)
+	target_link_libraries(server synlib)
 endif()

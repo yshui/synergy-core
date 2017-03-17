@@ -29,5 +29,5 @@ include_directories(
 add_library(client STATIC ${sources})
 
 if (NOT MSVC)
-	target_link_libraries(client synergy io)
+	target_link_libraries(client synlib io)
 endif()

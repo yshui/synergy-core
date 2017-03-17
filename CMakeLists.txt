@@ -105,7 +105,7 @@ add_definitions(-D_SYN_VERSION=\"${_SYN_VERSION}\")
 add_definitions(-D_SYN_APPVERSION=\"${_SYN_APPVERSION}\")
 
 
-option(BUILD_TESTS "should we build those damn tests" OFF)
+option(_BUILD_TESTS "should we build those damn tests" OFF)
 
 
 # Declare libs, so we can use list in linker later. There's probably
@@ -408,11 +408,10 @@ if (MSVC)
 	# TODO:	consider using /analyze to uncover potential bugs in the source code.
 
 	# /WX - warnings as errors (we have a problem with people checking in code with warnings).
-	# /FR - generate browse information (ncb files) useful for using IDE.
 	# /MP - use multi cores to compile.
 	# /D _BIND_TO_CURRENT_VCLIBS_VERSION - TODO: explain why.
 	# /D _SECURE_SCL=1 - find bugs with iterators.
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /WX /FR /MP /D_BIND_TO_CURRENT_VCLIBS_VERSION=1 /D_SECURE_SCL=1")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /WX /MP /D_BIND_TO_CURRENT_VCLIBS_VERSION=1 /D_SECURE_SCL=1")
 
 	# /MD - use multi-core libraries.
 	# /O2 - get the fastest code.

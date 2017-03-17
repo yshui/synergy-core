@@ -28,5 +28,5 @@ include_directories(
 add_library(ipc STATIC ${sources})
 
 if (NOT MSVC)
-	target_link_libraries(ipc arch base mt io net synergy)
+	target_link_libraries(ipc arch base mt io net synlib)
 endif()

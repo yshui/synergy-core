@@ -26,4 +26,4 @@ include_directories(
 )
 
 add_executable(synwinad ${sources})
-target_link_libraries(synwinad synergy arch base platform ${libs})
+target_link_libraries(synwinad synlib arch base platform ${libs})

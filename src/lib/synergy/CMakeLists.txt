@@ -37,8 +37,8 @@ include_directories(
 	../../../ext/googletest/googletest/include
 )
 
-add_library(synergy STATIC ${sources} ${arch_sources})
+add_library(synlib STATIC ${sources} ${arch_sources})
 
 if (NOT MSVC)
-	target_link_libraries(synergy arch client ipc net base platform mt server)
+	target_link_libraries(synlib arch client ipc net base platform mt server)
 endif()

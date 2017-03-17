@@ -22,6 +22,8 @@
 #include "arch/IArchMultithread.h"
 #include <deque>
 
+class EventQueueTimer { };
+
 //! In-memory event queue buffer
 /*!
 An event queue buffer provides a queue of events for an IEventQueue.
