@@ -49,10 +49,3 @@ private:
 	bool				m_queueReady;
 	EventDeque			m_queue;
 };
-
-class EventQueueTimer
-{
-public:
-	EventQueueTimer() { }
-	virtual ~EventQueueTimer() { }
-};
