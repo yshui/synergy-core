@@ -85,27 +85,54 @@ cmake --build ./ --config Debug
 
 
 (Windows) Compiling with Microsoft's Visual C++ environment
-===========================================================
+-----------------------------------------------------------
 Requirements:
 + Visual C++ Build Tools (2013 or 2015)
   + Visual Studio 2013 and 2015 will provide this if installed with `C++ Tools` selected
   + There's a standalone download for the 2015 build tools [here](http://landinghub.visualstudio.com/visual-cpp-build-tools)
 + [CMake](https://cmake.org/download/)
-+ [Qt 5.6, 5.7 or 5.8](https://www.qt.io/download-open-source/)
++ [Qt 5.6, 5.7 or 5.8](https://www.qt.io/download-open-source/) in your %Path% environment variable.
+  + Example %Path% addition: `;C:\Qt\5.8\msvc2015_64\bin`
   + [Here's what I select since I plan to only have x64 builds with Visual Studio 2015](https://imgur.com/YP6v8rE)
 
+Notes:
++ You'll need to create a server to run `synergyd.exe` nicely. Here's something to put into an elevated (admin) command prompt to create a service (you'll need to correct the path to your binary location:
+  + `sc create Synergy type= own start= auto error= ignore obj= LocalSystem DisplayName= "Synergy Daemon" binPath= "C:\code\synergy\build\bin\x64\Debug\synergyd.exe"`
+      + It might not start after creation so you'll need to do `sc start Synergy`. It will auto-start on boot though.
+    + Also when `synergyd.exe` crashes you can restart the Service with `sc stop Synergy` then `sc start Synergy`
+
 1. Open a `Command Prompt`
-2. something
+2. `cd C:\code`
+3. `git clone --recursive https://github.com/yupi2/synergy.git`
+4. `cd synergy`
+5. `mkdir build`
+6. `cd build`
+7. `cmake -DCMAKE_BUILD_TYPE=Debug -G"Visual Studio 14 2015 Win64" ../`
+8. `cmake --build ./ --config Debug`
+9. And then look above to see what do to make a service for `synergyd.exe` if you intend to run Synergy on this computer as a client.
 
 
 (Linux / POSIX) Compiling
-=========================
+-------------------------
 Requirements:
 + Compiler!
 + CMake!
 + Qt!
+  + Also you'll need the Qt5 Linguist Tools which might be `qttools5-dev-tools` or `qt5-tools`.
++ X11!
+  + X11/Xorg dev packages along with something like `libXtst-devel`.
+
+1. Open terminal.
+2. `cd ~/code`
+3. `git clone --recursive https://github.com/yupi2/synergy.git`
+4. `cd synergy ; mkdir build ; cd build`
+5. `cmake -DCMAKE_BUILD_TYPE=Debug ../`
+6. `cmake --build ./ -- -j$(nproc)`
+7. `ls bin/Release`
+
+If you have memory leaks with Synergy then you can add a flag to the CMake configure step (`cmake -DCMAKE_BUILD_TYPE=Debug -D_EXP_LEAK_FIX=ON ../`) and it might solve it.
 
 
 (Apple macOS) Compiling
-=======================
+-----------------------
 TODO
