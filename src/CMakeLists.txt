@@ -19,6 +19,6 @@ add_subdirectory(cmd)
 #add_subdirectory(micro)
 add_subdirectory(gui)
 
-if (_BUILD_TESTS)
+if (_TESTS)
 	add_subdirectory(test)
 endif()

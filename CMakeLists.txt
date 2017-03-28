@@ -86,15 +86,15 @@ if (NOT _DISABLE_GIT_REVISION)
 	)
 endif()
 
-option(_EXP_LEAK_FIX "a buggy/experimental memory leak fix" OFF)
-if (_EXP_LEAK_FIX)
-	add_definitions(-D_EXP_LEAK_FIX)
-endif()
-
 if ("${_GIT_REVISION}" STREQUAL "")
 	add_definitions(-D_GIT_REVISION=\"00000000\")
 else()
 	add_definitions(-D_GIT_REVISION=\"${_GIT_REVISION}\")
+endif()
+
+option(_EXP_LEAK_FIX "a buggy/experimental memory leak fix" OFF)
+if (_EXP_LEAK_FIX)
+	add_definitions(-D_EXP_LEAK_FIX)
 endif()
 
 add_definitions(-D_SYN_VERSION_HIGH=\"${_SYN_VERSION_HIGH}\")
@@ -105,7 +105,10 @@ add_definitions(-D_SYN_VERSION=\"${_SYN_VERSION}\")
 add_definitions(-D_SYN_APPVERSION=\"${_SYN_APPVERSION}\")
 
 
-option(_BUILD_TESTS "should we build those damn tests" OFF)
+option(_TESTS "should we build those damn tests" OFF)
+if (_TESTS)
+	add_definitions(-D_TESTS)
+endif()
 
 
 # Declare libs, so we can use list in linker later. There's probably

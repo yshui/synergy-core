@@ -24,7 +24,9 @@
 #include <set>
 #include <vector>
 
+#ifdef _TESTS
 #include <gtest/gtest_prod.h>
+#endif
 
 namespace synergy {
 
@@ -326,6 +328,7 @@ public:
 
 	//@}
 
+#ifdef _TESTS
 private:
 	FRIEND_TEST(KeyMapTests,
 				findBestKey_requiredDown_matchExactFirstItem);
@@ -340,6 +343,7 @@ private:
 	FRIEND_TEST(KeyMapTests,
 				findBestKey_onlyOneRequiredDown_matchTwoRequiredChangesItem);
 	FRIEND_TEST(KeyMapTests, findBestKey_noRequiredDown_cannotMatch);
+#endif
 
 private:
 	//! Ways to synthesize a key
