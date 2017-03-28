@@ -217,7 +217,6 @@ SecureSocket::doWrite()
 		status = secureWrite(s_staticBuffer, bufferSize, bytesWrote);
 		if (status > 0) {
 			s_retry = false;
-			bufferSize = 0;
 			free(s_staticBuffer);
 			s_staticBuffer = NULL;
 		}
