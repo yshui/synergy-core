@@ -64,15 +64,17 @@ if (NOT EXISTS ${_LIBRESSL_PATH})
 	set(_LIBRESSL_PATH ${root_dir}/ext/${_LIBRESSL_VERSION})
 
 	if (NOT EXISTS ${_LIBRESSL_PATH})
-		message(STATUS "Downloading ${_LIBRESSL_VERSION}.tar.gz ...")
-		file(
-			DOWNLOAD
-			https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/${_LIBRESSL_VERSION}.tar.gz
-			${_LIBRESSL_PATH}.tar.gz
-			SHOW_PROGRESS
-			EXPECTED_HASH SHA256=14e34cc586ec4ce5763f76046dcf366c45104b2cc71d77b63be5505608e68a30
-			TLS_VERIFY on
-		)
+		if (NOT EXISTS ${_LIBRESSL_PATH}.tar.gz)
+			message(STATUS "Downloading ${_LIBRESSL_VERSION}.tar.gz ...")
+			file(
+				DOWNLOAD
+				https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/${_LIBRESSL_VERSION}.tar.gz
+				${_LIBRESSL_PATH}.tar.gz
+				SHOW_PROGRESS
+				EXPECTED_HASH SHA256=14e34cc586ec4ce5763f76046dcf366c45104b2cc71d77b63be5505608e68a30
+				TLS_VERIFY on
+			)
+		endif()
 		execute_process(
 			COMMAND ${CMAKE_COMMAND} -E tar x ${_LIBRESSL_PATH}.tar.gz
 			WORKING_DIRECTORY ${root_dir}/ext
