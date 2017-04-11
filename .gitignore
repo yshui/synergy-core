@@ -11,7 +11,7 @@ build*
 Debug
 Release
 CMakeFiles
-ext/libressl*/
+ext/libressl-*
 Makefile*
 src/gui/gui.pro.user*
 src/gui/.qmake.stash

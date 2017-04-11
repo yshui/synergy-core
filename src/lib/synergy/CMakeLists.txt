@@ -34,8 +34,11 @@ endif()
 include_directories(
 	../
 	../../../ext
-	../../../ext/googletest/googletest/include
 )
+
+if (_TESTS)
+	include_directories(../../../ext/googletest/googletest/include)
+endif()
 
 add_library(synlib STATIC ${sources} ${arch_sources})
 

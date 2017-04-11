@@ -47,31 +47,44 @@ set(bin_dir ${root_dir}/bin)
 set(doc_dir ${root_dir}/doc)
 set(res_dir ${root_dir}/res)
 
-set(libressl_path ${root_dir}/ext/libressl-2.5.1)
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
+set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 
 if (MSVC)
-	set(EXECUTABLE_OUTPUT_PATH ${root_dir}/build/bin/${CMAKE_VS_PLATFORM_NAME})
+	set(EXECUTABLE_OUTPUT_PATH ${EXECUTABLE_OUTPUT_PATH}/${CMAKE_VS_PLATFORM_NAME})
 	# the CMAKE_RUNTIME_OUTPUT_DIRECTORY is for .dlls like synwinhk.dll
-	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${root_dir}/build/bin/${CMAKE_VS_PLATFORM_NAME})
-	set(LIBRARY_OUTPUT_PATH ${root_dir}/build/lib/${CMAKE_VS_PLATFORM_NAME})
-else()
-	set(EXECUTABLE_OUTPUT_PATH ${root_dir}/build/bin/${CMAKE_BUILD_TYPE})
-	set(LIBRARY_OUTPUT_PATH ${root_dir}/build/lib/${CMAKE_BUILD_TYPE})
+	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${EXECUTABLE_OUTPUT_PATH})
+	set(LIBRARY_OUTPUT_PATH ${LIBRARY_OUTPUT_PATH}/${CMAKE_VS_PLATFORM_NAME})
 endif()
 
+# Allow user-defined path to libressl
+if (NOT EXISTS ${_LIBRESSL_PATH})
+	# other-wise use an in-tree libressl tarball
+	set(_LIBRESSL_VERSION libressl-2.5.3)
+	set(_LIBRESSL_PATH ${root_dir}/ext/${_LIBRESSL_VERSION})
 
-if (NOT EXISTS ${libressl_path})
-	execute_process(
-		COMMAND ${CMAKE_COMMAND} -E tar x ${libressl_path}.tar.gz
-		WORKING_DIRECTORY ${root_dir}/ext
-	)
+	if (NOT EXISTS ${_LIBRESSL_PATH})
+		message(STATUS "Downloading ${_LIBRESSL_VERSION}.tar.gz ...")
+		file(
+			DOWNLOAD
+			https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/${_LIBRESSL_VERSION}.tar.gz
+			${_LIBRESSL_PATH}.tar.gz
+			SHOW_PROGRESS
+			EXPECTED_HASH SHA256=14e34cc586ec4ce5763f76046dcf366c45104b2cc71d77b63be5505608e68a30
+			TLS_VERIFY on
+		)
+		execute_process(
+			COMMAND ${CMAKE_COMMAND} -E tar x ${_LIBRESSL_PATH}.tar.gz
+			WORKING_DIRECTORY ${root_dir}/ext
+		)
+	endif()
 endif()
 
 include(ExternalProject)
 set_property(DIRECTORY PROPERTY EP_STEP_TARGETS configure build test)
 ExternalProject_Add(libressl
 	PREFIX libressl
-	SOURCE_DIR ${libressl_path}
+	SOURCE_DIR ${_LIBRESSL_PATH}
 	INSTALL_COMMAND ""
 )
 
@@ -367,8 +380,8 @@ endif()
 #	set(OPENSSL_LIBS ssl crypto)
 #endif()
 
-set(OPENSSL_BUILD_DIR ${root_dir}/build/libressl/src/libressl-build)
-set(OPENSSL_INCLUDE ${libressl_path}/include)
+set(OPENSSL_BUILD_DIR ${CMAKE_BINARY_DIR}/libressl/src/libressl-build)
+set(OPENSSL_INCLUDE ${_LIBRESSL_PATH}/include)
 
 if (MSVC)
 	set(OPENSSL_LIBS
@@ -378,7 +391,7 @@ if (MSVC)
 	set(OPENSSL_EXE ${OPENSSL_BUILD_DIR}/apps/openssl/${CMAKE_BUILD_TYPE}/openssl.exe)
 	set(OPENSSL_OUT_EXE ${EXECUTABLE_OUTPUT_PATH}/${CMAKE_BUILD_TYPE}/synopenssl.exe)
 else()
-	# todo: fix up the lib suffix for mingw here too
+	# mingw (msys2) uses .a lib suffixes too i believe
 	set(OPENSSL_LIBS
 		${OPENSSL_BUILD_DIR}/ssl/libssl.a
 		${OPENSSL_BUILD_DIR}/crypto/libcrypto.a
@@ -392,6 +405,7 @@ add_custom_command(TARGET libressl
 	POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy ${OPENSSL_EXE} ${OPENSSL_OUT_EXE}
 )
+
 
 if (MSVC)
 	configure_file(
@@ -410,6 +424,7 @@ add_subdirectory(src)
 if (MSVC)
 	# TODO:	consider using /analyze to uncover potential bugs in the source code.
 
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /MP")
 	# /WX - warnings as errors (we have a problem with people checking in code with warnings).
 	# /MP - use multi cores to compile.
 	# /D _BIND_TO_CURRENT_VCLIBS_VERSION - TODO: explain why.
@@ -423,10 +438,8 @@ if (MSVC)
 endif()
 
 if (CONF_DOXYGEN)
-
 	set(VERSION, "${VERSION}")
 
 	# For doxygen.cfg, save the results based on a template (doxygen.cfg.in).
 	configure_file(${res_dir}/doxygen.cfg.in ${doc_dir}/doxygen.cfg)
-
 endif()
