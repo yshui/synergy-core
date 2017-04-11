@@ -61,19 +61,31 @@ endif()
 if (NOT EXISTS ${_LIBRESSL_PATH})
 	# other-wise use an in-tree libressl tarball
 	set(_LIBRESSL_VERSION libressl-2.5.3)
+	set(_LIBRESSL_SHA256 14e34cc586ec4ce5763f76046dcf366c45104b2cc71d77b63be5505608e68a30)
 	set(_LIBRESSL_PATH ${root_dir}/ext/${_LIBRESSL_VERSION})
+	if (WIN32)
+		# cmake on windows doesn't support SSL/TLS ??????
+		set(prot http)
+	else()
+		set(prot https)
+	endif()
+	set(
+		_LIBRESSL_URL
+		${prot}://ftp.openbsd.org/pub/OpenBSD/LibreSSL/${_LIBRESSL_VERSION}.tar.gz
+	)
 
 	if (NOT EXISTS ${_LIBRESSL_PATH})
 		if (NOT EXISTS ${_LIBRESSL_PATH}.tar.gz)
-			message(STATUS "Downloading ${_LIBRESSL_VERSION}.tar.gz ...")
+			message(STATUS "Downloading ${_LIBRESSL_URL} ...")
 			file(
 				DOWNLOAD
-				https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/${_LIBRESSL_VERSION}.tar.gz
+				${_LIBRESSL_URL}
 				${_LIBRESSL_PATH}.tar.gz
 				SHOW_PROGRESS
-				EXPECTED_HASH SHA256=14e34cc586ec4ce5763f76046dcf366c45104b2cc71d77b63be5505608e68a30
-				TLS_VERIFY on
+				EXPECTED_HASH SHA256=${_LIBRESSL_SHA256}
 			)
+				#TLS_VERIFY on
+			#)
 		endif()
 		execute_process(
 			COMMAND ${CMAKE_COMMAND} -E tar x ${_LIBRESSL_PATH}.tar.gz
