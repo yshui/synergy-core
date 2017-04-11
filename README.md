@@ -41,6 +41,7 @@ There's a few things not listed here. Go through the commits.
 + Switch from using `hm` as helper script catchall to purely CMake.
 + Removed Python requirement (by deprecation of `hm`).
 + OpenSSL replaced with LibreSSL tarball (building as an external CMake project is easy).
+  + Tarball is now downloaded from LibreSSL website (2017-04-11).
   + OpenSSL could probably be used on Linux/everything-else instead but that can be done again in the future.
   + Generating certificates now uses 4096 bits for RSA instead of 1024 but it doesn't really matter.
 + Auto-generating translations (through CMake).
