@@ -32,6 +32,9 @@ add_executable (synergygui WIN32
 
 add_dependencies(synergygui libressl)
 target_link_libraries(synergygui ${OPENSSL_LIBCRYPTO})
+if (WIN32)
+	target_link_libraries(synergygui Ws2_32)
+endif()
 
 include_directories (
 	./src
