@@ -23,6 +23,12 @@
 #include <QDir>
 #include <QCoreApplication>
 
+#include <openssl/x509.h>
+#include <openssl/evp.h>
+#include <openssl/rsa.h>
+#include <openssl/pem.h>
+#include <openssl/bio.h>
+
 static const char kCertificateSubjectInfo[] = "/CN=Synergy4rk";
 static const char kCertificateFilename[] = "Synergy.pem";
 static const char kSslDir[] = "SSL";
@@ -35,8 +41,6 @@ static const char kOpenSslCommand[] = "openssl";//"./synopenssl";
 static const char kConfigFile[] = "synopenssl.cnf";
 #endif
 
-
-
 SslCertificate::SslCertificate(QObject *parent) :
 	QObject(parent)
 {
@@ -46,54 +50,121 @@ SslCertificate::SslCertificate(QObject *parent) :
 	}
 }
 
-bool SslCertificate::runTool(const QStringList& args)
+// https://stackoverflow.com/a/16393292
+X509 *CreateCertificate (
+	//const unsigned char *Country,
+	//const unsigned char *OrganizationName,
+	const unsigned char *CommonName,
+	int Serial,
+	int DaysValid,
+	EVP_PKEY **out_key)
 {
-	QString program;
-#if 1 || defined(Q_OS_WIN)
-	program = QCoreApplication::applicationDirPath();
-	program.append('\\').append(kOpenSslCommand);
-#else
-	program = kOpenSslCommand;
-#endif
+	X509 *Cert = NULL;
+	EVP_PKEY *PrivateKey = NULL;
+	X509_NAME *Name = NULL;
+	RSA *KeyPair = NULL;
+	BIGNUM *BigNumber = NULL;
+	int Success = 0;
 
+	// Faux loop...
+	do {
+		// Create the certificate object
+		Cert = X509_new();
+		if (!Cert)
+			break;
 
-	QStringList environment;
-#if 1 || defined(Q_OS_WIN)
-	environment << QString("OPENSSL_CONF=%1%2%3")
-		.arg(QCoreApplication::applicationDirPath())
-		.arg(QDir::separator())
-		.arg(kConfigFile);
-#endif
+		// Set version 2, and get version 3
+		X509_set_version (Cert, 2);
 
-	QProcess process;
-	process.setEnvironment(environment);
-	process.start(program, args);
+		// Set the certificate's properties
+		ASN1_INTEGER_set (X509_get_serialNumber (Cert), Serial);
+		X509_gmtime_adj (X509_get_notBefore (Cert), 0);
+		X509_gmtime_adj (X509_get_notAfter (Cert), (long)(60 * 60 * 24 * (DaysValid ? DaysValid : 1)));
+		Name = X509_get_subject_name (Cert);
+		//if (Country && *Country)
+		//	X509_NAME_add_entry_by_txt (Name, "C", MBSTRING_ASC, Country, -1, -1, 0);
+		if (CommonName && *CommonName)
+			X509_NAME_add_entry_by_txt (Name, "CN", MBSTRING_ASC, CommonName, -1, -1, 0);
+		//if (OrganizationName && *OrganizationName)
+		//	X509_NAME_add_entry_by_txt (Name, "O", MBSTRING_ASC, OrganizationName, -1, -1, 0);
+		X509_set_issuer_name (Cert, Name);
 
-	bool success = process.waitForStarted();
+		// Create the RSA key pair object
+		KeyPair = RSA_new();
+		if (!KeyPair)
+			break;
 
-	QString standardError;
-	if (success && process.waitForFinished())
+		// Create the big number object
+		BigNumber = BN_new();
+		if (!BigNumber)
+			break;
+
+		// Set the word
+		if (!BN_set_word (BigNumber, RSA_F4))
+			break;
+
+		// Generate the key pair; lots of computes here
+		if (!RSA_generate_key_ex (KeyPair, 4096, BigNumber, NULL))
+			break;
+
+		// Now we need a private key object
+		PrivateKey = EVP_PKEY_new();
+		if (!PrivateKey)
+			break;
+
+		// Assign the key pair to the private key object
+		if (!EVP_PKEY_assign_RSA (PrivateKey, KeyPair))
+			break;
+
+		// KeyPair now belongs to PrivateKey, so don't clean it up separately
+		KeyPair = NULL;
+
+		// Set the certificate's public key from the private key object
+		if (!X509_set_pubkey (Cert, PrivateKey))
+			break;
+
+		// Sign it with SHA-1
+		int x = X509_sign (Cert, PrivateKey, EVP_sha1());
+
+		if (x != 0) {
+			// but we also want this to do things with because I don't know how to
+			// use libcrypto at all
+			*out_key = PrivateKey;
+			Success = 1;
+		}
+
+		// PrivateKey now belongs to Cert, so don't clean it up separately
+		PrivateKey = NULL;
+
+	} while (0);
+
+	// Things we always clean up
+	if (BigNumber)
+		BN_free (BigNumber);
+	if (PrivateKey)
+		EVP_PKEY_free (PrivateKey);
+
+	// Things we clean up only on failure
+	if (!Success)
 	{
-		m_ToolOutput = process.readAllStandardOutput().trimmed();
-		standardError = process.readAllStandardError().trimmed();
+		if (Cert)
+			X509_free (Cert);
+		if (PrivateKey)
+			EVP_PKEY_free (PrivateKey);
+		if (KeyPair)
+			RSA_free (KeyPair);
+		Cert = NULL;
 	}
 
-	int code = process.exitCode();
-	if (!success || code != 0)
-	{
-		emit error(
-			QString("SSL tool failed: %1\n\nCode: %2\nError: %3")
-				.arg(program)
-				.arg(process.exitCode())
-				.arg(standardError.isEmpty() ? "Unknown" : standardError));
-		return false;
-	}
-
-	return true;
+	// Return the certificate (or NULL)
+	return (Cert);
 }
 
 void SslCertificate::generateCertificate()
 {
+	X509 *Cert = NULL;
+	BIO *synergy_pem = NULL;
+
 	QString sslDirPath = QString("%1%2%3")
 		.arg(m_ConfigDir)
 		.arg(QDir::separator())
@@ -104,8 +175,62 @@ void SslCertificate::generateCertificate()
 		.arg(QDir::separator())
 		.arg(kCertificateFilename);
 
-	QFile file(filename);
-	if (!file.exists()) {
+	//QFile file(filename);
+	if (QFile(filename).exists())
+		return;
+
+	do {
+		QDir sslDir(sslDirPath);
+		if (!sslDir.exists()) {
+			sslDir.mkpath(".");
+		}
+
+		EVP_PKEY *PrivateKey = NULL;
+
+		Cert = CreateCertificate(
+		//	NULL, // country
+		//	NULL, // org
+			(const unsigned char * const)"Synergy4rk", // common-name
+			1, // serial number
+			365, // days valid,
+			&PrivateKey
+		);
+
+		// previous ssl-gen didn't check if file was made
+		// i guess it's not too important
+		if (Cert == NULL)
+			break;
+
+		// BIO routines uses utf-8 on windows and we'll assume everything
+		// non-windows uses utf-8 too
+		synergy_pem = BIO_new_file(filename.toUtf8().constData(), "w+");
+
+		// uh oh file failed to open
+		if (synergy_pem == NULL)
+			break;
+
+		// TODO FIXME XXX -- PEM_write_bio_PKCS8PrivateKey
+		if (PEM_write_bio_PrivateKey(synergy_pem, PrivateKey, NULL,
+			NULL, 0, NULL, NULL) != 1)
+			break; // ugh
+
+		// write the file out now please
+		if (PEM_write_bio_X509(synergy_pem, Cert) != 1)
+			break; // damn once again i guess
+
+		generateFingerprint(Cert);
+
+		if (BIO_flush(synergy_pem) != 1)
+			break; // that's a shame
+
+		if (BIO_free(synergy_pem) != 1)
+			break; // wow really unlucky with these errors
+
+		synergy_pem = NULL;
+
+		emit info(tr("SSL certificate generated."));
+
+#if 0
 		QStringList arguments;
 
 		// self signed certificate
@@ -119,18 +244,12 @@ void SslCertificate::generateCertificate()
 
 		// subject information
 		arguments.append("-subj");
-
 		QString subInfo(kCertificateSubjectInfo);
 		arguments.append(subInfo);
 
 		// private key
 		arguments.append("-newkey");
 		arguments.append("rsa:4096");
-
-		QDir sslDir(sslDirPath);
-		if (!sslDir.exists()) {
-			sslDir.mkpath(".");
-		}
 
 		// key output filename
 		arguments.append("-keyout");
@@ -139,44 +258,39 @@ void SslCertificate::generateCertificate()
 		// certificate output filename
 		arguments.append("-out");
 		arguments.append(filename);
+#endif
+	} while (0);
 
-		if (!runTool(arguments)) {
-			return;
-		}
+	if (synergy_pem)
+		BIO_free(synergy_pem);
 
-		emit info(tr("SSL certificate generated."));
-	}
-
-	generateFingerprint(filename);
-
-	emit generateFinished();
+	if (Cert)
+		X509_free(Cert);
 }
 
-void SslCertificate::generateFingerprint(const QString& certificateFilename)
+void SslCertificate::generateFingerprint(X509 *data)
 {
-	QStringList arguments;
-	arguments.append("x509");
-	arguments.append("-fingerprint");
-	arguments.append("-sha1");
-	arguments.append("-noout");
-	arguments.append("-in");
-	arguments.append(certificateFilename);
+	unsigned int len = 0;
+	unsigned char hash[EVP_MAX_MD_SIZE] = {};
+	const EVP_MD *digest = EVP_get_digestbyname("sha1");
 
-	if (!runTool(arguments)) {
+	int success = X509_digest(data, digest, hash, &len);
+
+	// 160-bit hashes for sha1
+	if (success != 1 || len != 20) {
+		emit error(tr("Failed to find SSL fingerprint."));
 		return;
 	}
 
-	// find the fingerprint from the tool output
-	int i = m_ToolOutput.indexOf("=");
-	if (i != -1) {
-		i++;
-		QString fingerprint = m_ToolOutput.mid(
-			i, m_ToolOutput.size() - i);
+	QString fingerprint = "";
 
-		Fingerprint::local().trust(fingerprint, false);
-		emit info(tr("SSL fingerprint generated."));
+	for (int i = 0; i < 20; i++) {
+		fingerprint += QString("%1").arg(hash[i], 2, 16, QLatin1Char('0')).toUpper();
+		if (i != 19) {
+			fingerprint += ':';
+		}
 	}
-	else {
-		emit error(tr("Failed to find SSL fingerprint."));
-	}
+
+	Fingerprint::local().trust(fingerprint, false);
+	emit info(tr("SSL fingerprint generated."));
 }

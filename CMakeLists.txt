@@ -393,39 +393,12 @@ set(OPENSSL_BUILD_DIR ${CMAKE_BINARY_DIR}/libressl/src/libressl-build)
 set(OPENSSL_INCLUDE ${_LIBRESSL_PATH}/include)
 
 if (MSVC)
-	set(OPENSSL_LIBS
-		${OPENSSL_BUILD_DIR}/ssl/${CMAKE_BUILD_TYPE}/ssl.lib
-		${OPENSSL_BUILD_DIR}/crypto/${CMAKE_BUILD_TYPE}/crypto.lib
-	)
-	set(OPENSSL_EXE ${OPENSSL_BUILD_DIR}/apps/openssl/${CMAKE_BUILD_TYPE}/openssl.exe)
-	set(OPENSSL_OUT_EXE ${EXECUTABLE_OUTPUT_PATH}/${CMAKE_BUILD_TYPE}/synopenssl.exe)
+	set(OPENSSL_LIBSSL ${OPENSSL_BUILD_DIR}/ssl/${CMAKE_BUILD_TYPE}/ssl.lib)
+	set(OPENSSL_LIBCRYPTO ${OPENSSL_BUILD_DIR}/crypto/${CMAKE_BUILD_TYPE}/crypto.lib)
 else()
 	# mingw (msys2) uses .a lib suffixes too i believe
-	set(OPENSSL_LIBS
-		${OPENSSL_BUILD_DIR}/ssl/libssl.a
-		${OPENSSL_BUILD_DIR}/crypto/libcrypto.a
-	)
-	# keep ${CMAKE_EXECUTABLE_SUFFIX} because mingw might use it
-	set(OPENSSL_EXE ${OPENSSL_BUILD_DIR}/apps/openssl/openssl${CMAKE_EXECUTABLE_SUFFIX})
-	set(OPENSSL_OUT_EXE ${EXECUTABLE_OUTPUT_PATH}/synopenssl${CMAKE_EXECUTABLE_SUFFIX})
-endif()
-
-add_custom_command(TARGET libressl
-	POST_BUILD
-	COMMAND ${CMAKE_COMMAND} -E copy ${OPENSSL_EXE} ${OPENSSL_OUT_EXE}
-)
-
-
-if (MSVC)
-	configure_file(
-		${root_dir}/res/synopenssl.cnf
-		${EXECUTABLE_OUTPUT_PATH}/${CMAKE_BUILD_TYPE}/synopenssl.cnf
-	)
-else()
-	configure_file(
-		${root_dir}/res/synopenssl.cnf
-		${EXECUTABLE_OUTPUT_PATH}/synopenssl.cnf
-	)
+	set(OPENSSL_LIBSSL ${OPENSSL_BUILD_DIR}/ssl/libssl.a)
+	set(OPENSSL_LIBCRYPTO ${OPENSSL_BUILD_DIR}/crypto/libcrypto.a)
 endif()
 
 add_subdirectory(src)

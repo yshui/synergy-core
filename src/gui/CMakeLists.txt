@@ -29,9 +29,14 @@ add_executable (synergygui WIN32
 	res/Synergy.qrc
 )
 
+
+add_dependencies(synergygui libressl)
+target_link_libraries(synergygui ${OPENSSL_LIBCRYPTO})
+
 include_directories (
 	./src
 	../lib
+	${OPENSSL_INCLUDE}
 )
 
 qt5_use_modules (synergygui Widgets Network)

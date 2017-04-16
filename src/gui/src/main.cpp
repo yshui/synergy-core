@@ -32,8 +32,9 @@
 
 #if defined(Q_OS_MAC)
 #include <Carbon/Carbon.h>
-
 #endif
+
+#include <openssl/evp.h>
 
 class QThreadImpl : public QThread
 {
@@ -52,6 +53,8 @@ bool checkMacAssistiveDevices();
 
 int main(int argc, char* argv[])
 {
+	OpenSSL_add_all_algorithms();
+
 	QCoreApplication::setOrganizationName("Synergy");
 	QCoreApplication::setOrganizationDomain("http://symless.com/");
 	QCoreApplication::setApplicationName("Synergy");

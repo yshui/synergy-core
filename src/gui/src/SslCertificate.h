@@ -19,6 +19,12 @@
 
 #include <QObject>
 
+#include <openssl/x509.h>
+#include <openssl/evp.h>
+#include <openssl/rsa.h>
+#include <openssl/pem.h>
+#include <openssl/bio.h>
+
 class SslCertificate : public QObject
 {
 Q_OBJECT
@@ -32,13 +38,10 @@ public slots:
 signals:
 	void error(QString e);
 	void info(QString i);
-	void generateFinished();
 
 private:
-	bool runTool(const QStringList& args);
-	void generateFingerprint(const QString& certificateFilename);
+	void generateFingerprint(X509 *data);
 
 private:
 	QString m_ConfigDir;
-	QString m_ToolOutput;
 };
