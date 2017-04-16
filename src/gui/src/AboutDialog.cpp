@@ -28,8 +28,8 @@ AboutDialog::AboutDialog(QWidget* parent, const QString& synergyApp) :
 	setupUi(this);
 
 	m_versionChecker.setApp(synergyApp);
-	QString version = _SYN_VERSION;
-	version = version + '-' + _SYN_VERSION_STAGE +  '-' + _GIT_REVISION;
+	QString version =
+		_SYN_VERSION "-" _SYN_VERSION_STAGE "-" _GIT_REVISION;
 	m_pLabelSynergyVersion->setText(version);
 
 	QString buildDateString = QString::fromLocal8Bit(__DATE__).simplified();

@@ -14,19 +14,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Version number for Synergy
-set(_SYN_VERSION_HIGH   4)
-set(_SYN_VERSION_MIDDLE 2)
-set(_SYN_VERSION_LOW    0)
-set(_SYN_VERSION_STAGE testing)
-set(_SYN_VERSION "${_SYN_VERSION_HIGH}.${_SYN_VERSION_MIDDLE}.${_SYN_VERSION_LOW}")
-set(_SYN_APPVERSION "Synergy ${_SYN_VERSION}")
-
-
 cmake_minimum_required(VERSION 3.0)
 
 # First, declare project (important for prerequisite checks).
-project(synergy C CXX)
+project(synergy
+	LANGUAGES C CXX
+	VERSION 4.2.0)
+
+set(_SYN_VERSION_STAGE testing)
+set(_SYN_APPVERSION "Synergy ${PROJECT_VERSION}")
 
 # We're escaping quotes in the Windows version number, because
 # for some reason CMake won't do it at config version 2.4.7
@@ -112,7 +108,6 @@ if (NOT _DISABLE_GIT_REVISION)
 		ERROR_QUIET
 	)
 endif()
-
 if ("${_GIT_REVISION}" STREQUAL "")
 	add_definitions(-D_GIT_REVISION=\"00000000\")
 else()
@@ -124,11 +119,11 @@ if (_EXP_LEAK_FIX)
 	add_definitions(-D_EXP_LEAK_FIX)
 endif()
 
-add_definitions(-D_SYN_VERSION_HIGH=\"${_SYN_VERSION_HIGH}\")
-add_definitions(-D_SYN_VERSION_MIDDLE=\"${_SYN_VERSION_MIDDLE}\")
-add_definitions(-D_SYN_VERSION_LOW=\"${_SYN_VERSION_LOW}\")
+#add_definitions(-D_SYN_VERSION_HIGH=\"${PROJECT_VERSION_MAJOR}\")
+#add_definitions(-D_SYN_VERSION_MIDDLE=\"${PROJECT_VERSION_MINOR}\")
+#add_definitions(-D_SYN_VERSION_LOW=\"${_SYN_VERSION_PATCH}\")
 add_definitions(-D_SYN_VERSION_STAGE=\"${_SYN_VERSION_STAGE}\")
-add_definitions(-D_SYN_VERSION=\"${_SYN_VERSION}\")
+add_definitions(-D_SYN_VERSION=\"${PROJECT_VERSION}\")
 add_definitions(-D_SYN_APPVERSION=\"${_SYN_APPVERSION}\")
 
 
