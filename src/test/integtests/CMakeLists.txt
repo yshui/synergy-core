@@ -60,12 +60,6 @@ include_directories(
 	../../../ext/googletest/googlemock/include
 )
 
-if (UNIX)
-	include_directories(
-		../../..
-	)
-endif()
-
 add_executable(integtests ${sources})
 target_link_libraries(integtests
-	arch base client io ipc mt net platform server synlib gtest gmock ${libs} ${OPENSSL_LIBS})
+	arch base client io ipc mt net platform server synlib gtest gmock ${libs} ${OPENSSL_BOTH_LIBS})

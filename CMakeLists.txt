@@ -401,6 +401,11 @@ else()
 	set(OPENSSL_LIBCRYPTO ${OPENSSL_BUILD_DIR}/crypto/libcrypto.a)
 endif()
 
+set(OPENSSL_BOTH_LIBS
+	${OPENSSL_LIBSSL}
+	${OPENSSL_LIBCRYPTO}
+)
+
 add_subdirectory(src)
 
 if (MSVC)

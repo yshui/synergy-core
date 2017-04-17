@@ -29,4 +29,4 @@ include_directories(
 add_library(net STATIC ${sources})
 add_dependencies(net libressl)
 
-target_link_libraries(net mt io ${OPENSSL_LIBSSL} ${OPENSSL_LIBCRYPTO})
+target_link_libraries(net mt io ${OPENSSL_BOTH_LIBS})

@@ -54,4 +54,4 @@ else()
 endif()
 
 target_link_libraries(synergyp
-	arch base client io mt net ipc platform server synlib client ${libs} ${OPENSSL_LIBS})
+	arch base client io mt net ipc platform server synlib client ${libs} ${OPENSSL_BOTH_LIBS})

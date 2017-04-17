@@ -56,16 +56,10 @@ include_directories(
 	../../../ext
 )
 
-if (UNIX)
-	include_directories(
-		../../..
-	)
-endif()
-
 if (SYNERGY_ADD_HEADERS)
 	list(APPEND sources ${headers})
 endif()
 
 add_executable(unittests ${sources})
 target_link_libraries(unittests
-	arch base client server io net platform server synlib mt ipc gtest gmock ${libs} ${OPENSSL_LIBS})
+	arch base client server io net platform server synlib mt ipc gtest gmock ${libs} ${OPENSSL_BOTH_LIBS})
