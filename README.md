@@ -9,14 +9,15 @@ The `master` branch will be considered the "stable" branch. I use the `activey` 
 
 **IMPORTANT:** I don't have an evironment setup to test Apple macOS so expect building to fail completely. Feel free to contribute.
 
-This repository uses a submodule for [a testing framework](https://github.com/google/googletest) so to clone do this:
+If you want to build the tests for Synergy (`-D_TESTS=ON`) you'll the [googletest (and googlemock)](https://github.com/google/googletest) framework. It is included as a submodule which will be downloaded if you run:
 ```
 git clone --recursive https://github.com/yupi2/synergy.git
 ```
-If any new submodules are added in the future then running this should/might clone the module into the repository:
+If you have a Synergy repository already but didn't run the command above initially then you can download the submodule by running this:
 ```
 git submodule update --init
 ```
+If you have a preinstalled version of *googletest* from a package-manager or something and want to use it then check out `src/test/CMakeLists.txt` and maybe change some directories.
 
 
 Licenses and stuff
@@ -25,9 +26,9 @@ Synergy and it's components are licensed under the terms of the GNU General Publ
 
 uSynergy (micro Synergy) is a seperate project that falls under the zlib License. It is unused but is kept in the repo for "historical value".
 
-A tar-gz archive is included for [LibreSSL](https://www.libressl.org/) which includes software developed by Eric Young (eay@cryptsoft.com) and software developed by the OpenSSL Project for use in the OpenSSL Toolkit (http://www.openssl.org) along with work contributed from many other sources including the OpenBSD project and associates. More license information can be obtained by looking through the files in the tar-gz archive.
+A tar-gz archive of [LibreSSL](https://www.libressl.org/), an OpenSSL fork, is downloaded through CMake which includes software developed by Eric Young (eay@cryptsoft.com) and software developed by the OpenSSL Project for use in the OpenSSL Toolkit (http://www.openssl.org) along with work contributed from many other sources including the OpenBSD project and associates. More license information can be obtained by looking through the files in the tar-gz archive.
 
-The archive was retrieved from [here](https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/)
+The archive is retrieved from https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/
 
 
 Changes in this fork
@@ -40,17 +41,17 @@ There's a few things not listed here. Go through the commits.
   + Linux/everything-else uses `~/.config/Synergy/`
 + Switch from using `hm` as helper script catchall to purely CMake.
 + Removed Python requirement (by deprecation of `hm`).
-+ OpenSSL replaced with LibreSSL tarball (building as an external CMake project is easy).
++ OpenSSL replaced with LibreSSL tarball because building LibreSSL as an external CMake project is easy and requires fewer dependencies than OpenSSL (+ no .dlls).
   + Tarball is now downloaded from LibreSSL website (2017-04-11).
   + OpenSSL could probably be used on Linux/everything-else instead but that can be done again in the future.
   + Generating certificates now uses 4096 bits for RSA instead of 1024 but it doesn't really matter.
 + Auto-generating translations (through CMake).
 + Building on Windows should now put binaries in arch specific folders.
 + Printscreen doesn't send Alt+Printscreen to Windows clients anymore.
-+ Some new icons for OSX? (TODO recheck this)
++ Some new icons for OSX? (maybe)
 + EXTREMELY EXTREMELY BUGGY AND BAD MEMORY LEAK FIX FOR LINUX SERVERS.
   + Add `-D_EXP_LEAK_FIX=ON` to the CMake configuration command.
-+ Building tests now uses a googletest submodule instead of including zip files.
++ Building tests now uses a googletest submodule instead of including zipped source files.
 + Some misc pull-requests from the symless/synergy repo.
 
 
@@ -108,8 +109,8 @@ Notes:
 4. `cd synergy`
 5. `mkdir build`
 6. `cd build`
-7. `cmake -DCMAKE_BUILD_TYPE=Debug -G"Visual Studio 14 2015 Win64" ../`
-8. `cmake --build ./ --config Debug`
+7. `cmake -DCMAKE_BUILD_TYPE=Release -G"Visual Studio 14 2015 Win64" ../`
+8. `cmake --build ./ --config Release`
 9. And then look above to see what do to make a service for `synergyd.exe` if you intend to run Synergy on this computer as a client.
 
 
@@ -127,11 +128,11 @@ Requirements:
 2. `cd ~/code`
 3. `git clone --recursive https://github.com/yupi2/synergy.git`
 4. `cd synergy ; mkdir build ; cd build`
-5. `cmake -DCMAKE_BUILD_TYPE=Debug ../`
+5. `cmake -DCMAKE_BUILD_TYPE=Release ../`
 6. `cmake --build ./ -- -j$(nproc)`
-7. `ls bin/Release`
+7. `ls bin`
 
-If you have memory leaks with Synergy then you can add a flag to the CMake configure step (`cmake -DCMAKE_BUILD_TYPE=Debug -D_EXP_LEAK_FIX=ON ../`) and it might solve it.
+If you have memory leaks with Synergy then you can add a flag to the CMake configure step (`cmake -DCMAKE_BUILD_TYPE=Release -D_EXP_LEAK_FIX=ON ../`) and it might solve it.
 
 
 (Apple macOS) Compiling
