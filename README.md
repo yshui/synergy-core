@@ -45,7 +45,6 @@ There's a few things not listed here. Go through the commits.
   + Tarball is now downloaded from LibreSSL website (2017-04-11).
   + OpenSSL could probably be used on Linux/everything-else instead but that can be done again in the future.
   + Generating certificates now uses 4096 bits for RSA instead of 1024 but it doesn't really matter.
-+ Auto-generating translations (through CMake).
 + Building on Windows should now put binaries in arch specific folders.
 + Printscreen doesn't send Alt+Printscreen to Windows clients anymore.
 + Some new icons for OSX? (maybe)

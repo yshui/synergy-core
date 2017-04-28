@@ -3,7 +3,6 @@ config.h
 *.pyc
 *.o
 *~
-*.qm
 \.*.swp
 *.patch
 *build-gui-Desktop_Qt*
