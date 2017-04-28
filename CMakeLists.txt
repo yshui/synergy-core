@@ -38,45 +38,46 @@ if (COMMAND cmake_policy)
 endif()
 
 # Set some easy to type variables.
-set(root_dir ${PROJECT_SOURCE_DIR})
-set(bin_dir ${root_dir}/bin)
-set(doc_dir ${root_dir}/doc)
-set(res_dir ${root_dir}/res)
+set(root_dir "${PROJECT_SOURCE_DIR}")
 
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
-set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
+set(EXECUTABLE_OUTPUT_PATH "${CMAKE_BINARY_DIR}/bin")
+set(LIBRARY_OUTPUT_PATH "${CMAKE_BINARY_DIR}/lib")
 
 if (MSVC)
-	set(EXECUTABLE_OUTPUT_PATH ${EXECUTABLE_OUTPUT_PATH}/${CMAKE_VS_PLATFORM_NAME})
+	set(EXECUTABLE_OUTPUT_PATH "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_VS_PLATFORM_NAME}")
 	# the CMAKE_RUNTIME_OUTPUT_DIRECTORY is for .dlls like synwinhk.dll
-	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${EXECUTABLE_OUTPUT_PATH})
-	set(LIBRARY_OUTPUT_PATH ${LIBRARY_OUTPUT_PATH}/${CMAKE_VS_PLATFORM_NAME})
+	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${EXECUTABLE_OUTPUT_PATH}")
+	set(LIBRARY_OUTPUT_PATH "${LIBRARY_OUTPUT_PATH}/${CMAKE_VS_PLATFORM_NAME}")
 endif()
 
-# Allow user-defined path to libressl
-if (NOT EXISTS ${_LIBRESSL_PATH})
-	# other-wise use an in-tree libressl tarball
-	set(_LIBRESSL_VERSION libressl-2.5.3)
-	set(_LIBRESSL_SHA256 14e34cc586ec4ce5763f76046dcf366c45104b2cc71d77b63be5505608e68a30)
-	set(_LIBRESSL_PATH ${root_dir}/ext/${_LIBRESSL_VERSION})
+# user can provide `-D_LIBRESSL_PATH=somewhere`
+if ("${_LIBRESSL_PATH}" STREQUAL "")
+	# user did not provide anything so we skip lower
+
+	set(_LIBRESSL_VERSION "libressl-2.5.3")
+	set(_LIBRESSL_SHA256 "14e34cc586ec4ce5763f76046dcf366c45104b2cc71d77b63be5505608e68a30")
+	# set to in-source location of where libressl will be uncompressed to
+	set(_LIBRESSL_PATH "${root_dir}/ext/${_LIBRESSL_VERSION}")
+
 	if (WIN32)
 		# cmake on windows doesn't support SSL/TLS ??????
-		set(prot http)
+		set(prot "http")
 	else()
-		set(prot https)
+		set(prot "https")
 	endif()
 	set(
 		_LIBRESSL_URL
-		${prot}://ftp.openbsd.org/pub/OpenBSD/LibreSSL/${_LIBRESSL_VERSION}.tar.gz
+		"${prot}://ftp.openbsd.org/pub/OpenBSD/LibreSSL/${_LIBRESSL_VERSION}.tar.gz"
 	)
 
-	if (NOT EXISTS ${_LIBRESSL_PATH})
-		if (NOT EXISTS ${_LIBRESSL_PATH}.tar.gz)
+	# check if the we've already uncompressed the tarball
+	if (NOT EXISTS "${_LIBRESSL_PATH}")
+		if (NOT EXISTS "${_LIBRESSL_PATH}.tar.gz")
 			message(STATUS "Downloading ${_LIBRESSL_URL} ...")
 			file(
 				DOWNLOAD
-				${_LIBRESSL_URL}
-				${_LIBRESSL_PATH}.tar.gz
+				"${_LIBRESSL_URL}"
+				"${_LIBRESSL_PATH}.tar.gz"
 				SHOW_PROGRESS
 				EXPECTED_HASH SHA256=${_LIBRESSL_SHA256}
 			)
@@ -84,8 +85,8 @@ if (NOT EXISTS ${_LIBRESSL_PATH})
 			#)
 		endif()
 		execute_process(
-			COMMAND ${CMAKE_COMMAND} -E tar x ${_LIBRESSL_PATH}.tar.gz
-			WORKING_DIRECTORY ${root_dir}/ext
+			COMMAND ${CMAKE_COMMAND} -E tar x "${_LIBRESSL_PATH}.tar.gz"
+			WORKING_DIRECTORY "${root_dir}/ext"
 		)
 	endif()
 endif()
@@ -94,7 +95,7 @@ include(ExternalProject)
 set_property(DIRECTORY PROPERTY EP_STEP_TARGETS configure build test)
 ExternalProject_Add(libressl
 	PREFIX libressl
-	SOURCE_DIR ${_LIBRESSL_PATH}
+	SOURCE_DIR "${_LIBRESSL_PATH}"
 	INSTALL_COMMAND ""
 )
 
@@ -102,7 +103,7 @@ option(_DISABLE_GIT_REVISION "disable embedding a git revision" 0)
 if (NOT _DISABLE_GIT_REVISION)
 	execute_process(
 		COMMAND git log -1 --format=%h
-		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+		WORKING_DIRECTORY "${root_dir}"
 		OUTPUT_VARIABLE _GIT_REVISION
 		OUTPUT_STRIP_TRAILING_WHITESPACE
 		ERROR_QUIET
@@ -128,6 +129,8 @@ add_definitions(-D_SYN_APPVERSION=\"${_SYN_APPVERSION}\")
 
 
 option(_TESTS "should we build those damn tests" OFF)
+# just a random note for anyone reading this:
+# tests fail for me with -D_EXP_LEAK_FIX=ON but are fine when not using that
 if (_TESTS)
 	add_definitions(-D_TESTS)
 endif()
@@ -140,7 +143,7 @@ set(libs)
 
 # only include headers as "source" if not unix makefiles,
 # which is useful when using an IDE.
-if (${CMAKE_GENERATOR} STREQUAL "Unix Makefiles")
+if ("${CMAKE_GENERATOR}" STREQUAL "Unix Makefiles")
 	set(SYNERGY_ADD_HEADERS FALSE)
 else()
 	set(SYNERGY_ADD_HEADERS TRUE)
@@ -356,7 +359,7 @@ if (UNIX)
 	set(HAVE_SOCKLEN_T 1)
 
 	# For config.h, save the results based on a template (config.h.in).
-	configure_file(res/config.h.in ${root_dir}/build/config.h)
+	configure_file("${root_dir}/res/config.h.in" "${CMAKE_BINARY_DIR}/config.h")
 
 	add_definitions(-DSYSAPI_UNIX=1 -DHAVE_CONFIG_H)
 
@@ -376,12 +379,12 @@ else() # not-unix
 		/D_WIN32_WINNT=0x0501
 	)
 
-	if (MSVC_VERSION EQUAL 1600)
-		set(SLN_FILENAME "${CMAKE_CURRENT_BINARY_DIR}/synergy.sln")
-		if (EXISTS "${SLN_FILENAME}" )
-			file(APPEND "${SLN_FILENAME}" "\n# This should be regenerated!\n")
-		endif()
-	endif()
+	#if (MSVC_VERSION EQUAL 1600)
+	#	set(SLN_FILENAME "${CMAKE_CURRENT_BINARY_DIR}/synergy.sln")
+	#	if (EXISTS "${SLN_FILENAME}" )
+	#		file(APPEND "${SLN_FILENAME}" "\n# This should be regenerated!\n")
+	#	endif()
+	#endif()
 
 endif()
 
@@ -389,21 +392,21 @@ endif()
 #	set(OPENSSL_LIBS ssl crypto)
 #endif()
 
-set(OPENSSL_BUILD_DIR ${CMAKE_BINARY_DIR}/libressl/src/libressl-build)
-set(OPENSSL_INCLUDE ${_LIBRESSL_PATH}/include)
+set(OPENSSL_BUILD_DIR "${CMAKE_BINARY_DIR}/libressl/src/libressl-build")
+set(OPENSSL_INCLUDE "${_LIBRESSL_PATH}/include")
 
 if (MSVC)
-	set(OPENSSL_LIBSSL ${OPENSSL_BUILD_DIR}/ssl/${CMAKE_BUILD_TYPE}/ssl.lib)
-	set(OPENSSL_LIBCRYPTO ${OPENSSL_BUILD_DIR}/crypto/${CMAKE_BUILD_TYPE}/crypto.lib)
+	set(OPENSSL_LIBSSL "${OPENSSL_BUILD_DIR}/ssl/${CMAKE_BUILD_TYPE}/ssl.lib")
+	set(OPENSSL_LIBCRYPTO "${OPENSSL_BUILD_DIR}/crypto/${CMAKE_BUILD_TYPE}/crypto.lib")
 else()
 	# mingw (msys2) uses .a lib suffixes too i believe
-	set(OPENSSL_LIBSSL ${OPENSSL_BUILD_DIR}/ssl/libssl.a)
-	set(OPENSSL_LIBCRYPTO ${OPENSSL_BUILD_DIR}/crypto/libcrypto.a)
+	set(OPENSSL_LIBSSL "${OPENSSL_BUILD_DIR}/ssl/libssl.a")
+	set(OPENSSL_LIBCRYPTO "${OPENSSL_BUILD_DIR}/crypto/libcrypto.a")
 endif()
 
 set(OPENSSL_BOTH_LIBS
-	${OPENSSL_LIBSSL}
-	${OPENSSL_LIBCRYPTO}
+	"${OPENSSL_LIBSSL}"
+	"${OPENSSL_LIBCRYPTO}"
 )
 
 add_subdirectory(src)
@@ -428,5 +431,5 @@ if (CONF_DOXYGEN)
 	set(VERSION, "${VERSION}")
 
 	# For doxygen.cfg, save the results based on a template (doxygen.cfg.in).
-	configure_file(${res_dir}/doxygen.cfg.in ${doc_dir}/doxygen.cfg)
+	configure_file("${root_dir}/res/doxygen.cfg.in" "${root_dir}/doc/doxygen.cfg")
 endif()
