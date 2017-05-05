@@ -65,6 +65,7 @@ Building
 + [CMake 3.0 or newer](https://cmake.org/)
 + A C++11 environment
 + Qt 5.6, 5.7 or 5.8
++ WiX Toolset if you plan to make installers for Windows Platforms.
 + Any recent version of Git in your command path
 
 Here's how I build on Linux:<br/>
@@ -81,7 +82,7 @@ Open a `VS2015 x64 Native Tools Command Prompt`.
 ```
 mkdir build
 cd build
-cmake -DCMAKE_BUILD_TYPE=Release -G"Visual Studio 14 2015 Win64" ../
+cmake -DCMAKE_BUILD_TYPE=Release -G"Visual Studio 14 2015 Win64" ../<br/>
 cmake --build ./ --config Release
 ```
 
@@ -96,10 +97,11 @@ Requirements:
 + [Qt 5.6, 5.7 or 5.8](https://www.qt.io/download-open-source/) in your %Path% environment variable.
   + Example %Path% addition: `;C:\Qt\5.8\msvc2015_64\bin`
   + [Here's what I select since I plan to only have x64 builds with Visual Studio 2015](https://imgur.com/YP6v8rE)
++ [WiX Toolset build tools](http://wixtoolset.org/releases/) and maybe also the `WiX Toolset Visual Studio 201x Extension`
 
 Notes:
 + If you're NOT going to use an installer and just want to run Synergy from the build directory you'll need to create a service to run `synergyd.exe` nicely. Here's something to put into an elevated (admin) command prompt to create a service (you'll need to correct the path to your binary location:
-  + `sc create Synergy type= own start= auto error= ignore obj= LocalSystem DisplayName= "Synergy Daemon" binPath= "C:\code\synergy\build\bin\x64\Debug\synergyd.exe"`
+  + `sc create Synergy type= own start= auto error= ignore obj= LocalSystem DisplayName= "Synergy Daemon" binPath= "C:\code\synergy\build\bin\x64\Release\synergyd.exe"`
       + It might not start after creation so you'll need to do `sc start Synergy`. It will auto-start on boot though.
     + Also when `synergyd.exe` crashes you can restart the Service with `sc stop Synergy` then `sc start Synergy`
 
