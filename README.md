@@ -77,12 +77,12 @@ cmake -DCMAKE_BUILD_TYPE=Release -D_EXP_LEAK_FIX=ON ../
 cmake --build ./ -- -j$(nproc)
 ```
 
-On 64-bit Windows with Visual Studio 2015 (the Community edition is free):
+On 64-bit Windows with Visual Studio 2015 (the Community edition is free):<br/>
 Open a `VS2015 x64 Native Tools Command Prompt`.
 ```
 mkdir build
 cd build
-cmake -DCMAKE_BUILD_TYPE=Release -G"Visual Studio 14 2015 Win64" ../<br/>
+cmake -DCMAKE_BUILD_TYPE=Release -G"Visual Studio 14 2015 Win64" ../
 cmake --build ./ --config Release
 ```
 
