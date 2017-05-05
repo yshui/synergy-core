@@ -54,8 +54,8 @@ endif()
 if ("${_LIBRESSL_PATH}" STREQUAL "")
 	# user did not provide anything so we skip lower
 
-	set(_LIBRESSL_VERSION "libressl-2.5.3")
-	set(_LIBRESSL_SHA256 "14e34cc586ec4ce5763f76046dcf366c45104b2cc71d77b63be5505608e68a30")
+	set(_LIBRESSL_VERSION "libressl-2.5.4")
+	set(_LIBRESSL_SHA256 "107a5b522fbb8318d4c3be668075e5e607296f0a9255d71674caa94571336efa")
 	# set to in-source location of where libressl will be uncompressed to
 	set(_LIBRESSL_PATH "${root_dir}/ext/${_LIBRESSL_VERSION}")
 
