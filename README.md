@@ -77,6 +77,7 @@ cmake --build ./ -- -j$(nproc)
 ```
 
 On 64-bit Windows with Visual Studio 2015 (the Community edition is free):
+Open a `VS2015 x64 Native Tools Command Prompt`.
 ```
 mkdir build
 cd build
@@ -85,7 +86,7 @@ cmake --build ./ --config Release
 ```
 
 
-(Windows) Compiling with Microsoft's Visual C++ environment
+(Windows) Compiling with Microsoft's Visual C++ environment (and creating an installer!)
 -----------------------------------------------------------
 Requirements:
 + Visual C++ Build Tools (2013 or 2015)
@@ -97,20 +98,24 @@ Requirements:
   + [Here's what I select since I plan to only have x64 builds with Visual Studio 2015](https://imgur.com/YP6v8rE)
 
 Notes:
-+ You'll need to create a server to run `synergyd.exe` nicely. Here's something to put into an elevated (admin) command prompt to create a service (you'll need to correct the path to your binary location:
++ If you're NOT going to use an installer and just want to run Synergy from the build directory you'll need to create a service to run `synergyd.exe` nicely. Here's something to put into an elevated (admin) command prompt to create a service (you'll need to correct the path to your binary location:
   + `sc create Synergy type= own start= auto error= ignore obj= LocalSystem DisplayName= "Synergy Daemon" binPath= "C:\code\synergy\build\bin\x64\Debug\synergyd.exe"`
       + It might not start after creation so you'll need to do `sc start Synergy`. It will auto-start on boot though.
     + Also when `synergyd.exe` crashes you can restart the Service with `sc stop Synergy` then `sc start Synergy`
 
-1. Open a `Command Prompt`
-2. `cd C:\code`
-3. `git clone --recursive https://github.com/yupi2/synergy.git`
-4. `cd synergy`
-5. `mkdir build`
-6. `cd build`
-7. `cmake -DCMAKE_BUILD_TYPE=Release -G"Visual Studio 14 2015 Win64" ../`
-8. `cmake --build ./ --config Release`
-9. And then look above to see what do to make a service for `synergyd.exe` if you intend to run Synergy on this computer as a client.
+ 1. Open a `VS2015 x64 Native Tools Command Prompt` (or whatever thing you'd use for 32-bit or VS2013)
+ 2. `cd C:\`
+ 3. `mkdir code`
+ 4. `cd code`
+ 5. `git clone --recursive https://github.com/yupi2/synergy.git`
+ 6. `cd synergy`
+ 7. `mkdir build`
+ 8. `cd build`
+ 9. `cmake -DCMAKE_BUILD_TYPE=Release -G"Visual Studio 14 2015 Win64" ../`
+10. `cmake --build ./ --config Release`
+11. And now continue on if you want to create an installer.
+12. `windeployqt bin\x64\Release\synergygui.exe`
+13. `msbuild ../src/setup/win32/synergy.sln /p:Configuration="Release" /p:Platform="x64"`
 
 
 (Linux / POSIX) Compiling

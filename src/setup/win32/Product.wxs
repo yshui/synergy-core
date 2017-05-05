@@ -26,7 +26,6 @@
 
     <Feature Id="ProductFeature" Title="$(var.Name)">
       <ComponentGroupRef Id="ProductComponents" />
-      <ComponentGroupRef Id="OpenSslComponents" />
       <ComponentGroupRef Id="ProductQtPluginComponents" />
       <MergeRef Id="CRT" />
       <ComponentRef Id="RegistryEntries" />
@@ -84,7 +83,6 @@
       <Directory Id="$(var.ProgramFilesFolder)">
         <Directory Id="INSTALLFOLDER" Name="$(var.Name)">
           <Merge Id="CRT" Language="0" SourceFile="$(var.CRT)" DiskId="1" />
-          <Directory Id="OpenSslDir" Name="OpenSSL" />
           <Directory Id="PlatformsDir" Name="Platforms" />
         </Directory>
       </Directory>
@@ -121,42 +119,31 @@
         </File>
         
         <File Source="$(var.BinPath)/synergyc.exe" />
-        <File Source="$(var.BinPath)/syntool.exe" />
+        <File Source="$(var.BinPath)/synwinad.exe" />
         <File Source="$(var.BinPath)/synwinhk.dll" />
-        <File Source="$(var.BinPath)/libeay32.dll" />
-        <File Source="$(var.BinPath)/ssleay32.dll" />
         
       </Component>
       
       <Component Id="Gui" Guid="BAC8149B-6287-45BF-9C27-43D71ED40214">
-        <File Id="GuiProgram" Source="$(var.BinPath)/synergy.exe" KeyPath="yes">
+        <File Id="GuiProgram" Source="$(var.BinPath)/synergygui.exe" KeyPath="yes">
           <Shortcut Id="GuiShortcut" Name="$(var.Name)" Directory="ProgramMenuFolder" Icon="synergy.ico" Advertise="yes" />
           <fire:FirewallException Id="GuiFirewallException" Name="$(var.Name)" Scope="any" IgnoreFailure="yes" />
         </File>
-        <File Source="$(var.QtPath)\Qt5Core.dll" />
-        <File Source="$(var.QtPath)\Qt5Gui.dll" />
-        <File Source="$(var.QtPath)\Qt5Network.dll" />
-        <File Source="$(var.QtPath)\Qt5Svg.dll" />
-        <File Source="$(var.QtPath)\Qt5Widgets.dll" />
-        <File Source="$(var.QtPath)\libGLESv2.dll" />
-        <File Source="$(var.QtPath)\libEGL.dll" />
+        <File Source="$(var.BinPath)\Qt5Core.dll" />
+        <File Source="$(var.BinPath)\Qt5Gui.dll" />
+        <File Source="$(var.BinPath)\Qt5Network.dll" />
+        <File Source="$(var.BinPath)\Qt5Svg.dll" />
+        <File Source="$(var.BinPath)\Qt5Widgets.dll" />
+        <File Source="$(var.BinPath)\libGLESv2.dll" />
+        <File Source="$(var.BinPath)\libEGL.dll" />
       </Component>
       
     </ComponentGroup>
 
     <ComponentGroup Id="ProductQtPluginComponents" Directory="PlatformsDir">
       <Component Id="QtPlatformPlugin" Guid="684EFA14-856B-440E-A5E6-E90E04E36B41">
-      <File Source="$(var.QtPlatformPath)\qwindows.dll" />
+      <File Source="$(var.BinPath)\platforms\qwindows.dll" />
       </Component> 
-    </ComponentGroup>
-
-    <ComponentGroup Id="OpenSslComponents" Directory="OpenSslDir">
-      <Component Id="OpenSsl" Guid="92648F77-65A6-4B16-AC59-A1F37BD341B1">
-        <File Source="$(var.ExtPath)/$(var.OpensslPath)/out32dll/libeay32.dll" Id="OpenSslDll1" />
-        <File Source="$(var.ExtPath)/$(var.OpensslPath)/out32dll/ssleay32.dll" Id="OpenSslDll2" />
-        <File Source="$(var.ExtPath)/$(var.OpensslPath)/out32dll/openssl.exe" />
-        <File Source="$(var.ResPath)/openssl/synergy.conf" />
-      </Component>
     </ComponentGroup>
 
   </Fragment>
