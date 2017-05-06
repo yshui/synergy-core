@@ -118,6 +118,7 @@ Notes:
 11. And now continue on if you want to create an installer.
 12. `windeployqt bin\x64\Release\synergygui.exe`
 13. `msbuild ../src/setup/win32/synergy.sln /p:Configuration="Release" /p:Platform="x64"`
+14. Now you can find the installer at `build\bin\x64\Release\synergy_installer_x64.msi`
 
 
 (Linux / POSIX) Compiling
