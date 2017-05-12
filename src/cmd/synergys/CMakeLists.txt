@@ -29,6 +29,7 @@ if (WIN32)
 		tb_idle.ico
 		tb_run.ico
 		tb_wait.ico
+		"${root_dir}/res/synergys.manifest"
 	)
 elseif (APPLE)
 	file(GLOB arch_headers "OSX*.h")
@@ -50,3 +51,12 @@ include_directories(
 add_executable(synergys ${sources} ${arch_sources})
 target_link_libraries(synergys
 	arch base client io mt net ipc platform server synlib ${libs} ${OPENSSL_BOTH_LIBS})
+
+#if (WIN32)
+#	ADD_CUSTOM_COMMAND(
+#		TARGET synergys
+#		POST_BUILD
+#		COMMAND "mt.exe" -manifest \"${CMAKE_SOURCE_DIR}\\res\\synergys.manifest\" -outputresource:\"$<TARGET_FILE:synergys>\"\;1
+#		COMMENT "Adding display aware manifest..."
+#	)
+#endif()
