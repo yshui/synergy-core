@@ -30,8 +30,9 @@
 #include <QSettings>
 #include <QMessageBox>
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_DARWIN)
 #include <Carbon/Carbon.h>
+#include <cstdlib>
 #endif
 
 #include <openssl/evp.h>
@@ -55,6 +56,10 @@ int main(int argc, char* argv[])
 {
 	OpenSSL_add_all_algorithms();
 
+#ifdef Q_OS_DARWIN
+    /* Workaround for QTBUG-40332 - "High ping when QNetworkAccessManager is instantiated" */
+    ::setenv ("QT_BEARER_POLL_TIMEOUT", "-1", 1);
+#endif
 	QCoreApplication::setOrganizationName("Synergy");
 	QCoreApplication::setOrganizationDomain("http://symless.com/");
 	QCoreApplication::setApplicationName("Synergy");
