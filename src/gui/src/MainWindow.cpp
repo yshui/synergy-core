@@ -32,7 +32,7 @@
 #include "SslCertificate.h"
 #include "configDirectory.h"
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_MACOS)
 #include "OSXHelpers.h"
 #endif
 
@@ -47,7 +47,7 @@
 #include <QDesktopServices>
 #include <QDesktopWidget>
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_MACOS)
 #include <ApplicationServices/ApplicationServices.h>
 #endif
 
@@ -67,7 +67,7 @@ static const char guiConfigName[] = "gui.ini";
 
 static const QString serverConfigFilter(QObject::tr("Synergy Configurations (*.conf);;All files (*.*)"));
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_MACOS)
 static const char* synergyLightIconFiles[] =
 {
 	":/res/icons/64x64/synergy-light-disconnected.png",
@@ -131,7 +131,7 @@ MainWindow::MainWindow(QSettings& settings, AppConfig& appConfig) :
 #endif
 
 	// change default size based on os
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_MACOS)
 	resize(720, 550);
 	setMinimumSize(size());
 #elif defined(Q_OS_LINUX)
@@ -256,7 +256,7 @@ void MainWindow::createMenuBar()
 
 	m_pMenuBar->addAction(m_pMenuFile->menuAction());
 	m_pMenuBar->addAction(m_pMenuEdit->menuAction());
-#if !defined(Q_OS_MAC)
+#if !defined(Q_OS_MACOS)
 	m_pMenuBar->addAction(m_pMenuWindow->menuAction());
 #endif
 	m_pMenuBar->addAction(m_pMenuHelp->menuAction());
@@ -320,7 +320,7 @@ void MainWindow::setIcon(qSynergyState state)
 {
 	QIcon icon;
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_MACOS
 	if (isOSXInterfaceStyleDark())
 		icon.addFile(synergyDarkIconFiles[state]);
 	else

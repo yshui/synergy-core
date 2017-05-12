@@ -28,7 +28,7 @@ SetupWizard::SetupWizard(MainWindow& mainWindow, bool startMain) :
 {
 	setupUi(this);
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_MACOS)
 
 	// the mac style needs a little more room because of the
 	// graphic on the left.

@@ -30,7 +30,7 @@
 #include <QSettings>
 #include <QMessageBox>
 
-#if defined(Q_OS_DARWIN)
+#if defined(Q_OS_MACOS)
 #include <Carbon/Carbon.h>
 #include <cstdlib>
 #endif
@@ -48,7 +48,7 @@ public:
 
 int waitForTray();
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_MACOS)
 bool checkMacAssistiveDevices();
 #endif
 
@@ -56,7 +56,7 @@ int main(int argc, char* argv[])
 {
 	OpenSSL_add_all_algorithms();
 
-#ifdef Q_OS_DARWIN
+#ifdef Q_OS_MACOS
     /* Workaround for QTBUG-40332 - "High ping when QNetworkAccessManager is instantiated" */
     ::setenv ("QT_BEARER_POLL_TIMEOUT", "-1", 1);
 #endif
@@ -66,8 +66,7 @@ int main(int argc, char* argv[])
 
 	QSynergyApplication app(argc, argv);
 
-#if defined(Q_OS_MAC)
-
+#if defined(Q_OS_MACOS)
 	if (app.applicationDirPath().startsWith("/Volumes/")) {
 		QMessageBox::information(
 			NULL, "Synergy",
@@ -134,7 +133,7 @@ int waitForTray()
 	return true;
 }
 
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_MACOS)
 bool checkMacAssistiveDevices()
 {
 #if __MAC_OS_X_VERSION_MIN_REQUIRED >= 1090 // mavericks

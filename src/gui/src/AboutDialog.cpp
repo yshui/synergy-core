@@ -37,7 +37,7 @@ AboutDialog::AboutDialog(QWidget* parent, const QString& synergyApp) :
 	m_pLabelBuildDate->setText(buildDate.toString(Qt::SystemLocaleLongDate));
 
 	// change default size based on os
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_MACOS)
 	QSize size(600, 380);
 	setMaximumSize(size);
 	setMinimumSize(size);
