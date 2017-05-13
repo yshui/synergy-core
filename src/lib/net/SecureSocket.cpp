@@ -52,6 +52,7 @@ SecureSocket::SecureSocket(
 		IEventQueue* events,
 		SocketMultiplexer* socketMultiplexer) :
 	TCPSocket(events, socketMultiplexer),
+	m_ssl(nullptr),
 	m_secureReady(false),
 	m_fatal(false)
 {
@@ -62,6 +63,7 @@ SecureSocket::SecureSocket(
 		SocketMultiplexer* socketMultiplexer,
 		ArchSocket socket) :
 	TCPSocket(events, socketMultiplexer, socket),
+	m_ssl(nullptr),
 	m_secureReady(false),
 	m_fatal(false)
 {
