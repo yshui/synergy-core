@@ -2,11 +2,11 @@
  * synergy -- mouse and keyboard sharing utility
  * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
- * 
+ *
  * This package is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * found in the file LICENSE that should have accompanied this file.
- * 
+ *
  * This package is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -150,7 +150,7 @@ MSWindowsScreen::MSWindowsScreen(
 		forceShowCursor();
 		LOG((CLOG_DEBUG "screen shape: %d,%d %dx%d %s", m_x, m_y, m_w, m_h, m_multimon ? "(multi-monitor)" : ""));
 		LOG((CLOG_DEBUG "window is 0x%08x", m_window));
-		
+
 		// SHGetFolderPath is deprecated in vista, but use it for xp support.
 		char desktopPath[MAX_PATH];
 		if (SUCCEEDED(SHGetFolderPath(NULL, CSIDL_DESKTOP, NULL, 0, desktopPath))) {
@@ -394,7 +394,7 @@ MSWindowsScreen::sendDragThread(void*)
 		LOG((CLOG_DEBUG "send dragging file to server"));
 		client->sendFileToServer(draggingFilename.c_str());
 	}
-	
+
 	m_draggingStarted = false;
 }
 
@@ -641,7 +641,7 @@ MSWindowsScreen::registerHotKey(KeyID key, KeyModifierMask mask)
 		LOG((CLOG_WARN "failed to register hotkey %s (id=%04x mask=%04x)", synergy::KeyMap::formatKey(key, mask).c_str(), key, mask));
 		return 0;
 	}
-	
+
 	LOG((CLOG_DEBUG "registered hotkey %s (id=%04x mask=%04x) as id=%d", synergy::KeyMap::formatKey(key, mask).c_str(), key, mask, id));
 	return id;
 }
@@ -858,23 +858,25 @@ void
 MSWindowsScreen::destroyClass(ATOM windowClass) const
 {
 	if (windowClass != 0) {
-		UnregisterClass(reinterpret_cast<LPCTSTR>(windowClass), s_windowInstance);
+		UnregisterClass(MAKEINTATOM(windowClass), s_windowInstance);
 	}
 }
 
 HWND
 MSWindowsScreen::createWindow(ATOM windowClass, const char* name) const
 {
-	HWND window = CreateWindowEx(WS_EX_TOPMOST |
-									WS_EX_TRANSPARENT |
-									WS_EX_TOOLWINDOW,
-								reinterpret_cast<LPCTSTR>(windowClass),
-								name,
-								WS_POPUP,
-								0, 0, 1, 1,
-								NULL, NULL,
-								s_windowInstance,
-								NULL);
+	HWND window = CreateWindowEx(
+		WS_EX_TOPMOST |
+		WS_EX_TRANSPARENT |
+		WS_EX_TOOLWINDOW,
+		MAKEINTATOM(windowClass),
+		name,
+		WS_POPUP,
+		0, 0, 1, 1,
+		NULL, NULL,
+		s_windowInstance,
+		NULL);
+
 	if (window == NULL) {
 		LOG((CLOG_ERR "failed to create window: %d", GetLastError()));
 		throw XScreenOpenFailure();
@@ -889,7 +891,7 @@ MSWindowsScreen::createDropWindow(ATOM windowClass, const char* name) const
 		WS_EX_TOPMOST |
 		WS_EX_TRANSPARENT |
 		WS_EX_ACCEPTFILES,
-		reinterpret_cast<LPCTSTR>(m_class),
+		MAKEINTATOM(m_class),
 		name,
 		WS_POPUP,
 		0, 0, m_dropWindowSize, m_dropWindowSize,
@@ -1366,7 +1368,7 @@ MSWindowsScreen::onMouseMove(SInt32 mx, SInt32 my)
 	saveMousePosition(mx, my);
 
 	if (m_isOnScreen) {
-		
+
 		// motion on primary screen
 		sendEvent(
 			m_events->forIPrimaryScreen().motionOnPrimary(),
@@ -1376,15 +1378,15 @@ MSWindowsScreen::onMouseMove(SInt32 mx, SInt32 my)
 			m_draggingStarted = true;
 		}
 	}
-	else 
+	else
 	{
 		// the motion is on the secondary screen, so we warp mouse back to
-		// center on the server screen. if we don't do this, then the mouse 
-		// will always try to return to the original entry point on the 
+		// center on the server screen. if we don't do this, then the mouse
+		// will always try to return to the original entry point on the
 		// secondary screen.
 		LOG((CLOG_DEBUG5 "warping server cursor to center: %+d,%+d", m_xCenter, m_yCenter));
 		warpCursorNoFlush(m_xCenter, m_yCenter);
-		
+
 		// examine the motion.  if it's about the distance
 		// from the center of the screen to an edge then
 		// it's probably a bogus motion that we want to
@@ -1395,7 +1397,7 @@ MSWindowsScreen::onMouseMove(SInt32 mx, SInt32 my)
 			 x + bogusZoneSize > m_x + m_w - m_xCenter ||
 			-y + bogusZoneSize > m_yCenter - m_y ||
 			 y + bogusZoneSize > m_y + m_h - m_yCenter) {
-			
+
 			LOG((CLOG_DEBUG "dropped bogus delta motion: %+d,%+d", x, y));
 		}
 		else {
@@ -1527,8 +1529,8 @@ MSWindowsScreen::warpCursorNoFlush(SInt32 x, SInt32 y)
 	POINT cursorPos;
 	GetCursorPos(&cursorPos);
 
-	// there is a bug or round error in SetCursorPos and GetCursorPos on 
-	// a high DPI setting. The check here is for Vista/7 login screen. 
+	// there is a bug or round error in SetCursorPos and GetCursorPos on
+	// a high DPI setting. The check here is for Vista/7 login screen.
 	// since this feature is mainly for client, so only check on client.
 	if (!isPrimary()) {
 		if ((cursorPos.x != x) && (cursorPos.y != y)) {
@@ -1537,7 +1539,7 @@ MSWindowsScreen::warpCursorNoFlush(SInt32 x, SInt32 y)
 			// when at Vista/7 login screen, SetCursorPos does not work (which could be
 			// an MS security feature). instead we can use fakeMouseMove, which calls
 			// mouse_event.
-			// IMPORTANT: as of implementing this function, it has an annoying side 
+			// IMPORTANT: as of implementing this function, it has an annoying side
 			// effect; instead of the mouse returning to the correct exit point, it
 			// returns to the center of the screen. this could have something to do with
 			// the center screen warping technique used (see comments for onMouseMove
