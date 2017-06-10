@@ -64,7 +64,7 @@ Building
   + Linux (and maybe some POSIX systems)
 + [CMake 3.0 or newer](https://cmake.org/)
 + A C++11 environment
-+ Qt 5.6, 5.7 or 5.8
++ Qt 5.6, 5.7, 5.8 or 5.9
 + WiX Toolset if you plan to make installers for Windows Platforms.
 + Any recent version of Git in your command path
 
@@ -94,9 +94,9 @@ Requirements:
   + Visual Studio 2013 and 2015 will provide this if installed with `C++ Tools` selected
   + There's a standalone download for the 2015 build tools [here](http://landinghub.visualstudio.com/visual-cpp-build-tools)
 + [CMake](https://cmake.org/download/)
-+ [Qt 5.6, 5.7 or 5.8](https://www.qt.io/download-open-source/) in your %Path% environment variable.
-  + Example %Path% addition: `;C:\Qt\5.8\msvc2015_64\bin`
-  + [Here's what I select since I plan to only have x64 builds with Visual Studio 2015](https://imgur.com/YP6v8rE)
++ [Qt 5.6, 5.7, 5.8 or 5.9](https://www.qt.io/download-open-source/) in your %Path% environment variable.
+  + Example %Path% addition: `;C:\Qt\5.9\msvc2015_64\bin`
+  + [Here's what I select since I plan to only have x64 builds with Visual Studio 2015](https://imgur.com/KlFInOn)
 + [WiX Toolset build tools](http://wixtoolset.org/releases/) and maybe also the `WiX Toolset Visual Studio 201x Extension`
 
 Notes:
@@ -127,7 +127,7 @@ Requirements:
 + Compiler!
 + CMake!
 + Qt!
-  + Also you'll need the Qt5 Linguist Tools which might be `qttools5-dev-tools` or `qt5-tools`.
+  + ~~Also you'll need the Qt5 Linguist Tools which might be `qttools5-dev-tools` or `qt5-tools`.~~ Maybe not.
 + X11!
   + X11/Xorg dev packages along with something like `libXtst-devel`.
 
