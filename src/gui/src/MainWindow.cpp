@@ -55,6 +55,10 @@
 #include <Windows.h>
 #endif
 
+#if defined(Q_OS_UNIX)
+#include <signal.h>
+#endif
+
 #if defined(Q_OS_WIN)
 #define SYNERGYS_NAME "synergys.exe"
 #define SYNERGYC_NAME "synergyc.exe"
@@ -816,6 +820,12 @@ void MainWindow::synergyFinished(int exitCode, QProcess::ExitStatus)
 	if (exitCode == 0) {
 		appendLogInfo(QString("process exited normally"));
 	}
+#if defined(Q_OS_UNIX)
+	else if (exitCode == SIGKILL) {
+		// QProcess::close() sends SIGKILL which becomes the exit code too.
+		appendLogInfo(QString("process exited normally"));
+	}
+#endif
 	else {
 		appendLogError(QString("process exited with error code: %1").arg(exitCode));
 	}
