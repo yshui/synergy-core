@@ -54,8 +54,8 @@ endif()
 if ("${_LIBRESSL_PATH}" STREQUAL "")
 	# user did not provide anything so we skip lower
 
-	set(_LIBRESSL_VERSION "libressl-2.5.4")
-	set(_LIBRESSL_SHA256 "107a5b522fbb8318d4c3be668075e5e607296f0a9255d71674caa94571336efa")
+	set(_LIBRESSL_VERSION "libressl-2.6.0")
+	set(_LIBRESSL_SHA256 "e48d557474571792699000c32ae97dcef34207d13ed93e4126f213d5dcbe8a53")
 	# set to in-source location of where libressl will be uncompressed to
 	set(_LIBRESSL_PATH "${root_dir}/ext/${_LIBRESSL_VERSION}")
 
@@ -97,6 +97,7 @@ ExternalProject_Add(libressl
 	PREFIX libressl
 	SOURCE_DIR "${_LIBRESSL_PATH}"
 	INSTALL_COMMAND ""
+	CMAKE_ARGS -DLIBRESSL_SKIP_INSTALL=ON
 )
 
 option(_DISABLE_GIT_REVISION "disable embedding a git revision" 0)
