@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>434</width>
-    <height>437</height>
+    <width>464</width>
+    <height>486</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -241,7 +241,7 @@
         <item row="3" column="0">
          <widget class="QLabel" name="label_5">
           <property name="text">
-           <string>M&amp;eta:</string>
+           <string>&amp;Meta:</string>
           </property>
           <property name="buddy">
            <cstring>m_pComboBoxMeta</cstring>
@@ -452,7 +452,7 @@
           </property>
          </widget>
         </item>
-        <item row="3" column="0">
+        <item row="5" column="0">
          <widget class="QCheckBox" name="m_pCheckBoxXTest">
           <property name="text">
            <string>Fix XTest for Xinerama</string>
@@ -462,7 +462,7 @@
           </property>
          </widget>
         </item>
-        <item row="4" column="0">
+        <item row="7" column="0">
          <spacer>
           <property name="orientation">
            <enum>Qt::Vertical</enum>
@@ -474,6 +474,13 @@
            </size>
           </property>
          </spacer>
+        </item>
+        <item row="6" column="0">
+         <widget class="QCheckBox" name="m_pCheckBoxPassLockKeys">
+          <property name="text">
+           <string>Pass LOCK keys</string>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>

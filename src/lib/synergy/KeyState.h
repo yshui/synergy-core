@@ -85,6 +85,8 @@ public:
 
 	SInt32 getKeyState(KeyButton keyButton) { return m_keys[keyButton]; }
 
+	virtual void		disableIgnoringThoseKeys();
+
 protected:
 	typedef synergy::KeyMap::Keystroke Keystroke;
 
@@ -229,4 +231,7 @@ private:
 	KeyButton			m_serverKeys[kNumButtons];
 
 	IEventQueue*		m_events;
+
+	//
+	bool 				m_ignoreThoseKeys;
 };

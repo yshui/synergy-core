@@ -57,6 +57,7 @@ ScreenSettingsDialog::ScreenSettingsDialog(QWidget* parent, Screen* pScreen) :
 	m_pCheckBoxNumLock->setChecked(m_pScreen->fix(Screen::NumLock));
 	m_pCheckBoxScrollLock->setChecked(m_pScreen->fix(Screen::ScrollLock));
 	m_pCheckBoxXTest->setChecked(m_pScreen->fix(Screen::XTest));
+	m_pCheckBoxPassLockKeys->setChecked(m_pScreen->fix(Screen::PassLockKeys));
 }
 
 void ScreenSettingsDialog::accept()
@@ -104,6 +105,7 @@ void ScreenSettingsDialog::accept()
 	m_pScreen->setFix(Screen::NumLock, m_pCheckBoxNumLock->isChecked());
 	m_pScreen->setFix(Screen::ScrollLock, m_pCheckBoxScrollLock->isChecked());
 	m_pScreen->setFix(Screen::XTest, m_pCheckBoxXTest->isChecked());
+	m_pScreen->setFix(Screen::PassLockKeys, m_pCheckBoxPassLockKeys->isChecked());
 
 	QDialog::accept();
 }

@@ -102,13 +102,6 @@ public:
 	virtual const String&
 						getDropTarget() const { throw std::runtime_error("getDropTarget not implemented"); }
 
-protected:
-	//! Update mouse buttons
-	/*!
-	Subclasses must implement this method to update their internal mouse
-	button mapping and, if desired, state tracking.
-	*/
-	virtual void		updateButtons() = 0;
 
 	//! Get the key state
 	/*!
@@ -116,6 +109,13 @@ protected:
 	key state object that each subclass must have.
 	*/
 	virtual IKeyState*	getKeyState() const = 0;
+protected:
+	//! Update mouse buttons
+	/*!
+	Subclasses must implement this method to update their internal mouse
+	button mapping and, if desired, state tracking.
+	*/
+	virtual void		updateButtons() = 0;
 
 	// IPlatformScreen overrides
 	virtual void		handleSystemEvent(const Event& event, void*) = 0;

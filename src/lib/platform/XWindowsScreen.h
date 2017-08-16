@@ -84,12 +84,12 @@ public:
 	virtual void		setOptions(const OptionsList& options);
 	virtual void		setSequenceNumber(UInt32);
 	virtual bool		isPrimary() const;
+	virtual IKeyState*	getKeyState() const;
 
 protected:
 	// IPlatformScreen overrides
 	virtual void		handleSystemEvent(const Event&, void*);
 	virtual void		updateButtons();
-	virtual IKeyState*	getKeyState() const;
 
 private:
 	// event sending

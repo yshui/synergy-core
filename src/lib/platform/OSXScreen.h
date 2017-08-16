@@ -101,12 +101,12 @@ public:
 
 	const String&		getDropTarget() const { return m_dropTarget; }
 	void				waitForCarbonLoop() const;
+	virtual IKeyState*	getKeyState() const;
 
 protected:
 	// IPlatformScreen overrides
 	virtual void		handleSystemEvent(const Event&, void*);
 	virtual void		updateButtons();
-	virtual IKeyState*	getKeyState() const;
 
 private:
 	void				updateScreenShape();

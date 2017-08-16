@@ -119,12 +119,12 @@ public:
 	virtual String&	getDraggingFilename();
 	virtual const String&
 						getDropTarget() const;
+	virtual IKeyState*	getKeyState() const;
 
 protected:
 	// IPlatformScreen overrides
 	virtual void		handleSystemEvent(const Event&, void*);
 	virtual void		updateButtons();
-	virtual IKeyState*	getKeyState() const;
 
 	// simulate a local key to the system directly
 	void				fakeLocalKey(KeyButton button, bool press) const;

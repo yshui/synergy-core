@@ -18,6 +18,8 @@
 
 #include "synergy/Screen.h"
 #include "synergy/IPlatformScreen.h"
+#include "synergy/PlatformScreen.h"
+#include "synergy/KeyState.h"
 #include "synergy/protocol_types.h"
 #include "base/Log.h"
 #include "base/IEventQueue.h"
@@ -303,6 +305,14 @@ Screen::setOptions(const OptionsList& options)
 				m_halfDuplex &= ~KeyModifierScrollLock;
 			}
 			LOG((CLOG_DEBUG1 "half-duplex scroll-lock %s", ((m_halfDuplex & KeyModifierScrollLock) != 0) ? "on" : "off"));
+		}
+		else if (options[i] == kOptionPassLockKeys) {
+			if (options[i + 1] != 0) {
+				PlatformScreen* pscreen = dynamic_cast<PlatformScreen*>(m_screen);
+				KeyState* pkeystate = dynamic_cast<KeyState*>(pscreen->getKeyState());
+				pkeystate->disableIgnoringThoseKeys();
+			}
+			LOG((CLOG_DEBUG1 "pass lock keys %s", options[i+1] ? "on" : "off"));
 		}
 	}
 

@@ -388,6 +388,7 @@ KeyState::KeyState(IEventQueue* events) :
 	m_keyMapPtr(new synergy::KeyMap()),
 	m_keyMap(*m_keyMapPtr),
 	m_mask(0),
+	m_ignoreThoseKeys(true),
 	m_events(events)
 {
 	init();
@@ -398,6 +399,7 @@ KeyState::KeyState(IEventQueue* events, synergy::KeyMap& keyMap) :
 	m_keyMapPtr(0),
 	m_keyMap(keyMap),
 	m_mask(0),
+	m_ignoreThoseKeys(true),
 	m_events(events)
 {
 	init();
@@ -407,6 +409,12 @@ KeyState::~KeyState()
 {
 	if (m_keyMapPtr)
 		delete m_keyMapPtr;
+}
+
+void
+KeyState::disableIgnoringThoseKeys()
+{
+	m_ignoreThoseKeys = false;
 }
 
 void
@@ -559,7 +567,7 @@ KeyState::fakeKeyDown(KeyID id, KeyModifierMask mask, KeyButton serverID)
 	}
 
 	// ignore certain keys
-	if (isIgnoredKey(id, mask)) {
+	if (m_ignoreThoseKeys && isIgnoredKey(id, mask)) {
 		LOG((CLOG_DEBUG1 "ignored key %04x %04x", id, mask));
 		return;
 	}
