@@ -23,6 +23,10 @@
 #include <zmouse.h>
 #include <tchar.h>
 
+#ifndef WM_MOUSEHWHEEL
+#define WM_MOUSEHWHEEL 0x020E
+#endif
+
 #if _MSC_VER >= 1400
 // VS2005 hack - we don't use assert here because we don't want to link with the CRT.
 #undef assert
@@ -492,6 +496,12 @@ doMouseHookHandler(WPARAM wParam, SInt32 x, SInt32 y, SInt32 data)
 			PostThreadMessage(g_threadID, SYNERGY_MSG_MOUSE_WHEEL, data, 0);
 		}
 		return (g_mode == kHOOK_RELAY_EVENTS);
+	case WM_MOUSEHWHEEL:
+		if (g_mode == kHOOK_RELAY_EVENTS) {
+			// relay event
+			PostThreadMessage(g_threadID, SYNERGY_MSG_MOUSE_WHEEL, 0, data);
+		}
+		return (g_mode == kHOOK_RELAY_EVENTS);
 
 	case WM_NCMOUSEMOVE:
 	case WM_MOUSEMOVE:
@@ -588,7 +598,7 @@ mouseHook(int code, WPARAM wParam, LPARAM lParam)
 		SInt32 x = (SInt32)info->pt.x;
 		SInt32 y = (SInt32)info->pt.y;
 		SInt32 w = 0;
-		if (wParam == WM_MOUSEWHEEL) {
+		if (wParam == WM_MOUSEWHEEL || wParam == WM_MOUSEHWHEEL) {
 			// win2k and other systems supporting WM_MOUSEWHEEL in
 			// the mouse hook are gratuitously different (and poorly
 			// documented).  if a low-level mouse hook is in place
