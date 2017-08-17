@@ -678,7 +678,7 @@ OSXScreen::fakeMouseWheel(SInt32 xDelta, SInt32 yDelta) const
 		CGEventRef scrollEvent = CGEventCreateScrollWheelEvent(
 			NULL, kCGScrollEventUnitLine, 2,
 			mapScrollWheelFromSynergy(yDelta),
-			-mapScrollWheelFromSynergy(xDelta));
+			mapScrollWheelFromSynergy(xDelta));
 
         // Fix for sticky keys
         CGEventFlags modifiers = m_keyState->getModifierStateAsOSXFlags();
@@ -1029,7 +1029,7 @@ OSXScreen::handleSystemEvent(const Event& event, void*)
 			}
 
 			if (xScroll != 0 || yScroll != 0) {
-				onMouseWheel(-mapScrollWheelToSynergy(xScroll),
+				onMouseWheel(mapScrollWheelToSynergy(xScroll),
 								mapScrollWheelToSynergy(yScroll));
 			}
 		}
