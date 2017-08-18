@@ -25,9 +25,6 @@
 #include "base/Log.h"
 #include "base/String.h"
 
-#ifdef WINAPI_MSWINDOWS
-#include <VersionHelpers.h>
-#endif
 
 ArgsBase* ArgParser::m_argsBase = NULL;
 
@@ -222,7 +219,12 @@ ArgParser::parseGenericArgs(int argc, const char* const* argv, int& i)
 #endif
 
 #ifdef WINAPI_MSWINDOWS
-		if (!IsWindowsVistaOrGreater()) {
+		OSVERSIONINFOW osvi;
+		osvi.dwOSVersionInfoSize = sizeof(osvi);
+#pragma warning(push)		
+#pragma warning(disable: 4996)
+		if (GetVersionExW(&osvi) && osvi.dwMajorVersion < 6) {
+#pragma warning(pop)
 			useDragDrop = false;
 			LOG((CLOG_INFO "ignoring --enable-drag-drop, not supported below vista."));
 		}

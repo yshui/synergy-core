@@ -34,7 +34,6 @@
 #include <sstream>
 #include <iostream>
 #include <conio.h>
-#include <VersionHelpers.h>
 
 AppUtilWindows::AppUtilWindows(IEventQueue* events) :
 	m_events(events),
@@ -133,8 +132,15 @@ AppUtilWindows::beforeAppExit()
 int
 AppUtilWindows::run(int argc, char** argv)
 {
-	if (!IsWindowsXPSP3OrGreater()) {
-		throw std::runtime_error("Synergy only supports Windows XP SP3 and above.");
+	OSVERSIONINFOW osvi;
+	osvi.dwOSVersionInfoSize = sizeof(osvi);
+#pragma warning(push)		
+#pragma warning(disable: 4996)
+ 	if (GetVersionExW(&osvi)) {
+#pragma warning(pop)
+		if (osvi.dwMajorVersion <= 5 && osvi.dwServicePackMajor < 3) {
+			throw std::runtime_error("Synergy only supports Windows XP SP3 and above.");
+		}
 	}
 
 	// record window instance for tray icon, etc

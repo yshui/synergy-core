@@ -20,9 +20,7 @@
 
 #include <Windows.h>
 #include <shlobj.h>
-#include <tchar.h>
 #include <string.h>
-#include <VersionHelpers.h>
 
 //
 // ArchFileWindows

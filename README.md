@@ -133,6 +133,8 @@ Notes:
        + `Visual Studio 14 2015` -- x86_32 VS2015
        + `Visual Studio 15 2017 Win64` -- x86_64 VS2017
        + `Visual Studio 12 2013` -- x86_32 VS2013
+     + Also for targetting Windows XP you might need to provide a toolset argument such as `-T v140_xp` (the 2015 build tools XP target) or `-T v120_xp` (the 2013 one).
+       + so `cmake -DCMAKE_BUILD_TYPE=Release -G"Visual Studio 14 2015" -T v140_xp ../`
 11. `cmake --build ./ --config Release`
 12. And now continue on if you want to create an installer.
 13. `windeployqt bin\synergygui.exe`
