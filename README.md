@@ -138,10 +138,9 @@ Notes:
        + so `cmake -DCMAKE_BUILD_TYPE=Release -G"Visual Studio 14 2015" -T v140_xp ../`
 11. `cmake --build ./ --config Release`
 12. And now continue on if you want to create an installer.
-13. `windeployqt bin\synergygui.exe`
-14. `msbuild ../src/setup/win32/synergy.sln /p:Configuration=Release /p:Platform=x64`
+13. `msbuild ../src/setup/win32/synergy.sln /p:Configuration=Release /p:Platform=x64`
      + Or for x86_32 `/p:Platform=x86`
-15. Now you can find the installer at `bin\synergy_installer_???.msi` where `???` is `x86` or `x64`
+14. Now you can find the installer at `bin\synergy_installer_???.msi` where `???` is `x86` or `x64`
 + **Note:** You can also replace all instances above of `Release` with `Debug`, `RelWithDebInfo`, or `MinSizeRel`.
 
 

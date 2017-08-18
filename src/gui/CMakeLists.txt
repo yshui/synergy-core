@@ -32,6 +32,11 @@ add_dependencies(synergygui libressl)
 target_link_libraries(synergygui ${OPENSSL_LIBCRYPTO})
 if (WIN32)
 	target_link_libraries(synergygui Ws2_32)
+	add_custom_command(
+		TARGET synergygui
+		POST_BUILD
+		COMMAND windeployqt.exe "${EXECUTABLE_OUTPUT_PATH}/synergygui.exe"
+	)
 endif()
 
 include_directories(
