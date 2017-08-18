@@ -8,11 +8,8 @@
     <OutputType>Package</OutputType>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
-    <OutputPath>..\..\..\build\bin\$(Platform)\$(Configuration)\</OutputPath>
+    <OutputPath>..\..\..\build\bin\</OutputPath>
     <IntermediateOutputPath>..\..\..\build\wix\obj\$(Configuration)\</IntermediateOutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <OutputPath>..\..\..\build\bin\$(Platform)\$(Configuration)\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <WixExtension Include="WixFirewallExtension">
@@ -24,7 +21,7 @@
       <Name>WixUtilExtension</Name>
     </WixExtension>
     <WixExtension Include="WixUIExtension">
-      <HintPath>C:\Program Files (x86)\WiX Toolset v3.10\bin\WixUIExtension.dll</HintPath>
+      <HintPath>$(WixToolPath)WixUIExtension.dll</HintPath>
       <Name>WixUIExtension</Name>
     </WixExtension>
     <Compile Include="Product.wxs" />

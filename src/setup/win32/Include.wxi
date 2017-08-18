@@ -4,7 +4,7 @@
   <?define Name="Synergy" ?>
   <?define Author="Symless Ltd" ?>
   
-  <?define BinPath="../../../build/bin/$(var.Platform)/$(var.Configuration)" ?>
+  <?define BinPath="../../../build/bin" ?>
   <?define ResPath="../../../res" ?>
 
   <?ifndef Version ?>

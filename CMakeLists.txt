@@ -41,14 +41,10 @@ endif()
 set(root_dir "${PROJECT_SOURCE_DIR}")
 
 set(EXECUTABLE_OUTPUT_PATH "${CMAKE_BINARY_DIR}/bin")
-set(LIBRARY_OUTPUT_PATH "${CMAKE_BINARY_DIR}/lib")
-
-if (MSVC)
-	set(EXECUTABLE_OUTPUT_PATH "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_VS_PLATFORM_NAME}")
-	# the CMAKE_RUNTIME_OUTPUT_DIRECTORY is for .dlls like synwinhk.dll
-	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${EXECUTABLE_OUTPUT_PATH}")
-	set(LIBRARY_OUTPUT_PATH "${LIBRARY_OUTPUT_PATH}/${CMAKE_VS_PLATFORM_NAME}")
-endif()
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_BINARY_DIR}/bin")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_BINARY_DIR}/bin")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO "${CMAKE_BINARY_DIR}/bin")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_MINSIZEREL "${CMAKE_BINARY_DIR}/bin")
 
 # user can provide `-D_LIBRESSL_PATH=somewhere`
 if ("${_LIBRESSL_PATH}" STREQUAL "")
@@ -410,22 +406,12 @@ set(OPENSSL_BOTH_LIBS
 	"${OPENSSL_LIBCRYPTO}"
 )
 
-add_subdirectory(src)
-
 if (MSVC)
 	# TODO:	consider using /analyze to uncover potential bugs in the source code.
 
-	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /MP")
-	# /WX - warnings as errors (we have a problem with people checking in code with warnings).
 	# /MP - use multi cores to compile.
-	# /D _BIND_TO_CURRENT_VCLIBS_VERSION - TODO: explain why.
-	# /D _SECURE_SCL=1 - find bugs with iterators.
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /WX /MP /D_BIND_TO_CURRENT_VCLIBS_VERSION=1 /D_SECURE_SCL=1")
-
-	# /MD - use multi-core libraries.
-	# /O2 - get the fastest code.
-	# /Ob2 - expand inline functions (auto-inlining).
-	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD /O2 /Ob2")
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /MP")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
 endif()
 
 if (CONF_DOXYGEN)
@@ -434,3 +420,6 @@ if (CONF_DOXYGEN)
 	# For doxygen.cfg, save the results based on a template (doxygen.cfg.in).
 	configure_file("${root_dir}/res/doxygen.cfg.in" "${root_dir}/doc/doxygen.cfg")
 endif()
+
+
+add_subdirectory(src)
