@@ -132,13 +132,13 @@ AppUtilWindows::beforeAppExit()
 int
 AppUtilWindows::run(int argc, char** argv)
 {
-	OSVERSIONINFOW osvi;
+	OSVERSIONINFOEXW osvi;
 	osvi.dwOSVersionInfoSize = sizeof(osvi);
 #pragma warning(push)		
 #pragma warning(disable: 4996)
- 	if (GetVersionExW(&osvi)) {
+ 	if (GetVersionExW((OSVERSIONINFOW*)&osvi)) {
 #pragma warning(pop)
-		if (osvi.dwMajorVersion <= 5 && osvi.dwServicePackMajor < 3) {
+		if (osvi.dwMajorVersion <= 5 && osvi.wServicePackMajor < 3) {
 			throw std::runtime_error("Synergy only supports Windows XP SP3 and above.");
 		}
 	}

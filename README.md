@@ -102,7 +102,8 @@ Requirements:
 + [CMake](https://cmake.org/download/)
 + [Qt 5.6, 5.7, 5.8 or 5.9](https://www.qt.io/download-open-source/)
   + [Here's what I have selected for x32/x64 VS2015 and x64 VS2017](https://imgur.com/ImOghWy)
-    + Some notes: 5.6 is a LTS (long term support) version ending in 2018 and 5.9 too ending in 2020.
+    + Some notes: 5.6 is a LTS (long term support) version ending in 2019 and 5.9 too ending in 2020.
+    + Also you'll need to use 5.6 if you want to build targeting Windows XP.
 + [WiX Toolset build tools](http://wixtoolset.org/releases/) and maybe also the `WiX Toolset Visual Studio 201x Extension`
 
 Notes:
