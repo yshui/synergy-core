@@ -2118,7 +2118,7 @@ ConfigReadContext::parseInterval(const ArgList& args) const
 		throw XConfigRead(*this, "invalid interval \"%{1}\"", concatArgs(args));
 	}
 
-	return Config::Interval(startValue / 100.0, endValue / 100.0);
+	return Config::Interval((float)(startValue / 100.0), (float)(endValue / 100.0));
 }
 
 void

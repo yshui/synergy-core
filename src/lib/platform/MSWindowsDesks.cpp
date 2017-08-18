@@ -697,7 +697,10 @@ MSWindowsDesks::deskThread(void* vdesk)
 	{
 		OSVERSIONINFOW osvi;
 		osvi.dwOSVersionInfoSize = sizeof(osvi);
+#pragma warning(push)		
+#pragma warning(disable: 4996)
 		if (GetVersionExW(&osvi)) {
+#pragma warning(pop)
 			vistaOrGreater = osvi.dwMajorVersion >= 6;
 		}
 	}

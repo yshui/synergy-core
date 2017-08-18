@@ -91,7 +91,7 @@ IArchString::convStringWCToMB(char* dst,
 	}
 	ARCH->unlockMutex(s_mutex);
 
-	return len;
+	return (int)len;
 }
 
 int
@@ -142,7 +142,7 @@ IArchString::convStringMBToWC(wchar_t* dst,
 				// normal character
 				len    += 1;
 				scan   += mblen;
-				n      -= mblen;
+				n      -= (UInt32)mblen;
 				break;
 			}
 		}
@@ -177,7 +177,7 @@ IArchString::convStringMBToWC(wchar_t* dst,
 			default:
 				// normal character
 				scan   += mblen;
-				n      -= mblen;
+				n      -= (UInt32)mblen;
 				break;
 			}
 		}
@@ -185,5 +185,5 @@ IArchString::convStringMBToWC(wchar_t* dst,
 	}
 	ARCH->unlockMutex(s_mutex);
 
-	return len;
+	return (int)len;
 }
