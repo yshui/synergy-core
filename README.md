@@ -137,10 +137,8 @@ Notes:
      + Also for targetting Windows XP you might need to provide a toolset argument such as `-T v140_xp` (the 2015 build tools XP target) or `-T v120_xp` (the 2013 one).
        + so `cmake -DCMAKE_BUILD_TYPE=Release -G"Visual Studio 14 2015" -T v140_xp ../`
 11. `cmake --build ./ --config Release`
-12. And now continue on if you want to create an installer.
-13. `msbuild ../src/setup/win32/synergy.sln /p:Configuration=Release /p:Platform=x64`
-     + Or for x86_32 `/p:Platform=x86`
-14. Now you can find the installer at `bin\synergy_installer_???.msi` where `???` is `x86` or `x64`
+12. And if you want to build an installer: `msbuild synwix.sln`
+     + You can find the installer at `build\bin\synergy_installer_???.msi` where `???` is `x86` or `x64`
 + **Note:** You can also replace all instances above of `Release` with `Debug`, `RelWithDebInfo`, or `MinSizeRel`.
 
 

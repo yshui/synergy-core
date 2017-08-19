@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Include>
+  
+  <?define Name="Synergy" ?>
+  <?define Author="Symless Ltd" ?>
+  
+  <?define BinPath="${EXECUTABLE_OUTPUT_PATH}" ?>
+  <?define ResPath="${root_dir}/res" ?>
+
+  <?ifndef Version ?>
+  <?define Version="${PROJECT_VERSION}" ?>
+  <?endif?>
+
+  <?define UpgradeGuid32="BE0B9FD8-45E2-4A8E-A0D8-1F774D074A78" ?>
+  <?define UpgradeGuid64="E8A4FA54-14B9-4FD1-8E00-7BC46555FDA0" ?>
+  
+  <?if $(var.Platform) = "x64" ?>
+  <?define ProgramFilesFolder="ProgramFiles64Folder" ?>
+  <?define PlatformSimpleName="64-bit" ?>
+  <?define UpgradeGuid="$(var.UpgradeGuid64)" ?>
+  <?else?>
+  <?define ProgramFilesFolder="ProgramFilesFolder" ?>
+  <?define PlatformSimpleName="32-bit" ?>
+  <?define UpgradeGuid="$(var.UpgradeGuid32)" ?>
+  <?endif?>
+
+  <?define CRT="$(env.CommonProgramFiles)\Merge Modules\Microsoft_VC140_CRT_$(var.Platform).msm" ?>
+  
+</Include>
