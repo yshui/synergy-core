@@ -17,6 +17,7 @@ build_script:
     - msbuild synwix.sln
 
 test: off
-deploy:
-  artifact: ../build/bin/*.*
-  provider: Environment
+
+artifacts: 
+    - path: '../build/bin/*.*'
+    - path: './build/bin/*.*'
