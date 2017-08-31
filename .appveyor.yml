@@ -18,4 +18,4 @@ build_script:
 
 test: off
 deploy:
-    - artifact ../build/bin/*.*
+  artifact: ../build/bin/*.*
