@@ -19,4 +19,4 @@ build_script:
 test: off
 deploy:
   artifact: ../build/bin/*.*
-  provider: GitHub
+  provider: Environment
