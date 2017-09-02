@@ -32,7 +32,11 @@ AboutDialog::AboutDialog(QWidget* parent, const QString& synergyApp) :
 		_SYN_VERSION "-" _SYN_VERSION_STAGE "-" _GIT_REVISION;
 	m_pLabelSynergyVersion->setText(version);
 
+#ifdef _USE_C_DATE
 	QString buildDateString = QString::fromLocal8Bit(__DATE__).simplified();
+#else
+	QString buildDateString = QString("Jan 1 2000");
+#endif
 	QDate buildDate = QLocale("en_US").toDate(buildDateString, "MMM d yyyy");
 	m_pLabelBuildDate->setText(buildDate.toString(Qt::SystemLocaleLongDate));
 

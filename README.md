@@ -12,6 +12,8 @@ The `master` branch is what you want to use. `activey` is used for sharing code 
 
 **IMPORTANT: I DON'T BUILD OR TEST OSX/MACOS.** I don't have an environment to use so builds are likely to fail.
 
+Random thing: `-D_USE_C_DATE=OFF` will help with reproducible builds.
+
 
 Changes in this fork
 --------------------
@@ -82,6 +84,7 @@ cd build
 set PATH=%PATH%;C:\Qt\5.9.1\msvc2015_64\bin
 cmake -DCMAKE_BUILD_TYPE=Release -G"Visual Studio 14 2015 Win64" ../
 cmake --build ./ --config Release
+msbuild synwix.sln
 ```
 
 If you want to build the tests for Synergy (`-D_TESTS=ON`) you'll the [googletest (and googlemock)](https://github.com/google/googletest) framework. It is included as a submodule which will be downloaded if you run:

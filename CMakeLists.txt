@@ -108,8 +108,7 @@ ExternalProject_Add(libressl
 	CMAKE_ARGS -DLIBRESSL_SKIP_INSTALL=ON
 )
 
-option(_DISABLE_GIT_REVISION "disable embedding a git revision" 0)
-if (NOT _DISABLE_GIT_REVISION)
+if ("${_GIT_REVISION}" STREQUAL "")
 	execute_process(
 		COMMAND git log -1 --format=%h
 		WORKING_DIRECTORY "${root_dir}"
@@ -117,11 +116,15 @@ if (NOT _DISABLE_GIT_REVISION)
 		OUTPUT_STRIP_TRAILING_WHITESPACE
 		ERROR_QUIET
 	)
+	if ("${_GIT_REVISION}" STREQUAL "")
+		set(_GIT_REVISION "00000000")
+	endif()
 endif()
-if ("${_GIT_REVISION}" STREQUAL "")
-	add_definitions(-D_GIT_REVISION=\"00000000\")
-else()
-	add_definitions(-D_GIT_REVISION=\"${_GIT_REVISION}\")
+add_definitions(-D_GIT_REVISION=\"${_GIT_REVISION}\")
+
+option(_USE_C_DATE "should we use __DATE__ in places" ON)
+if (_USE_C_DATE)
+	add_definitions(-D_USE_C_DATE)
 endif()
 
 option(_EXP_LEAK_FIX "a buggy/experimental memory leak fix" OFF)
