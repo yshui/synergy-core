@@ -712,8 +712,8 @@ MSWindowsScreen::isAnyMouseButtonDown(UInt32& buttonID) const
 		"Left Button",
 		"Middle Button",
 		"Right Button",
-		"X Button 1",
-		"X Button 2"
+		"Mouse 4",
+		"Mouse 5"
 	};
 
 	for (UInt32 i = 1; i < sizeof(m_buttons) / sizeof(m_buttons[0]); ++i) {
