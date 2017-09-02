@@ -5,6 +5,7 @@ config.h
 *~
 \.*.swp
 *.patch
+*.diff
 *build-gui-Desktop_Qt*
 build*
 Debug
