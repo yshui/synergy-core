@@ -3,6 +3,9 @@ Synergy
 Share one buggy mouse and one buggy keyboard between multiple computers.
 ---
 
+appveyor master: [![Build status master](https://ci.appveyor.com/api/projects/status/ayhyxtpmgmfr3x9n/branch/master?svg=true)](https://ci.appveyor.com/project/yupi2/synergy/branch/master)<br/>
+appveyor activey: [![Build status activey](https://ci.appveyor.com/api/projects/status/ayhyxtpmgmfr3x9n/branch/activey?svg=true)](https://ci.appveyor.com/project/yupi2/synergy/branch/activey)
+
 This is a fork whose goal is to be less buggy, build easier, and to remove the activation requirement for features.
 
 The `master` branch is what you want to use. `activey` is used for sharing code between my computers and is likely to have compilation errors or buggy code.
