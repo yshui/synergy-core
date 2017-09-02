@@ -15,7 +15,7 @@ install:
 build_script:
     - mkdir build
     - cd build
-    - cmake -DCMAKE_BUILD_TYPE=Release %vs_generator% ../
+    - cmake -DCMAKE_BUILD_TYPE=Release -D_USE_C_DATE=OFF %vs_generator% ../
     - cmake --build ./ --config Release
     - msbuild synwix.sln
 
