@@ -1771,6 +1771,10 @@ XWindowsUtil::ErrorLock::internalHandler(Display* display, XErrorEvent* event)
 	if (s_top != NULL && s_top->m_handler != NULL) {
 		s_top->m_handler(display, event, s_top->m_userData);
 	}
+	char buf[1024] = {0};
+	XGetErrorText(display, event->error_code, buf, sizeof(buf)-1);
+	buf[sizeof(buf)-1] = 0;
+	LOG((CLOG_DEBUG1 "X error string: %s", buf));
 	return 0;
 }
 
