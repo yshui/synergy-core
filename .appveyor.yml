@@ -1,25 +1,46 @@
+version: 4.2.{build}
+
+image: Visual Studio 2015
+
+# fetch repo as a zip archive
+shallow_clone: true
+
 environment:
-    matrix:
-        - vc_arch: amd64
-          target_arch: x86_64
-          qt_ver: 5.6\msvc2015_64
-          vs_generator: '-G"Visual Studio 14 2015 Win64"'
-        - vc_arch: amd64_x86  # cross-compile from amd64 to x86
-          target_arch: x86
-          qt_ver: 5.6\msvc2015
-          vs_generator: '-G"Visual Studio 14 2015" -T v140_xp'
+  matrix:
+    - vc_arch: amd64
+      target_arch: x86_64
+      qt_ver: 5.6\msvc2015_64
+      vs_generator: '-G"Visual Studio 14 2015 Win64"'
+    - vc_arch: amd64_x86  # cross-compile from amd64 to x86
+      target_arch: x86
+      qt_ver: 5.6\msvc2015
+      vs_generator: '-G"Visual Studio 14 2015" -T v140_xp'
 
 install:
-    - set path=c:\Program Files (x86)\WiX Toolset v3.11\bin;C:\Qt\%qt_ver%\bin;%path%
+  - set path=c:\Program Files (x86)\WiX Toolset v3.11\bin;C:\Qt\%qt_ver%\bin;%path%
 
 build_script:
-    - mkdir build
-    - cd build
-    - cmake -DCMAKE_BUILD_TYPE=Release -D_USE_C_DATE=OFF %vs_generator% ../
-    - cmake --build ./ --config Release
-    - msbuild synwix.sln
+  - mkdir build
+  - cd build
+  - cmake -DCMAKE_BUILD_TYPE=Release -D_USE_C_DATE=OFF -D_GIT_REVISION=%APPVEYOR_REPO_COMMIT% -D_GIT_BRANCH=%APPVEYOR_REPO_BRANCH% %vs_generator% ../
+  - cmake --build ./ --config Release
+  - msbuild synwix.sln
 
 test: off
 
 artifacts: 
-    - path: 'build/bin/*.msi'
+  - path: 'build/bin/*.msi'
+
+deploy:
+  - provider: GitHub
+    tag: '{version}_{APPVEYOR_REPO_BRANCH}_{APPVEYOR_REPO_COMMIT}'
+    description: 'Automatic Appveyor / Travis release'
+    auth_token:
+      secure: aAbYHstV/7LZnm9r4VtDv8Ox8JwiqgSHb8BC0ruEPI5arrE3Ir11Z8TjvuzM7ccV
+    artifact: 'build/bin/*.msi'
+    draft: true
+    #prerelease: true
+    #force_update: true
+    on:
+      branch: master
+      #appveyor_repo_tag: true

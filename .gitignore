@@ -18,4 +18,5 @@ src/gui/.qmake.stash
 src/setup/win32/synergy.suo
 .cproject
 .project
+*.autosave
 cmake_install.cmake

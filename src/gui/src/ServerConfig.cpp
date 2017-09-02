@@ -114,6 +114,7 @@ void ServerConfig::saveSettings()
 	settings().setValue("switchDoubleTap", switchDoubleTap());
 	settings().setValue("switchCornerSize", switchCornerSize());
 	settings().setValue("enableDragAndDrop", enableDragAndDrop());
+	settings().setValue("expLeakFix", expLeakFix());
 
 	writeSettings(settings(), switchCorners(), "switchCorner");
 
@@ -157,6 +158,7 @@ void ServerConfig::loadSettings()
 	setSwitchDoubleTap(settings().value("switchDoubleTap", 250).toInt());
 	setSwitchCornerSize(settings().value("switchCornerSize").toInt());
 	setEnableDragAndDrop(settings().value("enableDragAndDrop", true).toBool());
+	setExpLeakFix(settings().value("expLeakFix", false).toBool());
 
 	readSettings(settings(), switchCorners(), "switchCorner", false, NumSwitchCorners);
 
@@ -244,6 +246,7 @@ QTextStream& operator<<(QTextStream& outStream, const ServerConfig& config)
 	outStream << "\t" << "screenSaverSync = " << (config.screenSaverSync() ? "true" : "false") << endl;
 	outStream << "\t" << "win32KeepForeground = " << (config.win32KeepForeground() ? "true" : "false") << endl;
 	outStream << "\t" << "clipboardSharing = " << (config.clipboardSharing() ? "true" : "false") << endl;
+	outStream << "\t" << "expLeakFix = " << (config.expLeakFix() ? "true" : "false") << endl;
 
 	if (config.hasSwitchDelay())
 		outStream << "\t" << "switchDelay = " << config.switchDelay() << endl;

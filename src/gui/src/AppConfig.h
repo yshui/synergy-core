@@ -122,7 +122,7 @@ protected:
 		ElevateMode m_ElevateMode;
 		bool m_CryptoEnabled;
 		bool m_AutoHide;
-		QString m_lastVersion;
+		//QString m_lastVersion;
 
 	signals:
 		void sslToggled(bool enabled);

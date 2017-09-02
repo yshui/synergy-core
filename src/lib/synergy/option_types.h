@@ -69,6 +69,7 @@ static const OptionID	kOptionRelativeMouseMoves		= OPTION_CODE("MDLT");
 static const OptionID	kOptionWin32KeepForeground		= OPTION_CODE("_KFW");
 static const OptionID	kOptionClipboardSharing			= OPTION_CODE("CLPS");
 static const OptionID	kOptionPassLockKeys				= OPTION_CODE("PLKS");
+static const OptionID   kOptionExpLeakFix               = OPTION_CODE("EXLF");
 //@}
 
 //! @name Screen switch corner enumeration

@@ -31,8 +31,10 @@ There's a few things not listed here. Go through the commits.
   + Generating certificates now uses 4096 bits for RSA instead of 1024.
 + Printscreen doesn't send Alt+Printscreen to Windows clients anymore.
 + Some new icons for OSX? (maybe)
-+ EXTREMELY EXTREMELY BUGGY AND BAD MEMORY LEAK FIX FOR LINUX SERVERS.
-  + Add `-D_EXP_LEAK_FIX=ON` to the CMake configuration command.
++ EXTREMELY EXTREMELY BUGGY AND BAD MEMORY LEAK FIX FOR SERVERS (LINUX ONLY?).
+  + Toggle the checkbox in `Configured Server->Advanced server settings` named `VERY experimental memory leak fix for yupi2`.
+  + Also for a server config file in `section: options` you can add a `
+  expLeakFix = true` line.
 + Removed in-tree googletest source-code and replaced it with a git submodule.
 + Working Mouse 4 (browser backwards) and Mouse 5 (browser forwards).
 + Working Horizontal scrolling.
@@ -69,11 +71,10 @@ Building
 + Any recent version of Git in your command path
 
 Here's how I build on Linux:<br/>
-The `-D_EXP_LEAK_FIX=ON` part might not be desired ([#2](https://github.com/yupi2/synergy/issues/2))
 ```
 mkdir build
 cd build
-cmake -DCMAKE_BUILD_TYPE=Release -D_EXP_LEAK_FIX=ON ../
+cmake -DCMAKE_BUILD_TYPE=Release ../
 cmake --build ./ -- -j$(nproc)
 ```
 
@@ -167,8 +168,6 @@ Requirements:
 6. `cmake --build ./ -- -j$(nproc)`
     + `$(nproc)` uses the number of processors available. You can use a static number of cores with `-jN` where `N` is your number or remove it entirely `cmake -build ./`
 7. `ls bin`
-
-If you have memory leaks with Synergy then you can add a flag to the CMake configure step (`cmake -DCMAKE_BUILD_TYPE=Release -D_EXP_LEAK_FIX=ON ../`) and it might solve it.
 
 
 (Apple macOS) Compiling

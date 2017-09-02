@@ -33,6 +33,8 @@
 // SocketMultiplexer
 //
 
+bool SocketMultiplexer::m_expLeakFix = false;
+
 SocketMultiplexer::SocketMultiplexer() :
 	m_mutex(new Mutex),
 	m_thread(NULL),
@@ -72,6 +74,10 @@ SocketMultiplexer::~SocketMultiplexer()
 						i != m_socketJobMap.end(); ++i) {
 		delete *(i->second);
 	}
+}
+
+void SocketMultiplexer::setStaticExpLeakFix(bool b) {
+	m_expLeakFix = b;
 }
 
 void
@@ -145,16 +151,17 @@ SocketMultiplexer::removeSocket(ISocket* socket)
 void
 SocketMultiplexer::serviceThread(void*)
 {
-#if !defined(_EXP_LEAK_FIX)
-	std::vector<IArchNetwork::PollEntry> pfds;
-#endif
+	std::vector<IArchNetwork::PollEntry> pfds_func_start;
+	std::vector<IArchNetwork::PollEntry>& pfds = pfds_func_start;
 	IArchNetwork::PollEntry pfd;
 
 	// service the connections
 	for (;;) {
-#if defined(_EXP_LEAK_FIX)
-		std::vector<IArchNetwork::PollEntry> pfds;
-#endif
+		std::vector<IArchNetwork::PollEntry> pfds_for_loop;
+		if (m_expLeakFix) {
+			pfds = pfds_for_loop;
+		}
+
 		Thread::testCancel();
 
 		// wait until there are jobs to handle

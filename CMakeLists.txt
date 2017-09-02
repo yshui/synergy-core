@@ -21,7 +21,6 @@ project(synergy
 	LANGUAGES C CXX
 	VERSION 4.2.0)
 
-set(_SYN_VERSION_STAGE testing)
 set(_SYN_APPVERSION "Synergy ${PROJECT_VERSION}")
 
 # We're escaping quotes in the Windows version number, because
@@ -110,32 +109,40 @@ ExternalProject_Add(libressl
 
 if ("${_GIT_REVISION}" STREQUAL "")
 	execute_process(
-		COMMAND git log -1 --format=%h
+		COMMAND git rev-parse HEAD
 		WORKING_DIRECTORY "${root_dir}"
 		OUTPUT_VARIABLE _GIT_REVISION
 		OUTPUT_STRIP_TRAILING_WHITESPACE
 		ERROR_QUIET
 	)
 	if ("${_GIT_REVISION}" STREQUAL "")
-		set(_GIT_REVISION "00000000")
+		set(_GIT_REVISION "0000000000000000000000000000000000000000")
 	endif()
 endif()
 add_definitions(-D_GIT_REVISION=\"${_GIT_REVISION}\")
+
+if ("${_GIT_BRANCH}" STREQUAL "")
+	execute_process(
+		COMMAND git rev-parse --abbrev-ref HEAD
+		WORKING_DIRECTORY "${root_dir}"
+		OUTPUT_VARIABLE _GIT_BRANCH
+		OUTPUT_STRIP_TRAILING_WHITESPACE
+		ERROR_QUIET
+	)
+	if ("${_GIT_BRANCH}" STREQUAL "")
+		set(_GIT_BRANCH "unknown")
+	endif()
+endif()
+add_definitions(-D_GIT_BRANCH=\"${_GIT_BRANCH}\")
 
 option(_USE_C_DATE "should we use __DATE__ in places" ON)
 if (_USE_C_DATE)
 	add_definitions(-D_USE_C_DATE)
 endif()
 
-option(_EXP_LEAK_FIX "a buggy/experimental memory leak fix" OFF)
-if (_EXP_LEAK_FIX)
-	add_definitions(-D_EXP_LEAK_FIX)
-endif()
-
 #add_definitions(-D_SYN_VERSION_HIGH=\"${PROJECT_VERSION_MAJOR}\")
 #add_definitions(-D_SYN_VERSION_MIDDLE=\"${PROJECT_VERSION_MINOR}\")
 #add_definitions(-D_SYN_VERSION_LOW=\"${_SYN_VERSION_PATCH}\")
-add_definitions(-D_SYN_VERSION_STAGE=\"${_SYN_VERSION_STAGE}\")
 add_definitions(-D_SYN_VERSION=\"${PROJECT_VERSION}\")
 add_definitions(-D_SYN_APPVERSION=\"${_SYN_APPVERSION}\")
 

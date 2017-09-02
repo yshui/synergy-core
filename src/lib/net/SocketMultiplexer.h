@@ -108,4 +108,8 @@ private:
 	SocketJobMap		m_socketJobMap;
 	ISocketMultiplexerJob*
 						m_cursorMark;
+
+public:
+	static void setStaticExpLeakFix(bool b);
+	static bool         m_expLeakFix;
 };

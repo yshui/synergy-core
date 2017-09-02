@@ -767,6 +767,9 @@ Config::readSectionOptions(ConfigReadContext& s)
 		else if (name == "clipboardSharing") {
 			addOption("", kOptionClipboardSharing, s.parseBoolean(value));
 		}
+		else if (name == "expLeakFix") {
+			addOption("", kOptionExpLeakFix, s.parseBoolean(value));
+		}
 
 		else {
 			handled = false;
@@ -1407,7 +1410,8 @@ Config::getOptionValue(OptionID id, OptionValue value)
 		id == kOptionWin32KeepForeground ||
 		id == kOptionScreenPreserveFocus ||
 		id == kOptionPassLockKeys ||
-		id == kOptionClipboardSharing) {
+		id == kOptionClipboardSharing ||
+		id == kOptionExpLeakFix) {
 		return (value != 0) ? "true" : "false";
 	}
 	if (id == kOptionModifierMapForShift ||

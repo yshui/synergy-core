@@ -37,6 +37,7 @@
 #include "net/IDataSocket.h"
 #include "net/IListenSocket.h"
 #include "net/XSocket.h"
+#include "net/SocketMultiplexer.h"
 #include "mt/Thread.h"
 #include "arch/Arch.h"
 #include "base/TMethodJob.h"
@@ -1175,6 +1176,14 @@ Server::processOptions()
 
 			if (m_enableClipboard == false) {
 				LOG((CLOG_NOTE "clipboard sharing is disabled"));
+			}
+		}
+		else if (id == kOptionExpLeakFix) {
+			m_expLeakFix = (value != 0);
+			SocketMultiplexer::setStaticExpLeakFix(m_expLeakFix);
+
+			if (m_expLeakFix == true) {
+				LOG((CLOG_WARN "Will you fight? Or will you perish like a dog?"));
 			}
 		}
 	}

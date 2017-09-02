@@ -62,6 +62,7 @@ class ServerConfig : public BaseConfig
 		const HotkeyList& hotkeys() const { return m_Hotkeys; }
 		bool enableDragAndDrop() const { return m_EnableDragAndDrop; }
 		bool clipboardSharing() const { return m_ClipboardSharing; }
+		bool expLeakFix() const { return m_ExpLeakFix; }
 
 		void saveSettings();
 		void loadSettings();
@@ -89,6 +90,7 @@ class ServerConfig : public BaseConfig
 		void setSwitchCornerSize(int val) { m_SwitchCornerSize = val; }
 		void setEnableDragAndDrop(bool on) { m_EnableDragAndDrop = on; }
 		void setClipboardSharing(bool on) { m_ClipboardSharing = on; }
+		void setExpLeakFix(bool on) { m_ExpLeakFix = on; }
 		QList<bool>& switchCorners() { return m_SwitchCorners; }
 		HotkeyList& hotkeys() { return m_Hotkeys; }
 
@@ -115,6 +117,7 @@ class ServerConfig : public BaseConfig
 		QString m_ServerName;
 		bool m_EnableDragAndDrop;
 		bool m_ClipboardSharing;
+		bool m_ExpLeakFix;
 		MainWindow* m_pMainWindow;
 };
 

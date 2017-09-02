@@ -20,6 +20,14 @@
 
 #include <QtCore>
 #include <QtGui>
+#include <QClipboard>
+
+const static char version[] = _SYN_VERSION "_" _GIT_BRANCH "_" _GIT_REVISION;
+
+void AboutDialog::on_m_pButtonCopy_clicked() {
+	QClipboard *clipboard = QApplication::clipboard();
+	clipboard->setText(QString(version));
+}
 
 AboutDialog::AboutDialog(QWidget* parent, const QString& synergyApp) :
 	QDialog(parent, Qt::WindowTitleHint | Qt::WindowSystemMenuHint),
@@ -28,9 +36,7 @@ AboutDialog::AboutDialog(QWidget* parent, const QString& synergyApp) :
 	setupUi(this);
 
 	m_versionChecker.setApp(synergyApp);
-	QString version =
-		_SYN_VERSION "-" _SYN_VERSION_STAGE "-" _GIT_REVISION;
-	m_pLabelSynergyVersion->setText(version);
+	m_pLabelSynergyVersion->setText(QString(version));
 
 #ifdef _USE_C_DATE
 	QString buildDateString = QString::fromLocal8Bit(__DATE__).simplified();

@@ -474,6 +474,7 @@ private:
 	String				m_dragFileExt;
 	bool				m_ignoreFileTransfer;
 	bool				m_enableClipboard;
+	bool                m_expLeakFix;
 
 	Thread*				m_sendDragInfoThread;
 	bool				m_waitDragInfoThread;

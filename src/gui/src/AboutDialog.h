@@ -37,6 +37,9 @@ class AboutDialog : public QDialog, public Ui::AboutDialogBase
 
 	private:
 		VersionChecker m_versionChecker;
+
+	protected slots:
+		void on_m_pButtonCopy_clicked();
 };
 
 #endif
