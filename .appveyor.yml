@@ -1,0 +1,27 @@
+environment:
+    matrix:
+        - vc_arch: amd64
+          choco_arch:
+          nuget_arch: x64
+          target_arch: x86_64
+          qt_ver: 5.6\msvc2013_64
+        - vc_arch: amd64_x86  # cross-compile from amd64 to x86
+          choco_arch: --x86
+          nuget_arch: Win32
+          target_arch: x86
+          qt_ver: 5.6\msvc2013
+
+install:
+    - set path=c:\Program Files (x86)\WiX Toolset v3.11\bin;C:\Qt\5.6\msvc2013_64\bin;%path%
+
+build_script:
+    - mkdir build
+    - cd build
+    - cmake -DCMAKE_BUILD_TYPE=Release -G"Visual Studio 12 2013 Win64" ../
+    - cmake --build ./ --config Release
+    - msbuild synwix.sln
+
+test: off
+
+artifacts: 
+    - path: 'build/bin/*.msi'
