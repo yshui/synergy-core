@@ -3,11 +3,11 @@ environment:
         - vc_arch: amd64
           target_arch: x86_64
           qt_ver: 5.6\msvc2015_64
-          vs_generator: '-G"Visual Studio 12 2015 Win64"'
+          vs_generator: '-G"Visual Studio 14 2015 Win64"'
         - vc_arch: amd64_x86  # cross-compile from amd64 to x86
           target_arch: x86
           qt_ver: 5.6\msvc2015
-          vs_generator: '-G"Visual Studio 12 2015" -T v140_xp'
+          vs_generator: '-G"Visual Studio 14 2015" -T v140_xp'
 
 install:
     - set path=c:\Program Files (x86)\WiX Toolset v3.11\bin;C:\Qt\%qt_ver%\bin;%path%
