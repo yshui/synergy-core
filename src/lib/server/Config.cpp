@@ -1392,6 +1392,9 @@ Config::getOptionName(OptionID id)
 	if (id == kOptionPassLockKeys) {
 		return "passLockKeys";
 	}
+	if (id == kOptionExpLeakFix) {
+		return "expLeakFix";
+	}
 	return NULL;
 }
 

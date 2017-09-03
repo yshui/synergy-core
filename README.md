@@ -145,7 +145,7 @@ Notes:
        + so `cmake -DCMAKE_BUILD_TYPE=Release -G"Visual Studio 14 2015" -T v140_xp ../`
 11. `cmake --build ./ --config Release`
 12. And if you want to build an installer: `msbuild synwix.sln`
-     + You can find the installer at `build\bin\synergy_installer_???.msi` where `???` is `x86` or `x64`
+     + You can find the installer at `build\bin\synergy_installer_*.msi` where `*` is a version, git branch, git revision, and architecture.
 + **Note:** You can also replace all instances above of `Release` with `Debug`, `RelWithDebInfo`, or `MinSizeRel`.
 
 
