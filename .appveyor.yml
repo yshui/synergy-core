@@ -33,7 +33,7 @@ build_script:
 test: off
 
 artifacts: 
-  - path: 'build/bin/*.msi'
+  - path: 'build\bin\*.msi'
 
 deploy:
   - provider: GitHub
@@ -41,7 +41,7 @@ deploy:
     description: 'Automatic Appveyor / Travis release'
     auth_token:
       secure: aAbYHstV/7LZnm9r4VtDv8Ox8JwiqgSHb8BC0ruEPI5arrE3Ir11Z8TjvuzM7ccV
-    artifact: build/bin/*.msi # this doesn't like quotes around it i think?
+    artifact: build\bin\*.msi # this doesn't like quotes around it i think?
     draft: true
     #prerelease: true
     #force_update: true
