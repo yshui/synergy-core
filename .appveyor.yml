@@ -1,9 +1,19 @@
+# https://www.appveyor.com/docs/appveyor-yml/
+# https://www.appveyor.com/docs/deployment/github/
+# https://www.appveyor.com/docs/environment-variables/
+# https://www.appveyor.com/docs/build-environment/#pre-installed-software
+
 version: 1.0.{build}
 
 image: Visual Studio 2015
 
 # fetch repo as a zip archive
 shallow_clone: true
+
+# Do not build on tags (GitHub and BitBucket)
+skip_tags: true # commit to master -> bins deployed to github -> tag for release created -> builds again because of new tag
+# Start builds on tags only (GitHub and BitBucket)
+#skip_non_tags: true
 
 environment:
   matrix:

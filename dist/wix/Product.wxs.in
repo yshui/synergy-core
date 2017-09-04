@@ -9,7 +9,7 @@
   <Product
       Id="*"
       UpgradeCode="$(var.UpgradeGuid)"
-      Name="$(var.Name) ($(var.PlatformSimpleName))"
+      Name="$(var.Name) ($(var.PlatformSimple)-bit)"
       Language="1033"
       Version="$(var.Version)"
       Manufacturer="$(var.Author)">

@@ -16,11 +16,11 @@
   
   <?if $(var.Platform) = "x64" ?>
   <?define ProgramFilesFolder="ProgramFiles64Folder" ?>
-  <?define PlatformSimpleName="64-bit" ?>
+  <?define PlatformSimple="64" ?>
   <?define UpgradeGuid="$(var.UpgradeGuid64)" ?>
   <?else?>
   <?define ProgramFilesFolder="ProgramFilesFolder" ?>
-  <?define PlatformSimpleName="32-bit" ?>
+  <?define PlatformSimple="32" ?>
   <?define UpgradeGuid="$(var.UpgradeGuid32)" ?>
   <?endif?>
 
