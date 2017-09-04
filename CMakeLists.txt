@@ -45,18 +45,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE "${EXECUTABLE_OUTPUT_PATH}")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO "${EXECUTABLE_OUTPUT_PATH}")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_MINSIZEREL "${EXECUTABLE_OUTPUT_PATH}")
 
-if (MSVC)
-	if("${CMAKE_SIZEOF_VOID_P}" STREQUAL "4")
-		set(WIX_THING "${CMAKE_BUILD_TYPE}|x86")
-	else()
-		set(WIX_THING "${CMAKE_BUILD_TYPE}|x64")
-	endif()
-	configure_file("${root_dir}/dist/wix/Include.wxi.in" "${CMAKE_BINARY_DIR}/Include.wxi")
-	configure_file("${root_dir}/dist/wix/Product.wxs.in" "${CMAKE_BINARY_DIR}/Product.wxs")
-	configure_file("${root_dir}/dist/wix/synwix.sln.in" "${CMAKE_BINARY_DIR}/synwix.sln")
-	configure_file("${root_dir}/dist/wix/synwix.wixproj.in" "${CMAKE_BINARY_DIR}/synwix.wixproj")
-endif()
-
 # user can provide `-D_LIBRESSL_PATH=somewhere`
 if ("${_LIBRESSL_PATH}" STREQUAL "")
 	# user did not provide anything so we skip lower
@@ -434,6 +422,19 @@ if (MSVC)
 	# /MP - use multi cores to compile.
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /MP")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
+
+
+	if("${CMAKE_SIZEOF_VOID_P}" STREQUAL "4")
+		set(WIX_THING "${CMAKE_BUILD_TYPE}|x86")
+		set(WIX_BITS "x32")
+	else()
+		set(WIX_THING "${CMAKE_BUILD_TYPE}|x64")
+		set(WIX_BITS "x64")
+	endif()
+	configure_file("${root_dir}/dist/wix/Include.wxi.in" "${CMAKE_BINARY_DIR}/Include.wxi")
+	configure_file("${root_dir}/dist/wix/Product.wxs.in" "${CMAKE_BINARY_DIR}/Product.wxs")
+	configure_file("${root_dir}/dist/wix/synwix.sln.in" "${CMAKE_BINARY_DIR}/synwix.sln")
+	configure_file("${root_dir}/dist/wix/synwix.wixproj.in" "${CMAKE_BINARY_DIR}/synwix.wixproj")
 endif()
 
 if (CONF_DOXYGEN)
