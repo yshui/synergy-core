@@ -29,6 +29,11 @@
 #include <openssl/pem.h>
 #include <openssl/bio.h>
 
+#if !defined(Q_OS_WIN)
+#include <sys/types.h>
+#include <sys/stat.h>
+#endif
+
 static const char kCertificateSubjectInfo[] = "/CN=Synergy4rk";
 static const char kCertificateFilename[] = "Synergy.pem";
 static const char kSslDir[] = "SSL";
@@ -174,6 +179,7 @@ void SslCertificate::generateCertificate()
 		.arg(sslDirPath)
 		.arg(QDir::separator())
 		.arg(kCertificateFilename);
+	auto utf8_filename = filename.toUtf8();
 
 	//QFile file(filename);
 	if (QFile(filename).exists())
@@ -203,7 +209,7 @@ void SslCertificate::generateCertificate()
 
 		// BIO routines uses utf-8 on windows and we'll assume everything
 		// non-windows uses utf-8 too
-		synergy_pem = BIO_new_file(filename.toUtf8().constData(), "w+");
+		synergy_pem = BIO_new_file(utf8_filename.constData(), "w+");
 
 		// uh oh file failed to open
 		if (synergy_pem == NULL)
@@ -227,6 +233,12 @@ void SslCertificate::generateCertificate()
 			break; // wow really unlucky with these errors
 
 		synergy_pem = NULL;
+
+#if !defined(Q_OS_WIN)
+		// could check for chmod error
+		// could also extract the fd from the FILE* in openssl and use fchmod
+		chmod(utf8_filename.constData(), S_IRUSR|S_IWUSR);
+#endif
 
 		emit info(tr("SSL certificate generated."));
 
