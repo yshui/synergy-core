@@ -385,6 +385,9 @@ SecureSocket::initContext(bool server)
 
 	// drop SSLv3 support
 	SSL_CTX_set_options(m_ssl->m_context, SSL_OP_NO_SSLv3);
+	// what libtls uses - tls_internal.h - TLS_CIPHERS_DEFAULT
+	//SSL_CTX_set_cipher_list(m_ssl->m_context, "TLSv1.2+AEAD+ECDHE:TLSv1.2+AEAD+DHE");
+	//SSL_CTX_set_cipher_list(m_ssl->m_context, "HIGH");
 
 	if (m_ssl->m_context == NULL) {
 		showError();
@@ -838,7 +841,7 @@ SecureSocket::showSecureConnectInfo()
 		char msg[kMsgSize];
 		SSL_CIPHER_description(cipher, msg, kMsgSize);
 		LOG((CLOG_INFO "%s", msg));
-		}
+	}
 	return;
 }
 
