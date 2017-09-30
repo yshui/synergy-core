@@ -44,7 +44,7 @@ There's a few things not listed here. Go through the commits.
   + As opposed to not sending the keycodes and only treating them as modifiers.
   + `Configure Server -> Double-click a screen -> Pass LOCK keys`
 + Merged some pull-requests that are fine from the symless/synergy repo.
-  + Some that I haven't merged but will look into: #6064 #5730 #5245 #5073 #4542 #4499
+  + Some that I haven't merged but will look into: #6161 #6151 #6064 #5730 #5245 #5073 #4542 #4499
 
 
 Licenses and stuff
