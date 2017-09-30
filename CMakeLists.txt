@@ -49,8 +49,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_MINSIZEREL "${EXECUTABLE_OUTPUT_PATH}")
 if ("${_LIBRESSL_PATH}" STREQUAL "")
 	# user did not provide anything so we skip lower
 
-	set(_LIBRESSL_VERSION "libressl-2.6.0")
-	set(_LIBRESSL_SHA256 "e48d557474571792699000c32ae97dcef34207d13ed93e4126f213d5dcbe8a53")
+	set(_LIBRESSL_VERSION "libressl-2.6.2")
+	set(_LIBRESSL_SHA256 "b029d2492b72a9ba5b5fcd9f3d602c9fd0baa087912f2aaecc28f52f567ec478")
 	# set to in-source location of where libressl will be uncompressed to
 	set(_LIBRESSL_PATH "${root_dir}/ext/${_LIBRESSL_VERSION}")
 
