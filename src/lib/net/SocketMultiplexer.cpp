@@ -153,6 +153,7 @@ SocketMultiplexer::serviceThread(void*)
 {
 	std::vector<IArchNetwork::PollEntry> pfds_func_start;
 	std::vector<IArchNetwork::PollEntry>& pfds = pfds_func_start;
+	//std::vector<IArchNetwork::PollEntry> pfds;
 	IArchNetwork::PollEntry pfd;
 
 	// service the connections
@@ -181,6 +182,8 @@ SocketMultiplexer::serviceThread(void*)
 			m_update = false;
 			pfds.clear();
 			pfds.reserve(m_socketJobMap.size());
+			//pfds.erase(pfds.begin(), pfds.end());
+			//pfds.shrink_to_fit();
 
 			JobCursor cursor    = newCursor();
 			JobCursor jobCursor = nextCursor(cursor);
