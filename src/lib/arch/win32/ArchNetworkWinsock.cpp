@@ -774,10 +774,12 @@ ArchNetworkWinsock::addrToName(ArchNetAddress addr)
 }
 
 static char*
-myIpv6InetNtop(int Family, const unsigned char* pAddr, char* pStringBuf, size_t StringBufSize)
+myIpv6InetNtop(int Family, const void* pAddr_aaaaa, char* pStringBuf, size_t StringBufSize)
 {
 	(void)Family;
 	(void)StringBufSize;
+
+	const unsigned char* pAddr = (const unsigned char*)pAddr_aaaaa;
 
 	// https://stackoverflow.com/a/27456943
 	sprintf(
