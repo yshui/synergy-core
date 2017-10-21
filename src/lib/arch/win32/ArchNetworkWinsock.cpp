@@ -23,6 +23,7 @@
 #include "arch/Arch.h"
 
 #include <malloc.h>
+#include <stdio.h>
 
 static const int s_family[] = {
 	PF_UNSPEC,
@@ -214,7 +215,7 @@ ArchNetworkWinsock::newSocket(EAddressFamily family, ESocketType type)
 	}
 	try {
 		setBlockingOnSocket(fd, false);
-		OOL flag = 0;
+		BOOL flag = 0;
         int size     = sizeof(flag);
         if (setsockopt_winsock(fd, IPPROTO_IPV6, IPV6_V6ONLY, &flag, size) == SOCKET_ERROR) {
             throwError(getsockerror_winsock());
@@ -772,6 +773,25 @@ ArchNetworkWinsock::addrToName(ArchNetAddress addr)
     return name;
 }
 
+static char*
+myIpv6InetNtop(int Family, const unsigned char* pAddr, char* pStringBuf, size_t StringBufSize)
+{
+	(void)Family;
+	(void)StringBufSize;
+
+	// https://stackoverflow.com/a/27456943
+	sprintf(
+		pStringBuf,
+		"%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x",
+		pAddr[0],  pAddr[1],  pAddr[2],  pAddr[3],
+		pAddr[4],  pAddr[5],  pAddr[6],  pAddr[7],
+		pAddr[8],  pAddr[9],  pAddr[10], pAddr[11],
+		pAddr[12], pAddr[13], pAddr[14], pAddr[15]
+	);
+
+	return pStringBuf;
+}
+
 std::string
 ArchNetworkWinsock::addrToString(ArchNetAddress addr)
 {
@@ -785,7 +805,7 @@ ArchNetworkWinsock::addrToString(ArchNetAddress addr)
 	case kINET6: {
         char strAddr[INET6_ADDRSTRLEN];
         struct sockaddr_in6* ipAddr = TYPED_ADDR(struct sockaddr_in6, addr);
-        inet_ntop(AF_INET6, &ipAddr->sin6_addr, strAddr, INET6_ADDRSTRLEN);
+        myIpv6InetNtop(AF_INET6, &ipAddr->sin6_addr, strAddr, INET6_ADDRSTRLEN);
         return strAddr;
     }
 	default:
