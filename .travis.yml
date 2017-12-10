@@ -1,0 +1,63 @@
+notifications:
+  email: false
+  
+env:
+  majorversion: 0
+  minorversion: 0
+
+language: cpp
+compiler: gcc
+
+#matrix:
+#  include:
+#      - compiler: gcc
+#  - os: linux
+#    dist: trusty
+#    env: DIST=trusty
+#  - os: osx
+#    osx_image: xcode7.3
+        
+cache: ccache
+
+before_install:
+    - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+    - sudo apt-get update
+#- sudo apt-get update -qq
+
+install:
+    #- sudo apt-get install -qq g++-4.8
+    #- export CXX="g++-4.8"
+    - sudo apt-get -qq install g++-6 gcc-6
+    - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 60 --slave /usr/bin/g++ g++ /usr/bin/g++-6
+    - if [[ $TRAVIS_OS_NAME == "osx" ]] ; then brew install --force qt@5.7 ; else sudo apt-get install -y libxtst-dev libx11-dev cmake bc qt5-default qttools5-dev qttools5-dev-tools; fi
+
+script:
+    - mkdir build
+    - cd build
+    - cmake -DCMAKE_BUILD_TYPE=Release ../
+    - cmake --build ./
+    - mkdir -p deb/synergy/DEBIAN
+    - mkdir -p deb/synergy/usr/local/bin
+    - cp bin/* deb/synergy/usr/local/bin/
+    - 'printf "Package: synergy\nVersion: " > deb/synergy/DEBIAN/control'
+    - printf "${majorversion}.${minorversion}.${TRAVIS_BUILD_NUMBER}" >> deb/synergy/DEBIAN/control
+    - 'printf "\nMaintainer: Community\nArchitecture: x64\nDescription: Synergy\n" >> deb/synergy/DEBIAN/control'
+    - cat deb/synergy/DEBIAN/control
+    - mkdir -p deb/synergy/usr/icons
+    - cp ../res/synergy.ico deb/synergy/usr/icons
+    - mkdir -p deb/synergy/usr/share/applications
+    - 'printf "[Desktop Entry]\nType=Application\nVersion=" > deb/synergy/usr/share/applications/synergy.desktop'
+    - printf "${majorversion}.${minorversion}.${TRAVIS_BUILD_NUMBER}" > deb/synergy/usr/share/applications/synergy.desktop
+    - 'printf "\nName=Synergy\nGenericName=Mouse and Keyboard Sharing\nIcon=/usr/icons/synergy.ico\nExec=/usr/local/bin/synergygui\nCategories=Utility;RemoteAccess;" > deb/synergy/usr/share/applications/synergy.desktop'
+    - dpkg-deb --build deb/synergy
+    - ls deb/
+        
+#deploy:
+#  all_branches: true
+#  provider: packagecloud
+#  repository: "debids"
+#  username: "dev-id"
+#  token: "fa7bc291f6a602dddf097739eadc589a0b00fea3b87fa773"
+#  dist: "ubuntu/trusty" # like 'ubuntu/precise', or 'centos/5', if pushing deb or rpms
+#  skip_cleanup: true
+#  package_glob: "deb/synergy.deb"
