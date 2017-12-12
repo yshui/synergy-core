@@ -39,7 +39,7 @@ script:
     - mkdir -p deb/synergy/DEBIAN
     - mkdir -p deb/synergy/usr/local/bin
     - cp bin/* deb/synergy/usr/local/bin/
-    - 'printf "Package: synergy\nVersion " > deb/synergy/DEBIAN/control'
+    - 'printf "Package: synergy\nVersion: " > deb/synergy/DEBIAN/control'
     - printf "${majorversion}.${minorversion}.${TRAVIS_BUILD_NUMBER}" >> deb/synergy/DEBIAN/control
     - 'printf "\nMaintainer: Community\nArchitecture: x64\nDescription: Synergy\n" >> deb/synergy/DEBIAN/control'
     - cat deb/synergy/DEBIAN/control
