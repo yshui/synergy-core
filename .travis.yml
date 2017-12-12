@@ -72,5 +72,5 @@ deploy:
   #package_glob: "deb/synergy.deb"
   skip_cleanup: true
   on:
-    tags: true
+    #tags: true
     branch: master
