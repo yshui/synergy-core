@@ -39,16 +39,16 @@ script:
     - mkdir -p deb/synergy/DEBIAN
     - mkdir -p deb/synergy/usr/local/bin
     - cp bin/* deb/synergy/usr/local/bin/
-    - printf "Package: synergy\nVersion " > deb/synergy/DEBIAN/control
+    - 'printf "Package: synergy\nVersion " > deb/synergy/DEBIAN/control'
     - printf "${majorversion}.${minorversion}.${TRAVIS_BUILD_NUMBER}" >> deb/synergy/DEBIAN/control
-    - printf "\nMaintainer: Community\nArchitecture: x64\nDescription: Synergy\n" >> deb/synergy/DEBIAN/control
+    - 'printf "\nMaintainer: Community\nArchitecture: x64\nDescription: Synergy\n" >> deb/synergy/DEBIAN/control'
     - cat deb/synergy/DEBIAN/control
     - mkdir -p deb/synergy/usr/icons
     - cp ../res/synergy.ico deb/synergy/usr/icons
     - mkdir -p deb/synergy/usr/share/applications
-    - printf "[Desktop Entry]\nType=Application\nVersion=" > deb/synergy/usr/share/applications/synergy.desktop
+    - 'printf "[Desktop Entry]\nType=Application\nVersion=" > deb/synergy/usr/share/applications/synergy.desktop'
     - printf "${majorversion}.${minorversion}.${TRAVIS_BUILD_NUMBER}" > deb/synergy/usr/share/applications/synergy.desktop
-    - printf "\nName=Synergy\nGenericName=Mouse and Keyboard Sharing\nIcon=/usr/icons/synergy.ico\nExec=/usr/local/bin/synergygui\nCategories=Utility;RemoteAccess;" > deb/synergy/usr/share/applications/synergy.desktop
+    - 'printf "\nName=Synergy\nGenericName=Mouse and Keyboard Sharing\nIcon=/usr/icons/synergy.ico\nExec=/usr/local/bin/synergygui\nCategories=Utility;RemoteAccess;" > deb/synergy/usr/share/applications/synergy.desktop'
     - cat deb/synergy/usr/share/applications/synergy.desktop
     - dpkg-deb --build deb/synergy
     - ls -la deb/
