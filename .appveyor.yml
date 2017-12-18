@@ -55,6 +55,7 @@ deploy:
     #draft: true
     prerelease: true
     #force_update: true
-    on:
-      branch: master
+    # Going to make it build all branches in case people want to test stuff I guess
+    #on:
+      #branch: master
       #appveyor_repo_tag: true

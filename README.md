@@ -3,8 +3,7 @@ Synergy
 Share one buggy mouse and one buggy keyboard between multiple computers.
 ---
 
-**You can find 32-bit and 64-bit Windows installers in the [Releases tab](https://github.com/yupi2/synergy/releases)**<br/>
-*64-bit .debs soon*
+**You can find 32-bit and 64-bit Windows installers + 64-bit .deb files for Linux in the [Releases tab](https://github.com/yupi2/synergy/releases)**<br/>
 
 appveyor master: [![Build status master](https://ci.appveyor.com/api/projects/status/ayhyxtpmgmfr3x9n/branch/master?svg=true)](https://ci.appveyor.com/project/yupi2/synergy/branch/master)<br/>
 appveyor activey: [![Build status activey](https://ci.appveyor.com/api/projects/status/ayhyxtpmgmfr3x9n/branch/activey?svg=true)](https://ci.appveyor.com/project/yupi2/synergy/branch/activey)<br/>
