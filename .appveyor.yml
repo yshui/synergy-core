@@ -52,8 +52,8 @@ deploy:
     auth_token:
       secure: aAbYHstV/7LZnm9r4VtDv8Ox8JwiqgSHb8BC0ruEPI5arrE3Ir11Z8TjvuzM7ccV
     artifact: /.*\.msi/
-    draft: true
-    #prerelease: true
+    #draft: true
+    prerelease: true
     #force_update: true
     on:
       branch: master
