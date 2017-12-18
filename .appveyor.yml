@@ -53,7 +53,7 @@ deploy:
       secure: aAbYHstV/7LZnm9r4VtDv8Ox8JwiqgSHb8BC0ruEPI5arrE3Ir11Z8TjvuzM7ccV
     artifact: /.*\.msi/
     #draft: true
-    prerelease: true
+    #prerelease: true
     #force_update: true
     # Going to make it build all branches in case people want to test stuff I guess
     #on:
