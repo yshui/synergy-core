@@ -44,7 +44,7 @@ deploy:
   #tag: 4.2.0_$(TRAVIS_BRANCH)_$(TRAVIS_COMMIT)
   api_key:
     secure: NE+og8E6EfTAdKI0/L55VBFtPbb1aWQzZ351Acw1sBLmiIUGCDKz3ryXKAlJEZppDCRphvYxGHaqRDJ9KMCZsZbsFqUitynNaO4Qxm87BLsfc1Ab3VrLiTCIi2OO+zGrxLdGgSmUCokjNGoq8svrMx/iWEfMf3v5mwgvCD9XFc2YMxGSbIVfErfoiKQqsiiq+kr0LZZW8Z2zBaE8T3pjy5lVPnvr5MFOD8Cw1qDAx76aV8BrFpiLefZ4PTo7mZ4JC7tHiaX9SY6pu3lwjjFP9tZtxsqx1AKKPD6rBeGmKvSRXOKBFwsG76x8qxeAIL1NIzLFotqAUx+brEtsq9WFovjmICYglKona2Srk26o3aPsTyGWG3dZUBxbgx/qvCPfKxyHLnSx7VsOx2V406fL4PB3e53TpiHdA4YbajRRMVwY4w8qLIX7ovqh7IDvAMo20y80O5gf9aEJyRnMVZDSHY83ipsxdEcQY8szXG6JoMZFb6XqDx0RvuoaSL5BZmARLt98SYoHK+0laa+GYSixcC2ljyrVaxKceGdggpvzHWM4bI35eT8KLFdECO6DskhXdSAnOlCMEJsWz3iGlInXaIiavk1Irx+wAj+Vf0JWcwjvvFeGdEeiwtvtjZyN0YqrlLug61bnC35YMk8pUJPNKvjufeEtuSReo0LyOGPlrGg=
-  file: "deb/synergy_${TRAVIS_BRANCH}.deb"
+  file: "build/deb/synergy_${TRAVIS_BRANCH}.deb"
   #package_glob: "deb/synergy.deb"
   skip_cleanup: true
   on:
