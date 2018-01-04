@@ -16,6 +16,16 @@
 
 cmake_minimum_required(VERSION 3.0)
 
+# https://blog.kitware.com/cmake-and-the-default-build-type/
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+  message(STATUS "Setting build type to 'Release' as none was specified.")
+  set(CMAKE_BUILD_TYPE "Release" CACHE
+      STRING "Choose the type of build." FORCE)
+  # Set the possible values of build type for cmake-gui
+  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS
+    "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
+endif()
+
 # First, declare project (important for prerequisite checks).
 project(synergy
 	LANGUAGES C CXX
@@ -347,6 +357,21 @@ if (UNIX)
 
 		add_definitions(-DWINAPI_XWINDOWS=1)
 
+		if("${DEB_ARCH}" STREQUAL "")
+			if("${TRAVIS}" STREQUAL "true")
+				# travis ci only does amd64 stuff
+				set(DEB_ARCH "amd64")
+			else()
+				# I'm not sure sure what the best way is to detect and map arches to debian formats
+				set(DEB_ARCH "all")
+			endif()
+		endif()
+		# https://manpages.debian.org/unstable/dpkg-dev/deb-control.5.en.html
+		configure_file("${root_dir}/dist/deb/control.in" "${CMAKE_BINARY_DIR}/deb/synergy/DEBIAN/control")
+		configure_file("${root_dir}/dist/deb/copyright" "${CMAKE_BINARY_DIR}/deb/synergy/DEBIAN/copyright")
+		configure_file("${root_dir}/dist/deb/changelog" "${CMAKE_BINARY_DIR}/deb/synergy/DEBIAN/changelog")
+		configure_file("${root_dir}/res/synergy.desktop" "${CMAKE_BINARY_DIR}/deb/synergy/usr/share/applications/synergy.desktop")
+		configure_file("${root_dir}/res/synergy.svg" "${CMAKE_BINARY_DIR}/deb/synergy/usr/icons/synergy.svg")
 	endif()
 
 	# For config.h, set some static values; it may be a good idea to make
@@ -367,6 +392,7 @@ if (UNIX)
 
 	# For config.h, save the results based on a template (config.h.in).
 	configure_file("${root_dir}/res/config.h.in" "${CMAKE_BINARY_DIR}/config.h")
+	include_directories("${CMAKE_BINARY_DIR}")
 
 	add_definitions(-DSYSAPI_UNIX=1 -DHAVE_CONFIG_H)
 

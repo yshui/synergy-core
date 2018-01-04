@@ -23,7 +23,8 @@
 #include <stdint.h>
 
 #if HAVE_CONFIG_H
-#	include "../../../build/config.h"
+//#	include "../../../build/config.h"
+#	include "config.h"
 
 	// don't use poll() on mac
 #	if defined(__APPLE__)

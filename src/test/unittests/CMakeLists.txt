@@ -63,3 +63,5 @@ endif()
 add_executable(unittests ${sources})
 target_link_libraries(unittests
 	arch base client server io net platform server synlib mt ipc gtest gmock ${libs} ${OPENSSL_BOTH_LIBS})
+
+add_test(NAME unittests COMMAND unittests)

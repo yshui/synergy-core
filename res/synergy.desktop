@@ -1,10 +1,14 @@
 [Desktop Entry]
 Name=Synergy
 Version=4.2.0
+GenericName=Mouse and Keyboard Sharing
 Comment=Share your keyboard and mouse over a network
 Exec=synergygui
 Icon=synergy
 Terminal=false
 Type=Application
-Categories=Utility;
+Categories=Utility;RemoteAccess;
 Keywords=keyboard;mouse;sharing;network;share;
+
+#Icon=/usr/icons/synergy.svg
+#Exec=/usr/local/bin/synergygui

@@ -1,0 +1,20 @@
+#!/bin/sh
+if [ "$MY_SYN_BUILD_DIR" = "" ]
+then
+	MY_SYN_BUILD_DIR="build"
+fi
+if [ "$MY_SYN_PWD" = "" ]
+then
+	MY_SYN_PWD="$(pwd)"
+fi
+mkdir -p "$MY_SYN_BUILD_DIR/deb/synergy/usr/local/bin"
+mkdir -p "$MY_SYN_BUILD_DIR/deb/synergy/DEBIAN"
+mkdir -p "$MY_SYN_BUILD_DIR/deb/synergy/usr/icons"
+mkdir -p "$MY_SYN_BUILD_DIR/deb/synergy/usr/share/applications"
+cd $MY_SYN_BUILD_DIR
+if [ "$TRAVIS" = "true" ]
+then
+	cmake -DCMAKE_BUILD_TYPE=Release -D_USE_C_DATE=OFF -D_TESTS=ON $MY_SYN_PWD
+else
+	cmake $@ $MY_SYN_PWD
+fi

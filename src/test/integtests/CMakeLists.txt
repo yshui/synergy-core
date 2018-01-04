@@ -63,3 +63,5 @@ include_directories(
 add_executable(integtests ${sources})
 target_link_libraries(integtests
 	arch base client io ipc mt net platform server synlib gtest gmock ${libs} ${OPENSSL_BOTH_LIBS})
+
+add_test(NAME integtests COMMAND integtests)
