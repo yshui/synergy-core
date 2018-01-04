@@ -75,7 +75,7 @@ Building
 + WiX Toolset if you plan to make installers for Windows Platforms.
 + Any recent version of Git in your command path
 
-Here's how I build on Linux:<br/>
+**Here's how I build on Linux:**<br/>
 ```
 ./configure
 make -C build -j$(nproc)
@@ -89,7 +89,7 @@ cmake --build ./ -- -j$(nproc)
 ```
 And optionally for packaging a .deb afterward: `./package_deb.sh`
 
-And on 64-bit Windows 7 with Visual Studio 2015:<br/>
+**And on 64-bit Windows 7 with Visual Studio 2015:**<br/>
 ```
 mkdir build
 cd build
@@ -109,7 +109,7 @@ git submodule update --init
 ```
 If you have a preinstalled version of *googletest* from a package-manager or something and want to use it then check out `src/test/CMakeLists.txt` and maybe change some directories.
 
-Some cmake things:
+**Some cmake things:**
 + `-DCMAKE_BUILD_TYPE=[Release|Debug|etc]` 
 + `-DDEB_ARCH=[amd64|i386|etc]` - used for setting the arch in `synergy/dist/deb/control.in`
 + `-D_TESTS=[ON|OFF]` - turn tests on or off
@@ -177,6 +177,18 @@ Requirements:
   + ~~Also you'll need the Qt5 Linguist Tools which might be `qttools5-dev-tools` or `qt5-tools`.~~ Maybe not.
 + X11!
   + X11/Xorg dev packages along with something like `libXtst-devel`.
+1. Open terminal.
+2. `cd ~/code`
+3. `git clone https://github.com/yupi2/synergy.git`
+4. `cd synergy`
+5. `./configure`
+    + You can pass regular cmake arguments to the `./configure` thing. Read the `configure` file for more information on what it does.
+    + You can do `MY_SYN_BUILD_DIR=/folder/to/thing` for build dir and `MY_SYN_PWD=/folder/to/syn` for root synergy dir.
+5. `make -C build -j$(nproc)`
+    + `$(nproc)` uses the number of processors available. You can use a static number of cores with `-jN` where `N` is your number or remove it entirely
+7. `ls bin`
+
+**or**
 
 1. Open terminal.
 2. `cd ~/code`
@@ -189,19 +201,6 @@ Requirements:
 7. `ls bin`
 8. If packaging a .deb then: `./package_deb.sh`
     + You can do `MY_SYN_BUILD_DIR=/folder/to/thing` for the build dir.
-
-or
-
-1. Open terminal.
-2. `cd ~/code`
-3. `git clone https://github.com/yupi2/synergy.git`
-4. `cd synergy`
-5. `./configure`
-    + You can pass regular cmake arguments to the `./configure` thing. Read the `configure` file for more information on what it does.
-    + You can do `MY_SYN_BUILD_DIR=/folder/to/thing` for build dir and `MY_SYN_PWD=/folder/to/syn` for root synergy dir.
-5. `make -C build -j$(nproc)`
-    + `$(nproc)` uses the number of processors available. You can use a static number of cores with `-jN` where `N` is your number or remove it entirely
-7. `ls bin`
 
 (Apple macOS) Compiling
 -----------------------
