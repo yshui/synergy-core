@@ -9,7 +9,7 @@ then
 fi
 mkdir -p "$MY_SYN_BUILD_DIR/deb/synergy/usr/local/bin"
 mkdir -p "$MY_SYN_BUILD_DIR/deb/synergy/DEBIAN"
-mkdir -p "$MY_SYN_BUILD_DIR/deb/synergy/usr/icons"
+mkdir -p "$MY_SYN_BUILD_DIR/deb/synergy/usr/share/icons"
 mkdir -p "$MY_SYN_BUILD_DIR/deb/synergy/usr/share/applications"
 cd $MY_SYN_BUILD_DIR
 if [ "$TRAVIS" = "true" ]

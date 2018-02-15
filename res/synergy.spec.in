@@ -21,23 +21,21 @@ mkdir -p %{buildroot}/%{_datarootdir}/applications
 mkdir -p %{buildroot}/%{_datarootdir}/icons
 mkdir -p %{buildroot}/%{_bindir}
 
-cp $source/bin/synergy %{buildroot}%{_bindir}
+cp $source/bin/synergygui %{buildroot}%{_bindir}
 cp $source/bin/synergyc %{buildroot}%{_bindir}
 cp $source/bin/synergys %{buildroot}%{_bindir}
 cp $source/bin/synergyd %{buildroot}%{_bindir}
-cp $source/bin/syntool %{buildroot}%{_bindir}
 cp $source/res/synergy.desktop %{buildroot}%{_datarootdir}/applications
-cp $source/res/synergy.ico %{buildroot}%{_datarootdir}/icons
+cp $source/res/synergy.svg %{buildroot}%{_datarootdir}/icons
 
 %files
 %defattr(755,root,root,-)
-%{_bindir}/synergy
+%{_bindir}/synergygui
 %{_bindir}/synergyc
 %{_bindir}/synergys
 %{_bindir}/synergyd
-%{_bindir}/syntool
 %attr(644,-,-) %{_datarootdir}/applications/synergy.desktop
-%attr(644,-,-) %{_datarootdir}/icons/synergy.ico
+%attr(644,-,-) %{_datarootdir}/icons/synergy.svg
 
 %changelog
 * Thu Mar 20 2014 Nick Bolton <nick@symless.com>

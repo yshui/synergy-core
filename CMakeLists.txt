@@ -371,7 +371,7 @@ if (UNIX)
 		configure_file("${root_dir}/dist/deb/copyright" "${CMAKE_BINARY_DIR}/deb/synergy/DEBIAN/copyright")
 		configure_file("${root_dir}/dist/deb/changelog" "${CMAKE_BINARY_DIR}/deb/synergy/DEBIAN/changelog")
 		configure_file("${root_dir}/res/synergy.desktop" "${CMAKE_BINARY_DIR}/deb/synergy/usr/share/applications/synergy.desktop")
-		configure_file("${root_dir}/res/synergy.svg" "${CMAKE_BINARY_DIR}/deb/synergy/usr/icons/synergy.svg")
+		configure_file("${root_dir}/res/synergy.svg" "${CMAKE_BINARY_DIR}/deb/synergy/usr/share/icons/synergy.svg")
 	endif()
 
 	# For config.h, set some static values; it may be a good idea to make

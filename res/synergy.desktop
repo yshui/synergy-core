@@ -10,5 +10,5 @@ Type=Application
 Categories=Utility;RemoteAccess;
 Keywords=keyboard;mouse;sharing;network;share;
 
-#Icon=/usr/icons/synergy.svg
+#Icon=/usr/icons/share/synergy.svg
 #Exec=/usr/local/bin/synergygui
