@@ -6,5 +6,10 @@ fi
 cd $MY_SYN_BUILD_DIR
 cp bin/* deb/synergy/usr/local/bin/
 dpkg-deb --build deb/synergy
-mv "deb/synergy.deb" "deb/synergy_${TRAVIS_BRANCH}.deb"
+
+if [ "$TRAVIS_BRANCH" != "" ]
+then
+	mv "deb/synergy.deb" "deb/synergy_${TRAVIS_BRANCH}.deb"
+fi
+
 ls -la deb/
