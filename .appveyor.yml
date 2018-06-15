@@ -46,29 +46,29 @@ artifacts:
   - path: 'build\bin\*.msi'
 
 deploy:
-  # - provider: GitHub
-  #   tag: 4.2.0_$(appveyor_repo_branch)_$(appveyor_repo_commit)
-  #   description: 'Automatic Appveyor / Travis release'
-  #   auth_token:
-  #     secure: aAbYHstV/7LZnm9r4VtDv8Ox8JwiqgSHb8BC0ruEPI5arrE3Ir11Z8TjvuzM7ccV
-  #   artifact: /.*\.msi/
-  #   #draft: true
-  #   #prerelease: true
-  #   #force_update: true
-  #   # Going to make it build all branches in case people want to test stuff I guess
-  #   on:
-  #     branch: master
-  #     #appveyor_repo_tag: true
   - provider: GitHub
-    #tag: 4.2.0_$(appveyor_repo_branch)_$(appveyor_repo_commit)
+    tag: 4.2.0_$(appveyor_repo_branch)_$(appveyor_repo_commit)
     description: 'Automatic Appveyor / Travis release'
     auth_token:
       secure: aAbYHstV/7LZnm9r4VtDv8Ox8JwiqgSHb8BC0ruEPI5arrE3Ir11Z8TjvuzM7ccV
     artifact: /.*\.msi/
-    draft: true
-    prerelease: true
+    #draft: true
+    #prerelease: true
     #force_update: true
     # Going to make it build all branches in case people want to test stuff I guess
     on:
-      #branch: activey
-      appveyor_repo_tag: true
+      branch: master
+      #appveyor_repo_tag: true
+  # - provider: GitHub
+  #   #tag: 4.2.0_$(appveyor_repo_branch)_$(appveyor_repo_commit)
+  #   description: 'Automatic Appveyor / Travis release'
+  #   auth_token:
+  #     secure: aAbYHstV/7LZnm9r4VtDv8Ox8JwiqgSHb8BC0ruEPI5arrE3Ir11Z8TjvuzM7ccV
+  #   artifact: /.*\.msi/
+  #   draft: true
+  #   prerelease: true
+  #   #force_update: true
+  #   # Going to make it build all branches in case people want to test stuff I guess
+  #   on:
+  #     #branch: activey
+  #     appveyor_repo_tag: true
