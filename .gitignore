@@ -21,3 +21,4 @@ src/setup/win32/synergy.suo
 *.autosave
 cmake_install.cmake
 commit
+
