@@ -1,5 +1,10 @@
 notifications:
   email: false
+
+branches:
+  except:
+    - master
+    - activey
   
 env:
   majorversion: 0
