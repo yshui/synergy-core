@@ -4,12 +4,13 @@ Share one buggy mouse and one buggy keyboard between multiple computers.
 ---
 
 **Visit https://github.com/yupi2/synergy/releases/latest for the latest 32/64-bit Windows installers and 64-bit Linux .deb files**<br/>
-You can find more at https://github.com/yupi2/synergy/releases
+You can find more at https://github.com/yupi2/synergy/releases <br/>
+**Last Windows XP build since LibreSSL doesn't support Windows XP anymore https://github.com/yupi2/synergy/releases/tag/4.2.0_master_0d1aad0dacc071f9981f778e2ee8a10f36b57ec5 .**
 
-appveyor master: [![Build status master](https://ci.appveyor.com/api/projects/status/ayhyxtpmgmfr3x9n/branch/master?svg=true)](https://ci.appveyor.com/project/yupi2/synergy/branch/master)<br/>
-appveyor activey: [![Build status activey](https://ci.appveyor.com/api/projects/status/ayhyxtpmgmfr3x9n/branch/activey?svg=true)](https://ci.appveyor.com/project/yupi2/synergy/branch/activey)<br/>
-travis master: [![Build status master](https://travis-ci.org/yupi2/synergy.svg?branch=master)](https://travis-ci.org/yupi2/synergy)<br/>
-travis activey: [![Build status master](https://travis-ci.org/yupi2/synergy.svg?branch=activey)](https://travis-ci.org/yupi2/synergy)<br/>
+appveyor master (Windows x32/x64): [![Build status master](https://ci.appveyor.com/api/projects/status/ayhyxtpmgmfr3x9n/branch/master?svg=true)](https://ci.appveyor.com/project/yupi2/synergy/branch/master)<br/>
+appveyor activey (Windows x32/x64): [![Build status activey](https://ci.appveyor.com/api/projects/status/ayhyxtpmgmfr3x9n/branch/activey?svg=true)](https://ci.appveyor.com/project/yupi2/synergy/branch/activey)<br/>
+travis master (Linux AMD64 .deb): [![Build status master](https://travis-ci.org/yupi2/synergy.svg?branch=master)](https://travis-ci.org/yupi2/synergy)<br/>
+travis activey (Linux AMD64 .deb): [![Build status master](https://travis-ci.org/yupi2/synergy.svg?branch=activey)](https://travis-ci.org/yupi2/synergy)<br/>
 
 This is a fork whose goal is to be less buggy, build easier, and to remove the activation requirement for features.
 
