@@ -22,7 +22,7 @@
 #include "common/stdlist.h"
 
 #define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
+#include <windows.h>
 
 #define ARCH_MULTITHREAD ArchMultithreadWindows
 

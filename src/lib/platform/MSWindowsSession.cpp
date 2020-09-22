@@ -21,7 +21,7 @@
 #include "synergy/XSynergy.h"
 #include "base/Log.h"
 
-#include <Wtsapi32.h>
+#include <wtsapi32.h>
 
 MSWindowsSession::MSWindowsSession() :
     m_activeSessionId(-1)

@@ -21,7 +21,7 @@
 #include "common/common.h"
 
 #include <stdio.h>
-#include <Shlobj.h>
+#include <shlobj.h>
 
 void getDropData(IDataObject *pDataObject);
 

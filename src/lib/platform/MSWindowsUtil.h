@@ -21,7 +21,7 @@
 #include "base/String.h"
 
 #define WINDOWS_LEAN_AND_MEAN
-#include <Windows.h>
+#include <windows.h>
 
 class MSWindowsUtil {
 public:

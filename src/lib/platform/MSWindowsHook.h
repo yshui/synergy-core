@@ -21,7 +21,7 @@
 #include "platform/synwinhk.h"
 
 #define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
+#include <windows.h>
 
 //! Loads and provides functions for the Windows hook
 class MSWindowsHook

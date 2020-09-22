@@ -21,7 +21,7 @@
 #include "arch/XArch.h"
 
 #define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
+#include <windows.h>
 
 //! Lazy error message string evaluation for windows
 class XArchEvalWindows : public XArchEval {

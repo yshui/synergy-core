@@ -35,7 +35,7 @@
 #include <sstream>
 #include <iostream>
 #include <conio.h>
-#include <VersionHelpers.h>
+#include <versionhelpers.h>
 
 AppUtilWindows::AppUtilWindows(IEventQueue* events) :
     m_events(events),

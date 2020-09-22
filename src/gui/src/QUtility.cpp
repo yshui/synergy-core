@@ -26,7 +26,7 @@
 
 #if defined(Q_OS_WIN)
 #define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
+#include <windows.h>
 #endif
 
 void setIndexFromItemData(QComboBox* comboBox, const QVariant& itemData)

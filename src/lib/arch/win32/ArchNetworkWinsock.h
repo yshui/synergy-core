@@ -28,9 +28,9 @@
 #include "arch/IArchNetwork.h"
 #include "arch/IArchMultithread.h"
 
-#include <WinSock2.h>
+#include <winsock2.h>
 #define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
+#include <windows.h>
 #include <list>
 
 #pragma comment(lib, "ws2_32.lib")

@@ -23,7 +23,7 @@
 #include "common/stdstring.h"
 
 #define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
+#include <windows.h>
 #include <tchar.h>
 
 #define ARCH_DAEMON ArchDaemonWindows

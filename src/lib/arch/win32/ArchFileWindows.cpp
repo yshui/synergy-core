@@ -19,7 +19,7 @@
 #include "arch/win32/ArchFileWindows.h"
 
 #define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
+#include <windows.h>
 #include <shlobj.h>
 #include <tchar.h>
 #include <string.h>

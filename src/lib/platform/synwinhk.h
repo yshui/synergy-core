@@ -29,7 +29,7 @@
 #include "base/EventTypes.h"
 
 #define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
+#include <windows.h>
 
 #if defined(synwinhk_EXPORTS)
 #define CSYNERGYHOOK_API __declspec(dllexport)

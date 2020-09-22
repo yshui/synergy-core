@@ -19,7 +19,7 @@
 #include "arch/win32/ArchTimeWindows.h"
 
 #define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
+#include <windows.h>
 
 #define MMNODRV         // Disable: Installable driver support
 #define MMNOSOUND       // Disable: Sound support
@@ -31,7 +31,7 @@
 #define MMNOMCI         // Disable: MCI support
 #define MMNOMMIO        // Disable: Multimedia file I/O support
 #define MMNOMMSYSTEM    // Disable: General MMSYSTEM functions
-#include <MMSystem.h>
+#include <mmsystem.h>
 
 typedef WINMMAPI DWORD (WINAPI *PTimeGetTime)(void);
 

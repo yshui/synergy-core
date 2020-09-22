@@ -27,7 +27,7 @@
 #include "base/String.h"
 
 #ifdef WINAPI_MSWINDOWS
-#include <VersionHelpers.h>
+#include <versionhelpers.h>
 #endif
 
 lib::synergy::ArgsBase* ArgParser::m_argsBase = NULL;

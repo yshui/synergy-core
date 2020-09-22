@@ -43,7 +43,7 @@
 #include "base/TMethodJob.h"
 
 #include <string.h>
-#include <Shlobj.h>
+#include <shlobj.h>
 #include <comutil.h>
 #include <algorithm>
 

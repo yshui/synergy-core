@@ -21,7 +21,7 @@
 #include "arch/IArchLog.h"
 
 #define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
+#include <windows.h>
 
 #define ARCH_LOG ArchLogWindows
 

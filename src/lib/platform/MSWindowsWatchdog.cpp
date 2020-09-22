@@ -34,8 +34,8 @@
 #include "common/Version.h"
 
 #include <sstream>
-#include <UserEnv.h>
-#include <Shellapi.h>
+#include <userenv.h>
+#include <shellapi.h>
 
 #define CURRENT_PROCESS_ID 0
 #define MAXIMUM_WAIT_TIME 3
