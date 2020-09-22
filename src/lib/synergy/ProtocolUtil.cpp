@@ -111,15 +111,18 @@ ProtocolUtil::vreadf(synergy::IStream* stream, const char* fmt, va_list args)
             UInt32 len = eatLength(&fmt);
             switch (*fmt) {
             case 'i': {
-                readInt(stream, len, args);
+                void* v = va_arg(args, void*);
+                readInt(stream, len, v);
                 break;
             }
             case 'I': {
-                readVectorInt(stream, len, args);
+                void* v = va_arg(args, void*);
+                readVectorInt(stream, len, v);
                 break;
             }
             case 's': {
-                readBytes(stream, len, args);
+                String* dst = va_arg(args, String*);
+                readBytes(stream, len, dst);
                 break;
             }
 
@@ -412,7 +415,7 @@ ProtocolUtil::read(synergy::IStream* stream, void* vbuffer, UInt32 count)
     }
 }
 
-void ProtocolUtil::readInt(synergy::IStream * stream, UInt32 len, va_list args) {
+void ProtocolUtil::readInt(synergy::IStream * stream, UInt32 len, void *v) {
     // check for valid length
     if (len == 4 || len == 2 || len == 1) {
 
@@ -423,7 +426,6 @@ void ProtocolUtil::readInt(synergy::IStream * stream, UInt32 len, va_list args) 
         read(stream, buffer, len > buffer_size ? buffer_size : len);
 
         // convert it
-        void* v = va_arg(args, void*);
         switch (len) {
             case 1:
                 // 1 byte integer
@@ -458,7 +460,7 @@ void ProtocolUtil::readInt(synergy::IStream * stream, UInt32 len, va_list args) 
     }
 }
 
-void ProtocolUtil::readVectorInt(synergy::IStream * stream, UInt32 len, va_list args) {
+void ProtocolUtil::readVectorInt(synergy::IStream * stream, UInt32 len, void *v) {
     // check for valid length
     assert(len == 1 || len == 2 || len == 4);
 
@@ -471,7 +473,6 @@ void ProtocolUtil::readVectorInt(synergy::IStream * stream, UInt32 len, va_list 
                static_cast<UInt32>(buffer[3]);
 
     // convert it
-    void* v = va_arg(args, void*);
     switch (len) {
         case 1:
             // 1 byte integer
@@ -510,7 +511,7 @@ void ProtocolUtil::readVectorInt(synergy::IStream * stream, UInt32 len, va_list 
     }
 }
 
-void ProtocolUtil::readBytes(synergy::IStream * stream, UInt32 len, va_list args) {
+void ProtocolUtil::readBytes(synergy::IStream * stream, UInt32 len, String *dst) {
     assert(len == 0);
 
     // read the string length
@@ -552,7 +553,6 @@ void ProtocolUtil::readBytes(synergy::IStream * stream, UInt32 len, va_list args
     LOG((CLOG_DEBUG2 "readf: read %d byte string", len));
 
     // save the data
-    String* dst = va_arg(args, String*);
     dst->assign((const char*)sBuffer, len);
 
     // release the buffer

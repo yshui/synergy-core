@@ -1152,7 +1152,7 @@ MSWindowsKeyState::getKeyMap(synergy::KeyMap& keyMap)
 						for (size_t k = 0; k < s_numModifiers; ++k) {
 							//if ((j & (1 << k)) != 0) {
 							// http://msdn.microsoft.com/en-us/library/ke55d167.aspx
-							if ((j & (1i64 << k)) != 0) {
+							if ((j & (1ll << k)) != 0) {
 								keys[modifiers[k].m_vk1] = modifiers[k].m_state;
 								keys[modifiers[k].m_vk2] = modifiers[k].m_state;
 							}
@@ -1177,7 +1177,7 @@ MSWindowsKeyState::getKeyMap(synergy::KeyMap& keyMap)
 							for (size_t j = 0; j < s_numCombinations; ++j) {
 								//if (id[j] != id[j ^ (1u << k)]) {
 								// http://msdn.microsoft.com/en-us/library/ke55d167.aspx
-								if (id[j] != id[j ^ (1ui64 << k)]) {
+								if (id[j] != id[j ^ (1ull << k)]) {
 									item.m_sensitive |= modifiers[k].m_mask;
 									break;
 								}
@@ -1191,7 +1191,7 @@ MSWindowsKeyState::getKeyMap(synergy::KeyMap& keyMap)
 							item.m_id       = id[j];
 							item.m_required = 0;
 							for (size_t k = 0; k < s_numModifiers; ++k) {
-								if ((j & (1i64 << k)) != 0) {
+								if ((j & (1ll << k)) != 0) {
 									item.m_required |= modifiers[k].m_mask;
 								}
 							}
