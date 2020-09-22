@@ -22,7 +22,7 @@
 
 // VC++ has built-in sized types
 // moved from common.h (why was it there?)
-#if defined(_MSC_VER)
+#if defined(_MSC_VER) || defined (__MINGW32__) || defined (__MINGW64__)
 #    include <wchar.h>
 #    define TYPE_OF_SIZE_1 __int8
 #    define TYPE_OF_SIZE_2 __int16

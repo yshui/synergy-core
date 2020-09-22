@@ -27,7 +27,7 @@
 #if HAVE_LOCALE_H
 #    include <locale.h>
 #endif
-#if HAVE_WCHAR_H || defined(_MSC_VER)
+#if HAVE_WCHAR_H || defined(_MSC_VER) || defined(__MINGW32__) || defined(__MINGW64__)
 #    include <wchar.h>
 #elif __APPLE__
     // wtf?  Darwin puts mbtowc() et al. in stdlib
