@@ -284,18 +284,29 @@ if (UNIX)
     endif()
 
 elseif (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP /D _BIND_TO_CURRENT_VCLIBS_VERSION=1")
-    set (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD /O2 /Ob2")
+    if (MSVC)
+        set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP /D _BIND_TO_CURRENT_VCLIBS_VERSION=1")
+        set (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD /O2 /Ob2")
+    endif()
 
     list (APPEND libs wtsapi32 userenv wininet shlwapi)
 
-    add_definitions (
-        /DWIN32
-        /D_WINDOWS
-        /D_CRT_SECURE_NO_WARNINGS
-        /DSYNERGY_VERSION=\"${SYNERGY_VERSION}\"
-        /D_XKEYCHECK_H
-    )
+    if (MINGW)
+        add_definitions (
+            -DWIN32
+            -D_WIN32_WINNT=0x0600
+            -D_WINDOWS
+            -D_CRT_SECURE_NO_WARNINGS
+            -DSYNERGY_VERSION=\"${SYNERGY_VERSION}\"
+            -D_XKEYCHECK_H)
+    else()
+        add_definitions(
+            /DWIN32
+            /D_WINDOWS
+            /D_CRT_SECURE_NO_WARNINGS
+            /DSYNERGY_VERSION=\"${SYNERGY_VERSION}\"
+            /D_XKEYCHECK_H)
+    endif()
 endif()
 
 #
