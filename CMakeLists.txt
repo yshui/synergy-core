@@ -287,7 +287,7 @@ elseif (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP /D _BIND_TO_CURRENT_VCLIBS_VERSION=1")
     set (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD /O2 /Ob2")
 
-    list (APPEND libs Wtsapi32 Userenv Wininet comsuppw Shlwapi)
+    list (APPEND libs wtsapi32 userenv wininet shlwapi)
 
     add_definitions (
         /DWIN32
