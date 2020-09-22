@@ -1,17 +1,35 @@
+## How to build
+
+Pre-built binaries are available in [Releases](https://github.com/yshui/synergy-core-mingw/releases)
+
+### Dependencies
+
+* qt5-base
+* qt5-tools
+
+### Configure
+
+```bash
+cmake -DSYNERGY_BUILD_LEGACY_GUI=Off -DSYNERGY_BUILD_LEGACY_INSTALLER=Off -DSYNERGY_BUILD_LEGACY_SERVICE=Off .
+```
+
+### Build
+
+```bash
+make
+```
+
+* * *
+Original README:
+
 # Synergy Core
 
 This is the open source core component of Synergy, a keyboard and mouse sharing tool.
-
-**[We're hiring!](https://careers.symless.com/)** *Join the Synergy Team (Node.js, React, C++)*
-
-**News:** [We Are Putting UX First](https://symless.com/blog/putting-ux-first) (Symless Blog)
 
 ## Recommended
 
 Things most people will need.
 
-* [Download](https://symless.com/synergy/downloads) - Get the compiled version of Synergy 1 or Synergy 2.
-* [Contact Support](https://symless.com/contact/customer-support) - Open a support ticket and talk directly to the Synergy team.
 * [Help Guides](https://symless.com/synergy-help) - Self-help guides and information for when you don't want to talk to people.
 * [Join us on Slack](https://bit.ly/synergy-slack-2020) - Talk to other Synergy users in real time using instant messaging.
 * [Symless Forums](https://symless.com/forums/forum/11-synergy/) - Discuss Synergy issues on the Symless Forums.
