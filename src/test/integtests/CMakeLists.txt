@@ -67,5 +67,13 @@ if (UNIX)
 endif()
 
 add_executable(integtests ${sources})
-target_link_libraries(integtests
-    arch base client common io ipc mt net platform server synlib gtest gmock ${libs} ${OPENSSL_LIBS})
+if (MINGW)
+    target_link_libraries(integtests -Wl,--start-group
+        arch base client common io ipc mt net platform server synlib gtest gmock
+        -Wl,--end-group
+        ws2_32
+        ${libs} ${OPENSSL_LIBS})
+else()
+    target_link_libraries(integtests
+        arch base client common io ipc mt net platform server synlib gtest gmock ${libs} ${OPENSSL_LIBS})
+endif()

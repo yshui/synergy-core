@@ -47,8 +47,16 @@ if (SYNERGY_ADD_HEADERS)
 endif()
 
 add_executable(synergys ${sources})
-target_link_libraries(synergys
-    arch base client common io mt net ipc platform server synlib ${libs} ${OPENSSL_LIBS})
+if (MINGW)
+    target_link_libraries(synergys -Wl,--start-group
+        arch base client common io mt net ipc platform server synlib
+        -Wl,--end-group
+        ws2_32
+        ${libs} ${OPENSSL_LIBS})
+else()
+    target_link_libraries(synergys
+        arch base client common io mt net ipc platform server synlib ${libs} ${OPENSSL_LIBS})
+endif()
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     install (TARGETS synergys DESTINATION ${SYNERGY_BUNDLE_BINARY_DIR})

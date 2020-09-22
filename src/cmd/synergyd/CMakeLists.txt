@@ -23,5 +23,14 @@ else()
   add_executable (synergyd ${sources})
 endif()
 
-target_link_libraries (synergyd
-    arch base common io ipc mt net platform synlib shared ${libs} ${OPENSSL_LIBS})
+if (MINGW)
+    target_link_libraries (synergyd -Wl,--start-group
+        arch base common io ipc mt net platform synlib shared client
+        ws2_32
+        ${libs} ${OPENSSL_LIBS}
+        -Wl,--end-group)
+else()
+    target_link_libraries (synergyd
+        arch base common io ipc mt net platform synlib shared client ${libs} ${OPENSSL_LIBS})
+endif()
+

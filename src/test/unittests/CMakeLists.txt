@@ -67,5 +67,14 @@ if (SYNERGY_ADD_HEADERS)
 endif()
 
 add_executable(unittests ${sources})
-target_link_libraries(unittests
-    arch base client server common io net platform server synlib mt ipc gtest gmock shared ${libs} ${OPENSSL_LIBS})
+if (MINGW)
+    target_link_libraries(unittests
+        -Wl,--start-group
+        arch base client server common io net platform server synlib mt ipc gtest gmock shared
+        -Wl,--end-group
+        ws2_32
+        ${libs} ${OPENSSL_LIBS})
+else()
+    target_link_libraries(unittests
+        arch base client server common io net platform server synlib mt ipc gtest gmock shared ${libs} ${OPENSSL_LIBS})
+endif()
